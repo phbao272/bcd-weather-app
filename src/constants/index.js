@@ -9,6 +9,12 @@ export default {
         zIndex: 50,
     },
 
+    container: {
+        flex: 1,
+        paddingTop: 32,
+        paddingHorizontal: 16,
+    },
+
     // flex
     // ///////////////////////////////////////////////////////////////////////////
     flexCenter: {
@@ -48,17 +54,22 @@ export default {
 
     // text
     // ///////////////////////////////////////////////////////////////////////////
-    textSpotify10: { fontFamily: fonts.spotifyRegular, fontSize: 10 },
-    textSpotify12: { fontFamily: fonts.spotifyRegular, fontSize: 12 },
-    textSpotify14: { fontFamily: fonts.spotifyRegular, fontSize: 14 },
-    textSpotify16: { fontFamily: fonts.spotifyRegular, fontSize: 16 },
-    textSpotify18: { fontFamily: fonts.spotifyRegular, fontSize: 18 },
-    textSpotifyBold12: { fontFamily: fonts.spotifyBold, fontSize: 12 },
-    textSpotifyBold16: { fontFamily: fonts.spotifyBold, fontSize: 16 },
-    textSpotifyBold18: { fontFamily: fonts.spotifyBold, fontSize: 18 },
-    textSpotifyBold20: { fontFamily: fonts.spotifyBold, fontSize: 20 },
-    textSpotifyBold22: { fontFamily: fonts.spotifyBold, fontSize: 22 },
-    textSpotifyBold24: { fontFamily: fonts.spotifyBold, fontSize: 24 },
+    // textSpotify10: { fontFamily: fonts.spotifyRegular, fontSize: 10 },
+    // textSpotify12: { fontFamily: fonts.spotifyRegular, fontSize: 12 },
+    // textSpotify14: { fontFamily: fonts.spotifyRegular, fontSize: 14 },
+    // textSpotify16: { fontFamily: fonts.spotifyRegular, fontSize: 16 },
+    // textSpotify18: { fontFamily: fonts.spotifyRegular, fontSize: 18 },
+    // textSpotifyBold12: { fontFamily: fonts.spotifyBold, fontSize: 12 },
+    // textSpotifyBold16: { fontFamily: fonts.spotifyBold, fontSize: 16 },
+    // textSpotifyBold18: { fontFamily: fonts.spotifyBold, fontSize: 18 },
+    // textSpotifyBold20: { fontFamily: fonts.spotifyBold, fontSize: 20 },
+    // textSpotifyBold22: { fontFamily: fonts.spotifyBold, fontSize: 22 },
+    // textSpotifyBold24: { fontFamily: fonts.spotifyBold, fontSize: 24 },
+
+    sizeIcon: {
+        width: 24,
+        height: 24,
+    },
 
     // spacers
     // ///////////////////////////////////////////////////////////////////////////
@@ -155,4 +166,3 @@ export default {
     pH2: { paddingHorizontal: spaceGrid * 2 },
     pH3: { paddingHorizontal: spaceGrid * 3 },
 }
-

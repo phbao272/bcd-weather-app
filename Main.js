@@ -1,4 +1,3 @@
-import { StyleSheet } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 
 import { Provider } from 'react-redux'
@@ -11,19 +10,16 @@ import { default as themeCustom } from './src/theme/custom-theme.json'
 
 import * as eva from '@eva-design/eva'
 import { EvaIconsPack } from '@ui-kitten/eva-icons'
-import {
-    ApplicationProvider,
-    Layout,
-    IconRegistry,
-} from '@ui-kitten/components'
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
 
-import Header from './src/components/Header'
-import Search from './src/components/Search'
-import LinkTo from './src/components/LinkTo'
-import DarkMode from './src/components/DarkMode'
-import Location from './src/components/Location'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import Section, { SectionTitle, SectionBody } from './src/components/Section'
+import HomePage from './src/screens/HomePage'
+import SearchPage from './src/screens/SearchPage'
+import SelectLocationPage from './src/screens/SelectLocationPage'
+
+const Stack = createNativeStackNavigator()
 
 const Main = () => {
     const { theme } = useContext(ThemeContext)
@@ -36,39 +32,24 @@ const Main = () => {
                 theme={{ ...eva[theme], ...themeCustom }}
             >
                 <Provider store={store}>
-                    <Layout style={styles.container}>
-                        <Layout level="1">
-                            <Header />
-                        </Layout>
-
-                        <Section>
-                            <SectionTitle>Search</SectionTitle>
-                            <SectionBody>
-                                <Search />
-                            </SectionBody>
-                        </Section>
-
-                        <Section>
-                            <SectionTitle>Link To</SectionTitle>
-                            <SectionBody>
-                                <LinkTo />
-                            </SectionBody>
-                        </Section>
-
-                        <Section>
-                            <SectionTitle>Location</SectionTitle>
-                            <SectionBody>
-                                <Location />
-                            </SectionBody>
-                        </Section>
-
-                        <Section>
-                            <SectionTitle>Dark Mode</SectionTitle>
-                            <SectionBody>
-                                <DarkMode />
-                            </SectionBody>
-                        </Section>
-                    </Layout>
+                    <NavigationContainer>
+                        <Stack.Navigator
+                            initialRouteName="Home"
+                            screenOptions={{
+                                headerShown: false,
+                            }}
+                        >
+                            <Stack.Screen name="Home" component={HomePage} />
+                            <Stack.Screen
+                                name="Search"
+                                component={SearchPage}
+                            />
+                            <Stack.Screen
+                                name="SelectLocation"
+                                component={SelectLocationPage}
+                            />
+                        </Stack.Navigator>
+                    </NavigationContainer>
                 </Provider>
                 <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
             </ApplicationProvider>
@@ -77,11 +58,3 @@ const Main = () => {
 }
 
 export default Main
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 32,
-        paddingHorizontal: 16,
-    },
-})

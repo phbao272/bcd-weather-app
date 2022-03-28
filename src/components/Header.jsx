@@ -1,46 +1,43 @@
-import { StyleSheet } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 
-import { Layout, Text, Icon } from '@ui-kitten/components'
+import { Layout, Text } from '@ui-kitten/components'
 
-import React, { useContext } from 'react'
+import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { locatitonActiveSelector } from '../redux/selectors'
 
 import { ShareIcon, MenuIcon } from './icons'
 
+import { useNavigation } from '@react-navigation/native'
+
+import globalStyles from '../constants/index'
+
 const Header = () => {
     const location = useSelector(locatitonActiveSelector)
 
+    const navigation = useNavigation()
+
+    const handleGoToSelectLocationPage = () => {
+        navigation.navigate('SelectLocation')
+    }
+
     return (
-        <Layout style={styles.container}>
-            <Text style={styles.heading}>{location}</Text>
-            <Layout style={styles.containerIcon}>
-                <ShareIcon style={[styles.sizeIcon, { marginRight: 24 }]} />
-                <MenuIcon style={styles.sizeIcon} />
+        <Layout style={globalStyles.flexRowSpace}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{location}</Text>
+            <Layout style={globalStyles.flexRowCenterAlign}>
+                <TouchableOpacity>
+                    <ShareIcon
+                        style={[{ marginRight: 24 }, globalStyles.sizeIcon]}
+                    />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={handleGoToSelectLocationPage}>
+                    <MenuIcon />
+                </TouchableOpacity>
             </Layout>
         </Layout>
     )
 }
 
 export default Header
-
-const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    sizeIcon: {
-        width: 24,
-        height: 24,
-    },
-    containerIcon: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    heading: {
-        fontSize: 24,
-        fontWeight: 'bold',
-    },
-})

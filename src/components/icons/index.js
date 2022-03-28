@@ -2,12 +2,17 @@ import { useContext } from 'react'
 import { ThemeContext } from '../../contexts/theme-context'
 import { Icon } from '@ui-kitten/components'
 
+import { StyleSheet } from 'react-native'
+
+import globalStyles from '../../constants/index'
+
 const SearchIcon = (props) => {
     const { theme } = useContext(ThemeContext)
     return (
         <Icon
             name="search"
             {...props}
+            style={globalStyles.sizeIcon}
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
         />
     )
@@ -19,6 +24,7 @@ const ShareIcon = (props) => {
         <Icon
             name="share-outline"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -30,6 +36,7 @@ const MenuIcon = (props) => {
         <Icon
             name="menu-outline"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -41,6 +48,7 @@ const BackIcon = (props) => {
         <Icon
             name="arrow-back-outline"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -52,6 +60,7 @@ const SettingIcon = (props) => {
         <Icon
             name="settings-2-outline"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -64,6 +73,7 @@ const SunIcon = (props) => {
         <Icon
             name="sun-outline"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -76,6 +86,7 @@ const EyeIcon = (props) => {
         <Icon
             name="eye-outline"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -88,6 +99,7 @@ const DropletIcon = (props) => {
         <Icon
             name="droplet"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -100,6 +112,7 @@ const ThermometerIcon = (props) => {
         <Icon
             name="thermometer"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -112,6 +125,7 @@ const ThermometerPlusIcon = (props) => {
         <Icon
             name="thermometer-plus"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -124,6 +138,7 @@ const PressureIcon = (props) => {
         <Icon
             name="compass-outline"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
@@ -136,6 +151,7 @@ const MoreVerticalIcon = (props) => {
         <Icon
             name="more-vertical"
             // fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             fill="#ffffff"
             {...props}
         />
@@ -148,9 +164,37 @@ const ExpandIcon = (props) => {
         <Icon
             name="arrow-right"
             fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
             {...props}
         />
     )
 }
 
-export { SearchIcon, ShareIcon, MenuIcon }
+const UserIcon = (props) => {
+    const { theme } = useContext(ThemeContext)
+    return (
+        <Icon
+            name="person"
+            fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
+            {...props}
+        />
+    )
+}
+
+export {
+    SearchIcon,
+    ShareIcon,
+    MenuIcon,
+    ExpandIcon,
+    MoreVerticalIcon,
+    PressureIcon,
+    BackIcon,
+    SettingIcon,
+    SunIcon,
+    EyeIcon,
+    DropletIcon,
+    ThermometerIcon,
+    ThermometerPlusIcon,
+    UserIcon,
+}
