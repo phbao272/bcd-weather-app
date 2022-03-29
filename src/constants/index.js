@@ -59,21 +59,10 @@ export default {
         borderBottomWidth: 0,
         elevation: 0,
     },
-
-    // text
-    // ///////////////////////////////////////////////////////////////////////////
-    // textSpotify10: { fontFamily: fonts.spotifyRegular, fontSize: 10 },
-    // textSpotify12: { fontFamily: fonts.spotifyRegular, fontSize: 12 },
-    // textSpotify14: { fontFamily: fonts.spotifyRegular, fontSize: 14 },
-    // textSpotify16: { fontFamily: fonts.spotifyRegular, fontSize: 16 },
-    // textSpotify18: { fontFamily: fonts.spotifyRegular, fontSize: 18 },
-    // textSpotifyBold12: { fontFamily: fonts.spotifyBold, fontSize: 12 },
-    // textSpotifyBold16: { fontFamily: fonts.spotifyBold, fontSize: 16 },
-    // textSpotifyBold18: { fontFamily: fonts.spotifyBold, fontSize: 18 },
-    // textSpotifyBold20: { fontFamily: fonts.spotifyBold, fontSize: 20 },
-    // textSpotifyBold22: { fontFamily: fonts.spotifyBold, fontSize: 22 },
-    // textSpotifyBold24: { fontFamily: fonts.spotifyBold, fontSize: 24 },
-
+    secondaryColor: {
+        // color: '#6d6d6d',
+        color: '#d9d9d9',
+    },
     sizeIcon: {
         width: 24,
         height: 24,

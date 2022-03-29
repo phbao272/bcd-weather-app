@@ -163,7 +163,7 @@ const ExpandIcon = (props) => {
     return (
         <Icon
             name="arrow-right"
-            fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            fill={theme === 'light' ? '#4A4A4A' : '#808080'}
             style={globalStyles.sizeIcon}
             {...props}
         />

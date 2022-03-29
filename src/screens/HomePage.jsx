@@ -3,7 +3,7 @@ import { Image, Dimensions, ScrollView, StyleSheet } from 'react-native'
 import { Layout, Avatar } from '@ui-kitten/components'
 
 import Header from '../components/Header'
-import Search from '../components/Search'
+import Summary from '../components/Summary'
 import LinkTo from '../components/LinkTo'
 import DarkMode from '../components/DarkMode'
 import Location from '../components/Location'
@@ -18,12 +18,12 @@ const HomePage = () => {
     console.log(screen)
 
     return (
-        <Layout style={globalStyles.container}>
-            <Layout style={{ paddingTop: 44, opacity: 0.7 }}>
+        <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
+            <Layout style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
                 <Header />
             </Layout>
 
-            <ScrollView>
+            <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
                 <Section>
                     <SectionBody>
                         <Image
@@ -36,9 +36,8 @@ const HomePage = () => {
                 </Section>
 
                 <Section>
-                    <SectionTitle>Link To</SectionTitle>
                     <SectionBody>
-                        <LinkTo />
+                        <Summary />
                     </SectionBody>
                 </Section>
 

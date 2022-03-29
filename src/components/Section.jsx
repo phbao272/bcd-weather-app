@@ -8,7 +8,7 @@ const Section = (props) => {
 
 export const SectionTitle = (props) => {
     return (
-        <Layout style={{ marginVertical: 12 }}>
+        <Layout style={[{ marginVertical: 12 }, props?.styled]}>
             <Text category="s1">{props.children}</Text>
         </Layout>
     )

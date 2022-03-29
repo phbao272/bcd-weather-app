@@ -9,8 +9,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 const DarkMode = () => {
     const context = useContext(ThemeContext)
 
-    
-
     return (
         <Layout>
             <Button onPress={context.toggleTheme} appearance="outline">

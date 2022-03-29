@@ -18,6 +18,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomePage from './src/screens/HomePage'
 import SearchPage from './src/screens/SearchPage'
 import SelectLocationPage from './src/screens/SelectLocationPage'
+import DailyPage from './src/screens/DailyPage'
+import HourlyPage from './src/screens/HourlyPage'
 
 const Stack = createNativeStackNavigator()
 
@@ -47,6 +49,14 @@ const Main = () => {
                             <Stack.Screen
                                 name="SelectLocation"
                                 component={SelectLocationPage}
+                            />
+                            <Stack.Screen
+                                name="DailyPage"
+                                component={DailyPage}
+                            />
+                            <Stack.Screen
+                                name="HourlyPage"
+                                component={HourlyPage}
                             />
                         </Stack.Navigator>
                     </NavigationContainer>

@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 import React from 'react'
 
 import { Layout, Text, Button } from '@ui-kitten/components'
