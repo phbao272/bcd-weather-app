@@ -66,7 +66,7 @@ const Item = (props) => (
 
 const Detail = () => {
     const context = useContext(ThemeContext)
-    const bgcolor = context?.theme === 'dark' ? '#1F1F1F' : '#fafafa'
+    const bgcolor = context?.theme === 'dark' ? '#1F1F1F' : '#F5F5F5'
 
     console.log(bgcolor)
 
