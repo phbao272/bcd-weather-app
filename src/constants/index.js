@@ -2,6 +2,14 @@ const spaceGrid = 8
 
 export default {
     activeOpacity: 0.7,
+    containerFixedTop: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 99,
+        marginBottom: 12,
+    },
     containerAbsolute: {
         position: 'absolute',
         bottom: 0,

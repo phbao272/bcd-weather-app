@@ -23,7 +23,10 @@ const Header = () => {
     }
 
     return (
-        <Layout style={globalStyles.flexRowSpace}>
+        // TODO: Header fixed
+        <Layout
+            style={[globalStyles.containerFixedTop, globalStyles.flexRowSpace]}
+        >
             <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{location}</Text>
             <Layout style={globalStyles.flexRowCenterAlign}>
                 <TouchableOpacity>
