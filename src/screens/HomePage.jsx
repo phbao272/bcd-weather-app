@@ -4,6 +4,7 @@ import { Layout, Avatar } from '@ui-kitten/components'
 
 import Header from '../components/Header'
 import Summary from '../components/Summary'
+import Detail from '../components/Detail'
 import LinkTo from '../components/LinkTo'
 import DarkMode from '../components/DarkMode'
 import Location from '../components/Location'
@@ -42,6 +43,13 @@ const HomePage = () => {
                 </Section>
 
                 <Section>
+                    <SectionTitle>CHI TIẾT</SectionTitle>
+                    <SectionBody>
+                        <Detail />
+                    </SectionBody>
+                </Section>
+
+                <Section>
                     <SectionTitle>Location</SectionTitle>
                     <SectionBody>
                         <Location />
@@ -67,5 +75,4 @@ const styles = StyleSheet.create({
         height: screen.width,
         borderRadius: 12,
     },
-    summary: {},
 })
