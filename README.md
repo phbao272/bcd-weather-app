@@ -2,4 +2,7 @@
 
 ### Screens
 - Home screen
-- Menu screen
+- Search screen
+- Select Location screen
+- Daily screen
+- Hourly screen
