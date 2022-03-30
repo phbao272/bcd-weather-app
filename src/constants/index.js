@@ -1,4 +1,4 @@
-const spaceGrid = 8
+const spaceGrid = 8;
 
 export default {
     activeOpacity: 0.7,
@@ -21,6 +21,7 @@ export default {
         flex: 1,
         paddingTop: 32,
         paddingHorizontal: 16,
+        position: 'relative',
     },
 
     // flex
@@ -162,4 +163,4 @@ export default {
     pH1: { paddingHorizontal: spaceGrid },
     pH2: { paddingHorizontal: spaceGrid * 2 },
     pH3: { paddingHorizontal: spaceGrid * 3 },
-}
+};
