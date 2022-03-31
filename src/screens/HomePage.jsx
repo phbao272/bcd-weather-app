@@ -1,22 +1,76 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, Dimensions, ScrollView, StyleSheet } from 'react-native'
-import { Layout, Avatar } from '@ui-kitten/components'
-
+import { Layout } from '@ui-kitten/components'
 import Header from '../components/Header'
 import Summary from '../components/Summary'
 import Detail from '../components/Detail'
-import LinkTo from '../components/LinkTo'
 import DarkMode from '../components/DarkMode'
-import Location from '../components/Location'
+// import Location from '../components/Location'
 import Section, { SectionTitle, SectionBody } from '../components/Section'
 
 import globalStyles from '../constants/index'
 
-const window = Dimensions.get('window')
+import * as Location from 'expo-location'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLocationNameByCoordinates, getWeatherData } from '../apis'
+import { setLocationActive, addWeatherData } from '../redux/slices/WeatherSlice'
+
+import { weatherDataSelector, dailySelector } from '../redux/selectors'
+
 const screen = Dimensions.get('screen')
 
 const HomePage = () => {
-    console.log(screen)
+    const [coordinates, setCoordinates] = useState({})
+
+    const dispatch = useDispatch()
+
+    const weatherData = useSelector(weatherDataSelector)
+
+    const dailyWeatherData = useSelector(dailySelector)
+
+    // if (Array.isArray(dailyWeatherData)) {
+    //     console.log(dailyWeatherData[0])
+    // }
+
+    // TODO: Ưu cầu bật định vị ở điện thoại
+    useEffect(() => {
+        ;(async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync()
+            if (status !== 'granted') {
+                console.log('permission denied')
+                return
+            }
+
+            let location = await Location.getCurrentPositionAsync({})
+            setCoordinates({
+                lon: location.coords.longitude,
+                lat: location.coords.latitude,
+            })
+        })()
+    }, [])
+
+    // TODO: Lấy tên địa điểm
+    useEffect(() => {
+        if (coordinates.lon && coordinates.lat) {
+            console.log(coordinates)
+            getLocationNameByCoordinates(coordinates.lon, coordinates.lat).then(
+                (res) => {
+                    console.log(res.data[0].local_names.vi)
+                    dispatch(setLocationActive(res.data[0].local_names.vi))
+                },
+            )
+        }
+    }, [coordinates])
+
+    // TODO: Lấy dữ liệu One Call
+    useEffect(() => {
+        if (coordinates.lon && coordinates.lat) {
+            getWeatherData(coordinates.lon, coordinates.lat).then((res) => {
+                console.log(res.data)
+                dispatch(addWeatherData(res.data))
+            })
+        }
+    }, [coordinates])
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
@@ -25,6 +79,7 @@ const HomePage = () => {
             </Layout>
 
             <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
+                {/* Image */}
                 <Section>
                     <SectionBody>
                         <Image
@@ -46,13 +101,6 @@ const HomePage = () => {
                     <SectionTitle>CHI TIẾT</SectionTitle>
                     <SectionBody>
                         <Detail />
-                    </SectionBody>
-                </Section>
-
-                <Section>
-                    <SectionTitle>Location</SectionTitle>
-                    <SectionBody>
-                        <Location />
                     </SectionBody>
                 </Section>
 

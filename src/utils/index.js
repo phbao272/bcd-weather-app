@@ -30,4 +30,8 @@ const ConvertKToC = (kelvin) => {
     return (kelvin - 273.15).toFixed()
 }
 
-export { ConvertKToC, ConvertUnixTimeToUTC }
+const ConvertVisibility = (visibility) => {
+    return (visibility / 1000).toFixed()
+}
+
+export { ConvertKToC, ConvertUnixTimeToUTC, ConvertVisibility }

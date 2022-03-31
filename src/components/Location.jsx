@@ -11,7 +11,6 @@ import { getLocationNameByCoordinates } from '../apis'
 
 const LocationTest = () => {
     const [coordinates, setCoordinates] = useState({})
-    const [errorMsg, setErrorMsg] = useState(null)
 
     const dispatch = useDispatch()
 
@@ -25,29 +24,21 @@ const LocationTest = () => {
 
             let location = await Location.getCurrentPositionAsync({})
             setCoordinates({
-                longitude: location.coords.longitude,
-                latitude: location.coords.latitude,
+                lon: location.coords.longitude,
+                lat: location.coords.latitude,
             })
         })()
     }, [])
 
-    let text = 'Waiting..'
-    if (errorMsg) {
-        text = errorMsg
-    } else if (location) {
-        text = JSON.stringify(location)
-    }
-
     useEffect(() => {
-        if (coordinates.longitude && coordinates.latitude) {
+        if (coordinates.lon && coordinates.lat) {
             console.log(coordinates)
-            getLocationNameByCoordinates(
-                coordinates.longitude,
-                coordinates.latitude,
-            ).then((res) => {
-                console.log(res.data[0].local_names.vi)
-                dispatch(setLocationActive(res.data[0].local_names.vi))
-            })
+            getLocationNameByCoordinates(coordinates.lon, coordinates.lat).then(
+                (res) => {
+                    console.log(res.data[0].local_names.vi)
+                    dispatch(setLocationActive(res.data[0].local_names.vi))
+                },
+            )
         }
     }, [coordinates])
 
