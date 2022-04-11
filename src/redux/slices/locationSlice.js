@@ -5,7 +5,7 @@ import apis from '../../apis'
 export const setLocationActive = createAsyncThunk(
     'location/setLocationActive',
     async (params) => {
-        console.log(params)
+        // console.log(params)
         const res = await apis.getLocationNameByCoordinates(
             params.lon,
             params.lat,

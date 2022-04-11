@@ -10,5 +10,6 @@ export const hourlySelector = (state) => state.weather.weatherData.hourly
 
 export const getLoadingSelector = (state) => state.weather.loading
 
+
 // export const currentDailySelector = (state) =>
 //     state.weather.weatherData.daily

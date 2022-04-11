@@ -49,19 +49,19 @@ const Detail = () => {
             id: '1',
             icon: ThermometerIcon,
             title: 'Cảm Giác Như',
-            data: `${ConvertKToC(currentData?.feels_like)}°C`,
+            data: `${ConvertKToC(currentWeatherData?.feels_like)}°C`,
         },
         {
             id: '2',
             icon: DropletIcon,
             title: 'Độ Ẩm',
-            data: `${currentData?.humidity}%`,
+            data: `${currentWeatherData?.humidity}%`,
         },
         {
             id: '3',
             icon: SunIcon,
             title: 'Chỉ Số UV',
-            data: `${Number(currentData?.uvi).toFixed()}`,
+            data: `${Number(currentWeatherData?.uvi).toFixed()}`,
         },
     ]
 
@@ -70,19 +70,19 @@ const Detail = () => {
             id: '4',
             icon: EyeIcon,
             title: 'Tầm Nhìn',
-            data: `${ConvertVisibility(currentData?.visibility)} km`,
+            data: `${ConvertVisibility(currentWeatherData?.visibility)} km`,
         },
         {
             id: '5',
             icon: ThermometerPlusIcon,
             title: 'Điểm Sương',
-            data: `${ConvertKToC(currentData?.dew_point)}°C`,
+            data: `${ConvertKToC(currentWeatherData?.dew_point)}°C`,
         },
         {
             id: '6',
             icon: PressureIcon,
             title: 'Ấp Suất',
-            data: `${currentData?.pressure}`,
+            data: `${currentWeatherData?.pressure}`,
         },
     ]
 
@@ -126,7 +126,6 @@ export default Detail
 const styles = StyleSheet.create({
     item: {
         flex: 1,
-        backgroundColor: 'red',
         padding: 12,
         justifyContent: 'center',
         alignItems: 'center',

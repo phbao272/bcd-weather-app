@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Dimensions, ScrollView, StyleSheet, Alert } from 'react-native'
 import { Layout, Spinner } from '@ui-kitten/components'
+
 import Header from '../components/Header'
 import Summary from '../components/Summary'
 import Detail from '../components/Detail'
+import Hourly from '../components/hourly/Hourly'
 import DarkMode from '../components/DarkMode'
 
+import ExpandIcon from '../components/icons'
 import Section, { SectionTitle, SectionBody } from '../components/Section'
 
 import globalStyles from '../constants/index'
 
 import * as Location from 'expo-location'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
 
 import { getWeatherData } from '../redux/slices/WeatherSlice'
 import { setLocationActive } from '../redux/slices/locationSlice'
@@ -31,6 +35,7 @@ const HomePage = () => {
     const [coordinates, setCoordinates] = useState({})
 
     const dispatch = useDispatch()
+    const navigation = useNavigation()
 
     const weatherData = useSelector(weatherDataSelector)
 
@@ -90,6 +95,10 @@ const HomePage = () => {
         }
     }, [coordinates])
 
+    const handleGoToHourlyPage = () => {
+        navigation.navigate('HourlyPage')
+    }
+
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
             {isLoading ? (
@@ -133,6 +142,18 @@ const HomePage = () => {
                             <SectionTitle>CHI TIẾT</SectionTitle>
                             <SectionBody>
                                 <Detail />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle
+                                expand={true}
+                                onPress={handleGoToHourlyPage}
+                            >
+                                HÀNG GIỜ
+                            </SectionTitle>
+                            <SectionBody>
+                                <Hourly />
                             </SectionBody>
                         </Section>
 

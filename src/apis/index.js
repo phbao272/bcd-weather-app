@@ -32,7 +32,7 @@ const apis = {
 
 // export const getWeatherData = (lon, lat) =>
 //     axios.get(
-//         `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}`,
+//         `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${API_KEY}`,
 //     )
 
 export default apis

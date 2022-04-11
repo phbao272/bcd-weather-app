@@ -34,4 +34,33 @@ const ConvertVisibility = (visibility) => {
     return (visibility / 1000).toFixed()
 }
 
-export { ConvertKToC, ConvertUnixTimeToUTC, ConvertVisibility }
+const ConvertWindSpeed = (speed) => {
+    return (speed * 3.6).toFixed()
+}
+
+const ConvertWindDeg = (deg) => {
+    let res = ''
+
+    if (deg >= 22.5 && deg <= 112.5) {
+        res = 'đông - đông bắc'
+    } else if (deg > 112.5 && deg < 202.5) {
+        res = 'nam - đông nam'
+    } else if (deg > 202.5 && deg < 292.5) {
+        res = 'tây - tây nam'
+    } else {
+        res = 'bắc - tây bắc'
+    }
+
+    return res
+}
+
+const ConvertPop = (value) => (value * 100).toFixed()
+
+export {
+    ConvertKToC,
+    ConvertUnixTimeToUTC,
+    ConvertVisibility,
+    ConvertWindSpeed,
+    ConvertWindDeg,
+    ConvertPop,
+}

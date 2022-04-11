@@ -5,7 +5,7 @@ import apis from '../../apis'
 export const getWeatherData = createAsyncThunk(
     'weather/getWeatherData',
     async (params, thunkAPI) => {
-        console.log(params)
+        // console.log(params)
         const res = await apis.getWeatherData(params.lon, params.lat)
         return res.data
     },
