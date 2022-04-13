@@ -1,5 +1,5 @@
 import React from 'react'
-import { TouchableOpacity } from 'react-native'
+import { TouchableOpacity, StyleSheet } from 'react-native'
 import { Layout, Text } from '@ui-kitten/components'
 import { useNavigation } from '@react-navigation/native'
 

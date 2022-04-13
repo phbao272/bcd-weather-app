@@ -18,17 +18,8 @@ const apis = {
         axios.get(
             `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}`,
         ),
+    getWeatherIcon: (id) => `http://openweathermap.org/img/wn/${id}@2x.png`,
 }
-
-// export const getCoordinatesByLocationName = (cityName, limit = 5) =>
-//     axios.get(
-//         `${BASE_URL}/geo/1.0/direct?q=${cityName}&limit=${limit}&appid=${API_KEY}`,
-//     )
-
-// export const getLocationNameByCoordinates = (lon, lat, limit = 5) =>
-//     axios.get(
-//         `${BASE_URL}/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${API_KEY}`,
-//     )
 
 // export const getWeatherData = (lon, lat) =>
 //     axios.get(

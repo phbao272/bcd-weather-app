@@ -23,19 +23,19 @@ moment.updateLocale('vi', {
 // 'dddd, Do MMMM'
 // 'hh:mm'
 const ConvertUnixTimeToUTC = (time, format) => {
-    return moment(time * 1000).format(format)
+    return time ? moment(time * 1000).format(format) : ''
 }
 
 const ConvertKToC = (kelvin) => {
-    return (kelvin - 273.15).toFixed()
+    return kelvin ? (kelvin - 273.15).toFixed() : ''
 }
 
 const ConvertVisibility = (visibility) => {
-    return (visibility / 1000).toFixed()
+    return visibility ? (visibility / 1000).toFixed() : ''
 }
 
 const ConvertWindSpeed = (speed) => {
-    return (speed * 3.6).toFixed()
+    return speed ? (speed * 3.6).toFixed() : ''
 }
 
 const ConvertWindDeg = (deg) => {
@@ -54,7 +54,9 @@ const ConvertWindDeg = (deg) => {
     return res
 }
 
-const ConvertPop = (value) => (value * 100).toFixed()
+const ConvertPop = (value) => {
+    return value ? (value * 100).toFixed() : ''
+}
 
 export {
     ConvertKToC,

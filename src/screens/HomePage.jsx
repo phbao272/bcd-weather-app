@@ -6,9 +6,9 @@ import Header from '../components/Header'
 import Summary from '../components/Summary'
 import Detail from '../components/Detail'
 import Hourly from '../components/hourly/Hourly'
+import Daily from '../components/daily/Daily'
 import DarkMode from '../components/DarkMode'
 
-import ExpandIcon from '../components/icons'
 import Section, { SectionTitle, SectionBody } from '../components/Section'
 
 import globalStyles from '../constants/index'
@@ -50,7 +50,11 @@ const HomePage = () => {
     // console.log(dailyWeatherData)
 
     useEffect(() => {
-        setLoading(loading)
+        if (!loading) {
+            setTimeout(() => {
+                setLoading(loading)
+            }, 1500)
+        }
     }, [loading])
 
     // TODO: Ưu cầu bật định vị ở điện thoại
@@ -98,6 +102,14 @@ const HomePage = () => {
     const handleGoToHourlyPage = () => {
         navigation.navigate('HourlyPage')
     }
+
+    const handleGoToDailyPage = () => {
+        navigation.navigate('DailyPage')
+    }
+
+    useEffect(() => {
+        // .then((res) => console.log(res.data))
+    }, [])
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
@@ -154,6 +166,18 @@ const HomePage = () => {
                             </SectionTitle>
                             <SectionBody>
                                 <Hourly />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle
+                                expand={true}
+                                onPress={handleGoToDailyPage}
+                            >
+                                HÀNG NGÀY
+                            </SectionTitle>
+                            <SectionBody>
+                                <Daily />
                             </SectionBody>
                         </Section>
 

@@ -55,13 +55,19 @@ const Detail = () => {
             id: '2',
             icon: DropletIcon,
             title: 'Độ Ẩm',
-            data: `${currentWeatherData?.humidity}%`,
+            data: `${
+                currentWeatherData?.humidity ? currentWeatherData?.humidity : ''
+            }%`,
         },
         {
             id: '3',
             icon: SunIcon,
             title: 'Chỉ Số UV',
-            data: `${Number(currentWeatherData?.uvi).toFixed()}`,
+            data: `${
+                Number(currentWeatherData?.uvi).toFixed() === NaN
+                    ? ''
+                    : Number(currentWeatherData?.uvi).toFixed()
+            }`,
         },
     ]
 
@@ -82,7 +88,9 @@ const Detail = () => {
             id: '6',
             icon: PressureIcon,
             title: 'Ấp Suất',
-            data: `${currentWeatherData?.pressure}`,
+            data: `${
+                currentWeatherData?.pressure ? currentWeatherData?.pressure : ''
+            }`,
         },
     ]
 

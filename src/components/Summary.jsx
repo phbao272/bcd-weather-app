@@ -82,7 +82,7 @@ const Summary = () => {
                     )}
                 </Text>
                 <Text category="s2" style={{ fontSize: 16, marginBottom: 8 }}>
-                    {descriptionWeather[currentData.weather[0].id]}
+                    {descriptionWeather[currentData?.weather[0]?.id]}
                 </Text>
                 <TouchableOpacity
                     onPress={handleGoToDailyPage}

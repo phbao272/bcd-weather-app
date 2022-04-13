@@ -11,7 +11,7 @@ const Section = (props) => {
 
 export const SectionTitle = (props) => {
     const { expand, onPress } = props
-    console.log(props)
+    // console.log(props)
     return (
         <Layout
             style={[

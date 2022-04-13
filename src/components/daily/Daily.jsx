@@ -4,18 +4,20 @@ import React, { useState, useEffect } from 'react'
 import globalStyles from '../../constants/index'
 
 import { useSelector } from 'react-redux'
-import { hourlySelector } from '../../redux/selectors'
+import { dailySelector } from '../../redux/selectors'
 
-import HourlyItem from './HourlyItem'
+import DailyItem from './DailyItem'
 
-const Hourly = () => {
-    const [hourly, setHourly] = useState([])
+const Daily = () => {
+    const [daily, setDaily] = useState([])
 
-    const hourlyData = useSelector(hourlySelector)
+    const dailyData = useSelector(dailySelector)
 
     useEffect(() => {
-        setHourly(hourlyData)
-    }, [hourlyData])
+        setDaily(dailyData)
+    }, [dailyData])
+
+    console.log(daily)
 
     return (
         <Layout>
@@ -24,14 +26,14 @@ const Hourly = () => {
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
             >
-                {hourly.map((item, index) => (
-                    <HourlyItem key={index} data={item} active={index === 0} />
+                {daily.map((item, index) => (
+                    <DailyItem key={index} data={item} active={index === 0} />
                 ))}
             </ScrollView>
         </Layout>
     )
 }
 
-export default Hourly
+export default Daily
 
 const styles = StyleSheet.create({})

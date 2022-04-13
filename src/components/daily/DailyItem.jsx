@@ -16,14 +16,12 @@ import {
 import globalStyles from '../../constants/index'
 import apis from '../../apis/index'
 
-const HourlyItem = (props) => {
+const DailyItem = (props) => {
     const { data, active } = props
 
     const context = useContext(ThemeContext)
     const bgcolor = context?.theme === 'dark' ? '#1F1F1F' : '#F5F5F5'
 
-    // console.log(data)
-    // console.log(screen)
     return (
         <Layout
             style={[
@@ -31,7 +29,9 @@ const HourlyItem = (props) => {
                 active ? { backgroundColor: bgcolor } : '',
             ]}
         >
-            <Text style={globalStyles.mB1}>{ConvertKToC(data?.temp)}°</Text>
+            <Text style={globalStyles.mB1}>
+                {`${ConvertKToC(data?.temp?.max)}° - ${ConvertKToC(data?.temp?.min)}°`}
+            </Text>
             <Text style={[styles.text, styles.textPop]}>
                 {ConvertPop(data?.pop) == 0
                     ? '   '
@@ -55,12 +55,13 @@ const HourlyItem = (props) => {
                 />
             </Text>
             <Text style={[styles.text, { fontSize: 14 }]}>
-                {ConvertUnixTimeToUTC(data?.dt, 'HH:mm')}
+                {ConvertUnixTimeToUTC(data?.dt, 'dddd')}
             </Text>
         </Layout>
     )
 }
-export default HourlyItem
+
+export default DailyItem
 
 const styles = StyleSheet.create({
     container: {
