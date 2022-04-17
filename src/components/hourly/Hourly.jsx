@@ -1,6 +1,7 @@
 import { StyleSheet, ScrollView } from 'react-native'
 import { Layout } from '@ui-kitten/components'
 import React, { useState, useEffect } from 'react'
+
 import globalStyles from '../../constants/index'
 
 import { useSelector } from 'react-redux'

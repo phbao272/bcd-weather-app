@@ -7,11 +7,12 @@ import Summary from '../components/Summary'
 import Detail from '../components/Detail'
 import Hourly from '../components/hourly/Hourly'
 import Daily from '../components/daily/Daily'
+import AreaChart from '../components/charts/AreaChart'
 import DarkMode from '../components/DarkMode'
 
 import Section, { SectionTitle, SectionBody } from '../components/Section'
 
-import globalStyles from '../constants/index'
+import globalStyles, { color } from '../constants/index'
 
 import * as Location from 'expo-location'
 import { useDispatch, useSelector } from 'react-redux'
@@ -24,6 +25,7 @@ import apis from '../apis'
 
 import {
     weatherDataSelector,
+    hourlySelector,
     dailySelector,
     getLoadingSelector,
 } from '../redux/selectors'
@@ -37,11 +39,19 @@ const HomePage = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
 
-    const weatherData = useSelector(weatherDataSelector)
+    // const weatherData = useSelector(weatherDataSelector)
 
-    const dailyWeatherData = useSelector(dailySelector)
+    // const dailyWeatherData = useSelector(dailySelector)
 
     const loading = useSelector(getLoadingSelector)
+
+    const [hourly, setHourly] = useState([])
+
+    const hourlyData = useSelector(hourlySelector)
+
+    useEffect(() => {
+        setHourly(hourlyData)
+    }, [hourlyData])
 
     // if (Array.isArray(dailyWeatherData)) {
     //     console.log(dailyWeatherData[0])
@@ -107,9 +117,13 @@ const HomePage = () => {
         navigation.navigate('DailyPage')
     }
 
-    useEffect(() => {
-        // .then((res) => console.log(res.data))
-    }, [])
+    const handleGoToGraphPage = () => {
+        navigation.navigate('GraphPage')
+    }
+
+    // useEffect(() => {
+    //     console.log(hourlyData)
+    // }, [])
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
@@ -178,6 +192,26 @@ const HomePage = () => {
                             </SectionTitle>
                             <SectionBody>
                                 <Daily />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle
+                                expand={true}
+                                onPress={handleGoToGraphPage}
+                            >
+                                ĐỒ THỊ
+                            </SectionTitle>
+                            <SectionBody>
+                                <AreaChart
+                                    title=""
+                                    data={hourly}
+                                    name="Khả năng mưa"
+                                    color={color.pop}
+                                    color_shadow={color.pop_shadow}
+                                    type="pop"
+                                    y_axis_suffix="%"
+                                />
                             </SectionBody>
                         </Section>
 

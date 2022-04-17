@@ -30,7 +30,9 @@ const DailyItem = (props) => {
             ]}
         >
             <Text style={globalStyles.mB1}>
-                {`${ConvertKToC(data?.temp?.max)}° - ${ConvertKToC(data?.temp?.min)}°`}
+                {`${ConvertKToC(data?.temp?.max)}° - ${ConvertKToC(
+                    data?.temp?.min,
+                )}°`}
             </Text>
             <Text style={[styles.text, styles.textPop]}>
                 {ConvertPop(data?.pop) == 0

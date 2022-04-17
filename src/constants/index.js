@@ -1,4 +1,17 @@
-const spaceGrid = 8;
+const spaceGrid = 8
+
+export const color = {
+    pop: '#2e7ddb',
+    pop_shadow: '#4498fa',
+    temp: '#da935d',
+    temp_shadow: '#ffb47b',
+    wind: '#9cd65e',
+    uvi: '#e8d980',
+    humidity: '#9d77fe',
+    humidity_shadow: '',
+    dew_point: '#b1cdd2',
+    dew_point_shadow: '#b2cdd4',
+}
 
 export default {
     activeOpacity: 0.7,
@@ -163,4 +176,4 @@ export default {
     pH1: { paddingHorizontal: spaceGrid },
     pH2: { paddingHorizontal: spaceGrid * 2 },
     pH3: { paddingHorizontal: spaceGrid * 3 },
-};
+}

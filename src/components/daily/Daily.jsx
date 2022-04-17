@@ -17,7 +17,7 @@ const Daily = () => {
         setDaily(dailyData)
     }, [dailyData])
 
-    console.log(daily)
+    // console.log(daily)
 
     return (
         <Layout>
