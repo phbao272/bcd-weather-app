@@ -1,8 +1,8 @@
-import { StyleSheet, View, Image, Dimensions } from 'react-native'
-import React from 'react'
-import AppIntroSlider from 'react-native-app-intro-slider'
+import { StyleSheet, View, Image, Dimensions, TouchableOpacity } from 'react-native';
+import React from 'react';
+import AppIntroSlider from 'react-native-app-intro-slider';
 
-import { Layout, Text } from '@ui-kitten/components'
+import { Layout, Text } from '@ui-kitten/components';
 
 const slides = [
     {
@@ -10,16 +10,14 @@ const slides = [
         title: 'BCD WEATHER',
         image: require('../../assets/welcome-image/intro.png'),
         text: 'Một ứng dụng thời tiết đẹp và dễ sử dụng',
-        backgroundColor: '#59b2ab',
     },
     {
         key: 'two',
-        title: 'Title 2',
-        text: 'Other cool stuff',
+        title: 'CHO PHÉP QUYỀN',
+        text: 'BCD Weather cần quyền truy cập vị trí của bạn để hoạt động',
         image: require('../../assets/welcome-image/intro.png'),
-        backgroundColor: '#febe29',
     },
-]
+];
 
 const WelcomePage = () => {
     const renderItem = ({ item }) => {
@@ -30,19 +28,28 @@ const WelcomePage = () => {
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text>{item.title}</Text>
-                    <Text>{item.text}</Text>
+                    <Text style={{ fontSize: 26 }}>{item.title}</Text>
+                    <Text style={{ fontSize: 18 }}>{item.text}</Text>
                 </View>
             </View>
-        )
-    }
+        );
+    };
 
-    return <AppIntroSlider data={slides} renderItem={renderItem} />
-}
+    const _renderDoneButton = () => {
+        return (
+            <TouchableOpacity style={styles.doneButton}>
+                <Text>CẤP QUYỀN</Text>
+            </TouchableOpacity>
+        );
+    };
 
-export default WelcomePage
+    //
+    return <AppIntroSlider data={slides} renderItem={renderItem} renderDoneButton={_renderDoneButton} showNextButton={false} />;
+};
 
-const screen = Dimensions.get('screen')
+export default WelcomePage;
+
+const screen = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
     container: {
@@ -56,6 +63,7 @@ const styles = StyleSheet.create({
         height: screen.height / 2,
         width: screen.width,
         overflow: 'hidden',
+        padding: 4,
     },
 
     image: {
@@ -64,7 +72,14 @@ const styles = StyleSheet.create({
     },
 
     textContainer: {
-        justifyContent: 'flex-start',
+        padding: 16,
         flex: 1,
+        textAlign: 'left',
     },
-})
+
+    doneButton: {
+        backgroundColor: '#ccc',
+        paddingVertical: 4,
+        paddingHorizontal: 8,
+    },
+});
