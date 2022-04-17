@@ -40,6 +40,7 @@ const GraphPage = () => {
                         style={[
                             globalStyles.flexRowCenterAlign,
                             styles.containerFixedTop,
+                            { paddingHorizontal: 16 },
                         ]}
                     >
                         <TouchableOpacity
@@ -53,7 +54,7 @@ const GraphPage = () => {
                         </Text>
                     </Layout>
                 </SectionTitle>
-                <ScrollView>
+                <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
                     <SectionBody>
                         <Section>
                             <SectionTitle>KHẢ NĂNG MƯA</SectionTitle>
@@ -148,5 +149,6 @@ export default GraphPage
 const styles = StyleSheet.create({
     container: {
         paddingBottom: 24,
+        paddingHorizontal: 0,
     },
 })

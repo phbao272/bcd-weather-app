@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Image, Dimensions, ScrollView, StyleSheet, Alert } from 'react-native'
+import {
+    Image,
+    Dimensions,
+    ScrollView,
+    StyleSheet,
+    Alert,
+    TouchableOpacity,
+} from 'react-native'
 import { Layout, Spinner } from '@ui-kitten/components'
 
 import Header from '../components/Header'
@@ -18,7 +25,7 @@ import * as Location from 'expo-location'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 
-import { getWeatherData } from '../redux/slices/WeatherSlice'
+import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
 import { setLocationActive } from '../redux/slices/locationSlice'
 
 import apis from '../apis'
@@ -105,6 +112,10 @@ const HomePage = () => {
         if (coordinates.lon && coordinates.lat) {
             dispatch(
                 getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }),
+            )
+
+            dispatch(
+                getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }),
             )
         }
     }, [coordinates])
@@ -201,6 +212,26 @@ const HomePage = () => {
                                 onPress={handleGoToGraphPage}
                             >
                                 ĐỒ THỊ
+                            </SectionTitle>
+                            <SectionBody>
+                                <AreaChart
+                                    title=""
+                                    data={hourly}
+                                    name="Khả năng mưa"
+                                    color={color.pop}
+                                    color_shadow={color.pop_shadow}
+                                    type="pop"
+                                    y_axis_suffix="%"
+                                />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle
+                                expand={true}
+                                onPress={handleGoToGraphPage}
+                            >
+                                CHẤT LƯỢNG KHÔNG KHÍ
                             </SectionTitle>
                             <SectionBody>
                                 <AreaChart

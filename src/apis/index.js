@@ -19,6 +19,10 @@ const apis = {
             `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}`,
         ),
     getWeatherIcon: (id) => `http://openweathermap.org/img/wn/${id}@2x.png`,
+    getAirPollution: (lon, lat) =>
+        axios.get(
+            `${BASE_URL}/data/2.5/air_pollution/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`,
+        ),
 }
 
 // export const getWeatherData = (lon, lat) =>

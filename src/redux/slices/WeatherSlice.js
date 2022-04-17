@@ -11,8 +11,19 @@ export const getWeatherData = createAsyncThunk(
     },
 )
 
+export const getAirPollution = createAsyncThunk(
+    'weather/getAirPollution',
+    async (params, thunkAPI) => {
+        // console.log(params)
+        const res = await apis.getAirPollution(params.lon, params.lat)
+
+        return res.data.list
+    },
+)
+
 const initState = {
     weatherData: {},
+    airPollution: [],
     loading: true,
     error: '',
 }
@@ -35,6 +46,18 @@ export const weatherSlice = createSlice({
         },
         [getWeatherData.fulfilled]: (state, action) => {
             state.weatherData = action.payload
+            state.loading = false
+        },
+
+        [getAirPollution.pending]: (state) => {
+            state.loading = true
+        },
+        [getAirPollution.rejected]: (state, action) => {
+            state.loading = false
+            state.error = action.error
+        },
+        [getAirPollution.fulfilled]: (state, action) => {
+            state.airPollution = action.payload
             state.loading = false
         },
     },
