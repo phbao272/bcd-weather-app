@@ -1,42 +1,38 @@
-import React, { useState, useEffect } from 'react'
-import { Image, Dimensions, ScrollView, StyleSheet, Alert } from 'react-native'
-import { Layout, Spinner } from '@ui-kitten/components'
-import Header from '../components/Header'
-import Summary from '../components/Summary'
-import Detail from '../components/Detail'
-import DarkMode from '../components/DarkMode'
+import React, { useState, useEffect } from 'react';
+import { Image, Dimensions, ScrollView, StyleSheet, Alert, TouchableOpacity } from 'react-native';
+import { Layout, Spinner, Text } from '@ui-kitten/components';
+import Header from '../components/Header';
+import Summary from '../components/Summary';
+import Detail from '../components/Detail';
+import DarkMode from '../components/DarkMode';
+import { useNavigation } from '@react-navigation/native';
+import Section, { SectionTitle, SectionBody } from '../components/Section';
 
-import Section, { SectionTitle, SectionBody } from '../components/Section'
+import globalStyles from '../constants/index';
 
-import globalStyles from '../constants/index'
+import * as Location from 'expo-location';
+import { useDispatch, useSelector } from 'react-redux';
 
-import * as Location from 'expo-location'
-import { useDispatch, useSelector } from 'react-redux'
+import { getWeatherData } from '../redux/slices/WeatherSlice';
+import { setLocationActive } from '../redux/slices/locationSlice';
 
-import { getWeatherData } from '../redux/slices/WeatherSlice'
-import { setLocationActive } from '../redux/slices/locationSlice'
+import apis from '../apis';
 
-import apis from '../apis'
+import { weatherDataSelector, dailySelector, getLoadingSelector } from '../redux/selectors';
 
-import {
-    weatherDataSelector,
-    dailySelector,
-    getLoadingSelector,
-} from '../redux/selectors'
-
-const screen = Dimensions.get('screen')
+const screen = Dimensions.get('screen');
 
 const HomePage = () => {
-    const [isLoading, setLoading] = useState(true)
-    const [coordinates, setCoordinates] = useState({})
+    const [isLoading, setLoading] = useState(true);
+    const [coordinates, setCoordinates] = useState({});
 
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
-    const weatherData = useSelector(weatherDataSelector)
+    const weatherData = useSelector(weatherDataSelector);
 
-    const dailyWeatherData = useSelector(dailySelector)
+    const dailyWeatherData = useSelector(dailySelector);
 
-    const loading = useSelector(getLoadingSelector)
+    const loading = useSelector(getLoadingSelector);
 
     // if (Array.isArray(dailyWeatherData)) {
     //     console.log(dailyWeatherData[0])
@@ -45,50 +41,54 @@ const HomePage = () => {
     // console.log(dailyWeatherData)
 
     useEffect(() => {
-        setLoading(loading)
-    }, [loading])
+        setLoading(loading);
+    }, [loading]);
 
     // TODO: Ưu cầu bật định vị ở điện thoại
     useEffect(() => {
-        handleTurnOnLocation()
-    }, [])
+        handleTurnOnLocation();
+    }, []);
 
     const handleTurnOnLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync()
+        let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
-            console.log('permission denied')
-            Alert.alert('permission denied')
-            return
+            console.log('permission denied');
+            Alert.alert('permission denied');
+            return;
         }
 
-        let location = await Location.getCurrentPositionAsync({})
+        let location = await Location.getCurrentPositionAsync({});
         setCoordinates({
             lon: location.coords.longitude,
             lat: location.coords.latitude,
-        })
-    }
+        });
+    };
+
+    const navigation = useNavigation();
+
+    const handleGoToWelcomePage = () => {
+        navigation.navigate('WelcomePage');
+    };
 
     // TODO: Lấy tên địa điểm
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
-            console.log(coordinates)
+            console.log(coordinates);
             dispatch(
                 setLocationActive({
                     lon: coordinates.lon,
                     lat: coordinates.lat,
-                }),
-            )
+                })
+            );
         }
-    }, [coordinates])
+    }, [coordinates]);
 
     // TODO: Lấy dữ liệu One Call
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
-            dispatch(
-                getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }),
-            )
+            dispatch(getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }));
         }
-    }, [coordinates])
+    }, [coordinates]);
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
@@ -108,9 +108,7 @@ const HomePage = () => {
                         <Header />
                     </Layout>
 
-                    <ScrollView
-                        contentContainerStyle={{ paddingHorizontal: 16 }}
-                    >
+                    <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
                         {/* Image */}
                         <Section>
                             <SectionBody>
@@ -142,14 +140,23 @@ const HomePage = () => {
                                 <DarkMode />
                             </SectionBody>
                         </Section>
+
+                        <Section>
+                            <SectionTitle>WelcomePage</SectionTitle>
+                            <SectionBody>
+                                <TouchableOpacity onPress={handleGoToWelcomePage}>
+                                    <Text>WelcomePage</Text>
+                                </TouchableOpacity>
+                            </SectionBody>
+                        </Section>
                     </ScrollView>
                 </>
             )}
         </Layout>
-    )
-}
+    );
+};
 
-export default HomePage
+export default HomePage;
 
 const styles = StyleSheet.create({
     imageStyle: {
@@ -157,4 +164,4 @@ const styles = StyleSheet.create({
         height: screen.width,
         borderRadius: 12,
     },
-})
+});
