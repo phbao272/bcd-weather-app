@@ -1,8 +1,8 @@
-import { StyleSheet, View, Image, Dimensions } from 'react-native';
-import React from 'react';
-import AppIntroSlider from 'react-native-app-intro-slider';
+import { StyleSheet, View, Image, Dimensions } from 'react-native'
+import React from 'react'
+import AppIntroSlider from 'react-native-app-intro-slider'
 
-import { Layout, Text } from '@ui-kitten/components';
+import { Layout, Text } from '@ui-kitten/components'
 
 const slides = [
     {
@@ -19,7 +19,7 @@ const slides = [
         image: require('../../assets/welcome-image/intro.png'),
         backgroundColor: '#febe29',
     },
-];
+]
 
 const WelcomePage = () => {
     const renderItem = ({ item }) => {
@@ -34,15 +34,15 @@ const WelcomePage = () => {
                     <Text>{item.text}</Text>
                 </View>
             </View>
-        );
-    };
+        )
+    }
 
-    return <AppIntroSlider data={slides} renderItem={renderItem} />;
-};
+    return <AppIntroSlider data={slides} renderItem={renderItem} />
+}
 
-export default WelcomePage;
+export default WelcomePage
 
-const screen = Dimensions.get('screen');
+const screen = Dimensions.get('screen')
 
 const styles = StyleSheet.create({
     container: {
@@ -54,15 +54,17 @@ const styles = StyleSheet.create({
 
     imageContainer: {
         height: screen.height / 2,
+        width: screen.width,
         overflow: 'hidden',
     },
 
     image: {
-        width: screen.width,
+        width: '100%',
+        height: screen.width,
     },
 
     textContainer: {
         justifyContent: 'flex-start',
         flex: 1,
     },
-});
+})
