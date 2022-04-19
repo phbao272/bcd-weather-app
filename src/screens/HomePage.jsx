@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {
-    Image,
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    Alert,
-    TouchableOpacity,
-} from 'react-native'
+import { Image, Dimensions, ScrollView, StyleSheet, Alert } from 'react-native'
 import { Layout, Spinner } from '@ui-kitten/components'
 
 import Header from '../components/Header'
@@ -36,6 +29,8 @@ import {
     dailySelector,
     getLoadingSelector,
 } from '../redux/selectors'
+
+import { calcAQI } from '../utils'
 
 const screen = Dimensions.get('screen')
 
@@ -130,6 +125,10 @@ const HomePage = () => {
 
     const handleGoToGraphPage = () => {
         navigation.navigate('GraphPage')
+    }
+
+    const handleGoToAirPollutionPage = () => {
+        navigation.navigate('AirPollutionPage')
     }
 
     // useEffect(() => {
@@ -229,7 +228,7 @@ const HomePage = () => {
                         <Section>
                             <SectionTitle
                                 expand={true}
-                                onPress={handleGoToGraphPage}
+                                onPress={handleGoToAirPollutionPage}
                             >
                                 CHẤT LƯỢNG KHÔNG KHÍ
                             </SectionTitle>

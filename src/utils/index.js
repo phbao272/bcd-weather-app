@@ -1,4 +1,5 @@
 import moment from 'moment'
+import _ from 'lodash'
 
 moment.locale('vi')
 
@@ -57,6 +58,32 @@ const ConvertWindDeg = (deg) => {
 const ConvertPop = (value) => {
     return value ? (value * 100).toFixed() : ''
 }
+
+// export const calcAQI = (arr, value) => {
+//     const max = _.max(arr)
+//     const min = _.min(arr)
+//     const weight = min / max > 0.5 ? min / max : 0.5
+
+//     let nowCast
+
+//     if (weight > 0.5) {
+//         const denominator = arr.reduce((total, item, index) => {
+//             return total + Math.pow(weight, arr.length - 1 - index)
+//         }, 0)
+
+//         const numerator = arr.reduce((total, item, index) => {
+//             return total + item * Math.pow(weight, arr.length - 1 - index)
+//         }, 0)
+
+//         nowCast = numerator / denominator
+//     } else {
+//         nowCast = arr.reduce((total, item, index) => {
+//             return total + item * Math.pow(0.5, arr.length - 1 - index)
+//         }, 0)
+//     }
+
+//     console.log({ weight, nowCast })
+// }
 
 export {
     ConvertKToC,

@@ -21,6 +21,7 @@ import SelectLocationPage from './src/screens/SelectLocationPage'
 import DailyPage from './src/screens/DailyPage'
 import HourlyPage from './src/screens/HourlyPage'
 import GraphPage from './src/screens/GraphPage'
+import AirPollutionPage from './src/screens/AirPollutionPage'
 
 const Stack = createNativeStackNavigator()
 
@@ -62,6 +63,10 @@ const Main = () => {
                             <Stack.Screen
                                 name="GraphPage"
                                 component={GraphPage}
+                            />
+                            <Stack.Screen
+                                name="AirPollutionPage"
+                                component={AirPollutionPage}
                             />
                         </Stack.Navigator>
                     </NavigationContainer>

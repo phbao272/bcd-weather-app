@@ -24,15 +24,13 @@ function* yLabel() {
 }
 
 const AreaChart = (props) => {
-    const { percen } = props
-
     const [data, setData] = useState(props.data.slice(0, 24))
 
     useEffect(() => {
         setData(props.data.slice(0, 24))
     }, [props.data])
 
-    console.log(data)
+    // console.log(data)
 
     const yLabelIterator = yLabel()
 
@@ -48,15 +46,15 @@ const AreaChart = (props) => {
     const customData = () => {
         switch (props.type) {
             case 'pop':
-                return data.map((item) => ConvertPop(item[props.type]))
+                return data.map((item) => +ConvertPop(item[props.type]))
             case 'temp':
-                return data.map((item) => ConvertKToC(item[props.type]))
+                return data.map((item) => +ConvertKToC(item[props.type]))
             case 'humidity':
                 return data.map((item) => item[props.type])
             case 'dew_point':
-                return data.map((item) => ConvertKToC(item[props.type]))
+                return data.map((item) => +ConvertKToC(item[props.type]))
             case 'wind':
-                return data.map((item) => ConvertWindSpeed(item['wind_speed']))
+                return data.map((item) => +ConvertWindSpeed(item['wind_speed']))
             case 'uvi':
                 return data.map((item) => item[props.type].toFixed())
             default:
