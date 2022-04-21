@@ -1,19 +1,19 @@
-import { StatusBar } from 'expo-status-bar'
+import { StatusBar } from 'expo-status-bar';
 
-import { Provider } from 'react-redux'
-import store from './src/redux/store'
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
 
-import { useContext } from 'react'
-import { ThemeContext } from './src/contexts/theme-context'
+import { useContext } from 'react';
+import { ThemeContext } from './src/contexts/theme-context';
 
-import { default as themeCustom } from './src/theme/custom-theme.json'
+import { default as themeCustom } from './src/theme/custom-theme.json';
 
-import * as eva from '@eva-design/eva'
-import { EvaIconsPack } from '@ui-kitten/eva-icons'
-import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
+import * as eva from '@eva-design/eva';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomePage from './src/screens/HomePage'
 import SearchPage from './src/screens/SearchPage'
@@ -22,11 +22,12 @@ import DailyPage from './src/screens/DailyPage'
 import HourlyPage from './src/screens/HourlyPage'
 import GraphPage from './src/screens/GraphPage'
 import AirPollutionPage from './src/screens/AirPollutionPage'
+import WelcomePage from './src/screens/WelcomePage';
 
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator();
 
 const Main = () => {
-    const { theme } = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext);
 
     return (
         <>
@@ -45,6 +46,7 @@ const Main = () => {
                             <Stack.Screen name="SelectLocation" component={SelectLocationPage} />
                             <Stack.Screen name="DailyPage" component={DailyPage} />
                             <Stack.Screen name="HourlyPage" component={HourlyPage} />
+                            <Stack.Screen name="WelcomePage" component={WelcomePage} />
                             <Stack.Screen name="GraphPage" component={GraphPage} />
                             <Stack.Screen name="AirPollutionPage" component={AirPollutionPage} />
                         </Stack.Navigator>
@@ -53,7 +55,7 @@ const Main = () => {
                 <StatusBar style={theme === 'dark' ? 'light' : 'dark'} />
             </ApplicationProvider>
         </>
-    )
-}
+    );
+};
 
-export default Main
+export default Main;

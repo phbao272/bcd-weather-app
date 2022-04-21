@@ -11,7 +11,7 @@ import AreaChart from '../components/charts/AreaChart'
 import DarkMode from '../components/DarkMode'
 import AirPollution from '../components/air-pollution/AirPollution'
 
-import Section, { SectionTitle, SectionBody } from '../components/Section'
+import globalStyles from '../constants/index';
 
 import globalStyles, { color } from '../constants/index'
 
@@ -21,8 +21,6 @@ import { useNavigation } from '@react-navigation/native'
 
 import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
 import { setLocationActive } from '../redux/slices/locationSlice'
-
-import apis from '../apis'
 
 import {
     weatherDataSelector,
@@ -37,17 +35,16 @@ import { calcAQI } from '../utils'
 const screen = Dimensions.get('screen')
 
 const HomePage = () => {
-    const [isLoading, setLoading] = useState(true)
-    const [coordinates, setCoordinates] = useState({})
+    const [isLoading, setLoading] = useState(true);
+    const [coordinates, setCoordinates] = useState({});
 
     const dispatch = useDispatch()
-    const navigation = useNavigation()
 
     // const weatherData = useSelector(weatherDataSelector)
 
     // const dailyWeatherData = useSelector(dailySelector)
 
-    const loading = useSelector(getLoadingSelector)
+    const loading = useSelector(getLoadingSelector);
 
     const [hourly, setHourly] = useState([])
 
@@ -75,28 +72,34 @@ const HomePage = () => {
 
     // TODO: Ưu cầu bật định vị ở điện thoại
     useEffect(() => {
-        handleTurnOnLocation()
-    }, [])
+        handleTurnOnLocation();
+    }, []);
 
     const handleTurnOnLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync()
+        let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
-            console.log('permission denied')
-            Alert.alert('permission denied')
-            return
+            console.log('permission denied');
+            Alert.alert('permission denied');
+            return;
         }
 
-        let location = await Location.getCurrentPositionAsync({})
+        let location = await Location.getCurrentPositionAsync({});
         setCoordinates({
             lon: location.coords.longitude,
             lat: location.coords.latitude,
-        })
-    }
+        });
+    };
+
+    const navigation = useNavigation();
+
+    const handleGoToWelcomePage = () => {
+        navigation.navigate('WelcomePage');
+    };
 
     // TODO: Lấy tên địa điểm
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
-            console.log(coordinates)
+            console.log(coordinates);
             dispatch(
                 setLocationActive({
                     lon: coordinates.lon,
@@ -104,7 +107,7 @@ const HomePage = () => {
                 })
             )
         }
-    }, [coordinates])
+    }, [coordinates]);
 
     // TODO: Lấy dữ liệu One Call
     useEffect(() => {
@@ -113,7 +116,7 @@ const HomePage = () => {
 
             dispatch(getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }))
         }
-    }, [coordinates])
+    }, [coordinates]);
 
     const handleGoToHourlyPage = () => {
         navigation.navigate('HourlyPage')
@@ -229,14 +232,23 @@ const HomePage = () => {
                                 <DarkMode />
                             </SectionBody>
                         </Section>
+
+                        <Section>
+                            <SectionTitle>WelcomePage</SectionTitle>
+                            <SectionBody>
+                                <TouchableOpacity onPress={handleGoToWelcomePage}>
+                                    <Text>WelcomePage</Text>
+                                </TouchableOpacity>
+                            </SectionBody>
+                        </Section>
                     </ScrollView>
                 </>
             )}
         </Layout>
-    )
-}
+    );
+};
 
-export default HomePage
+export default HomePage;
 
 const styles = StyleSheet.create({
     imageStyle: {
@@ -244,4 +256,4 @@ const styles = StyleSheet.create({
         height: screen.width,
         borderRadius: 12,
     },
-})
+});
