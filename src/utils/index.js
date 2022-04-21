@@ -60,7 +60,7 @@ const ConvertWindDeg = (deg) => {
 }
 
 const ConvertPop = (value) => {
-    return value ? (value * 100).toFixed() : ''
+    return value ? (value * 100).toFixed() : '0'
 }
 
 // export const calcAQI = (arr, value) => {
@@ -88,8 +88,6 @@ const ConvertPop = (value) => {
 
 //     console.log({ weight, nowCast })
 // }
-
-// let aqibot = require('aqi-bot');
 
 export {
     ConvertKToC,
