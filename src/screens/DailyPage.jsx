@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     TouchableOpacity,
     StyleSheet,
@@ -8,22 +8,24 @@ import {
 } from 'react-native'
 import { Layout, Text, Icon, Avatar } from '@ui-kitten/components'
 import { useNavigation } from '@react-navigation/native'
-
+import { useSelector } from 'react-redux'
 import { BackIcon } from '../components/icons'
 import Section, { SectionBody, SectionTitle } from '../components/Section'
 
+import { dailySelector } from '../redux/selectors'
 import { ConvertUnixTimeToUTC } from '../utils/index'
 
 import globalStyles from '../constants/index'
 
 const screen = Dimensions.get('screen')
 
-const DailyItem = (
+const DailyItem = ({
     isToday = false,
     iconUrl,
     rainChanceNight,
     rainChanceDay,
-) => {
+    data,
+}) => {
     return (
         <Layout style={styles.container}>
             <Layout
@@ -45,7 +47,7 @@ const DailyItem = (
                 </Layout>
                 <Layout style={{ flex: 8 }}>
                     <Text style={styles.textStyle}>
-                        {ConvertUnixTimeToUTC(1648539456, 'dddd, Do MMMM')}
+                        {ConvertUnixTimeToUTC(data?.dt, 'dddd, Do MMMM')}
                     </Text>
                     <Text style={[styles.textStyle]}>26&#176;C/22&#176;C</Text>
                 </Layout>
@@ -101,6 +103,16 @@ const DailyPage = () => {
         navigation.goBack()
     }
 
+    const [daily, setDaily] = useState([])
+
+    const dailyData = useSelector(dailySelector)
+
+    useEffect(() => {
+        setDaily(dailyData)
+    }, [dailyData])
+
+    console.log(daily)
+
     return (
         <Layout style={globalStyles.container}>
             <Section>
@@ -128,6 +140,7 @@ const DailyPage = () => {
                             isToday="true"
                             rainChanceDay="12"
                             rainChanceNight="37"
+                            data={dailyData[0]}
                         />
                         <DailyItem rainChanceDay="12" rainChanceNight="37" />
                         <DailyItem rainChanceDay="12" rainChanceNight="37" />

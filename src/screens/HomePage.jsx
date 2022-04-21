@@ -1,48 +1,74 @@
-import React, { useState, useEffect } from 'react';
-import { Image, Dimensions, ScrollView, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import { Layout, Spinner, Text } from '@ui-kitten/components';
-import Header from '../components/Header';
-import Summary from '../components/Summary';
-import Detail from '../components/Detail';
-import DarkMode from '../components/DarkMode';
-import { useNavigation } from '@react-navigation/native';
-import Section, { SectionTitle, SectionBody } from '../components/Section';
+import React, { useState, useEffect } from 'react'
+import { Image, Dimensions, ScrollView, StyleSheet, Alert } from 'react-native'
+import { Layout, Spinner } from '@ui-kitten/components'
+
+import Header from '../components/Header'
+import Summary from '../components/Summary'
+import Detail from '../components/Detail'
+import Hourly from '../components/hourly/Hourly'
+import Daily from '../components/daily/Daily'
+import AreaChart from '../components/charts/AreaChart'
+import DarkMode from '../components/DarkMode'
+import AirPollution from '../components/air-pollution/AirPollution'
 
 import globalStyles from '../constants/index';
 
-import * as Location from 'expo-location';
-import { useDispatch, useSelector } from 'react-redux';
+import globalStyles, { color } from '../constants/index'
 
-import { getWeatherData } from '../redux/slices/WeatherSlice';
-import { setLocationActive } from '../redux/slices/locationSlice';
+import * as Location from 'expo-location'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
 
-import apis from '../apis';
+import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
+import { setLocationActive } from '../redux/slices/locationSlice'
 
-import { weatherDataSelector, dailySelector, getLoadingSelector } from '../redux/selectors';
+import {
+    weatherDataSelector,
+    hourlySelector,
+    dailySelector,
+    getLoadingSelector,
+    getAirPollutionSelector,
+} from '../redux/selectors'
 
-const screen = Dimensions.get('screen');
+import { calcAQI } from '../utils'
+
+const screen = Dimensions.get('screen')
 
 const HomePage = () => {
     const [isLoading, setLoading] = useState(true);
     const [coordinates, setCoordinates] = useState({});
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch()
 
-    const weatherData = useSelector(weatherDataSelector);
+    // const weatherData = useSelector(weatherDataSelector)
 
-    const dailyWeatherData = useSelector(dailySelector);
+    // const dailyWeatherData = useSelector(dailySelector)
 
     const loading = useSelector(getLoadingSelector);
 
-    // if (Array.isArray(dailyWeatherData)) {
-    //     console.log(dailyWeatherData[0])
-    // }
+    const [hourly, setHourly] = useState([])
 
-    // console.log(dailyWeatherData)
+    const hourlyData = useSelector(hourlySelector)
 
     useEffect(() => {
-        setLoading(loading);
-    }, [loading]);
+        setHourly(hourlyData)
+    }, [hourlyData])
+
+    const airPollution = useSelector(getAirPollutionSelector)
+
+    const [airPollutionData, setAirPollutionData] = useState(airPollution)
+
+    useEffect(() => {
+        setAirPollutionData(airPollution)
+    }, [airPollution])
+
+    useEffect(() => {
+        if (!loading) {
+            setTimeout(() => {
+                setLoading(loading)
+            }, 1500)
+        }
+    }, [loading])
 
     // TODO: Ưu cầu bật định vị ở điện thoại
     useEffect(() => {
@@ -79,16 +105,38 @@ const HomePage = () => {
                     lon: coordinates.lon,
                     lat: coordinates.lat,
                 })
-            );
+            )
         }
     }, [coordinates]);
 
     // TODO: Lấy dữ liệu One Call
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
-            dispatch(getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }));
+            dispatch(getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }))
+
+            dispatch(getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }))
         }
     }, [coordinates]);
+
+    const handleGoToHourlyPage = () => {
+        navigation.navigate('HourlyPage')
+    }
+
+    const handleGoToDailyPage = () => {
+        navigation.navigate('DailyPage')
+    }
+
+    const handleGoToGraphPage = () => {
+        navigation.navigate('GraphPage')
+    }
+
+    const handleGoToAirPollutionPage = () => {
+        navigation.navigate('AirPollutionPage')
+    }
+
+    // useEffect(() => {
+    //     console.log(hourlyData)
+    // }, [])
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
@@ -131,6 +179,50 @@ const HomePage = () => {
                             <SectionTitle>CHI TIẾT</SectionTitle>
                             <SectionBody>
                                 <Detail />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle expand={true} onPress={handleGoToHourlyPage}>
+                                HÀNG GIỜ
+                            </SectionTitle>
+                            <SectionBody>
+                                <Hourly />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle expand={true} onPress={handleGoToDailyPage}>
+                                HÀNG NGÀY
+                            </SectionTitle>
+                            <SectionBody>
+                                <Daily />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle expand={true} onPress={handleGoToGraphPage}>
+                                ĐỒ THỊ
+                            </SectionTitle>
+                            <SectionBody>
+                                <AreaChart
+                                    title=""
+                                    data={hourly}
+                                    name="Khả năng mưa"
+                                    color={color.pop}
+                                    color_shadow={color.pop_shadow}
+                                    type="pop"
+                                    y_axis_suffix="%"
+                                />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle expand={true} onPress={handleGoToAirPollutionPage}>
+                                CHẤT LƯỢNG KHÔNG KHÍ
+                            </SectionTitle>
+                            <SectionBody>
+                                <AirPollution data={airPollutionData.pm25} />
                             </SectionBody>
                         </Section>
 

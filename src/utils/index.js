@@ -1,4 +1,5 @@
 import moment from 'moment'
+import _ from 'lodash'
 
 moment.locale('vi')
 
@@ -23,15 +24,79 @@ moment.updateLocale('vi', {
 // 'dddd, Do MMMM'
 // 'hh:mm'
 const ConvertUnixTimeToUTC = (time, format) => {
-    return moment(time * 1000).format(format)
+    return time ? moment(time * 1000).format(format) : ''
+}
+
+const ConvertDateToDays = (time) => {
+    return moment(time).format('dddd')
 }
 
 const ConvertKToC = (kelvin) => {
-    return (kelvin - 273.15).toFixed()
+    return kelvin ? (kelvin - 273.15).toFixed() : ''
 }
 
 const ConvertVisibility = (visibility) => {
-    return (visibility / 1000).toFixed()
+    return visibility ? (visibility / 1000).toFixed() : ''
 }
 
-export { ConvertKToC, ConvertUnixTimeToUTC, ConvertVisibility }
+const ConvertWindSpeed = (speed) => {
+    return speed ? (speed * 3.6).toFixed() : ''
+}
+
+const ConvertWindDeg = (deg) => {
+    let res = ''
+
+    if (deg >= 22.5 && deg <= 112.5) {
+        res = 'đông - đông bắc'
+    } else if (deg > 112.5 && deg < 202.5) {
+        res = 'nam - đông nam'
+    } else if (deg > 202.5 && deg < 292.5) {
+        res = 'tây - tây nam'
+    } else {
+        res = 'bắc - tây bắc'
+    }
+
+    return res
+}
+
+const ConvertPop = (value) => {
+    return value ? (value * 100).toFixed() : ''
+}
+
+// export const calcAQI = (arr, value) => {
+//     const max = _.max(arr)
+//     const min = _.min(arr)
+//     const weight = min / max > 0.5 ? min / max : 0.5
+
+//     let nowCast
+
+//     if (weight > 0.5) {
+//         const denominator = arr.reduce((total, item, index) => {
+//             return total + Math.pow(weight, arr.length - 1 - index)
+//         }, 0)
+
+//         const numerator = arr.reduce((total, item, index) => {
+//             return total + item * Math.pow(weight, arr.length - 1 - index)
+//         }, 0)
+
+//         nowCast = numerator / denominator
+//     } else {
+//         nowCast = arr.reduce((total, item, index) => {
+//             return total + item * Math.pow(0.5, arr.length - 1 - index)
+//         }, 0)
+//     }
+
+//     console.log({ weight, nowCast })
+// }
+
+// let aqibot = require('aqi-bot');
+
+export {
+    ConvertKToC,
+    ConvertUnixTimeToUTC,
+    ConvertDateToDays,
+    ConvertVisibility,
+    ConvertWindSpeed,
+    ConvertWindDeg,
+    ConvertPop,
+}

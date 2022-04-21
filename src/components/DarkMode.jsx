@@ -11,12 +11,6 @@ const DarkMode = () => {
 
     return (
         <Layout>
-            <Button onPress={context.toggleTheme} appearance="outline">
-                Dark Mode
-            </Button>
-            <Button onPress={context.toggleTheme} appearance="ghost">
-                Dark Mode
-            </Button>
             <Toggle
                 style={{ marginTop: 8 }}
                 checked={context.theme === 'dark'}

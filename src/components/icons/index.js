@@ -182,6 +182,18 @@ const UserIcon = (props) => {
     )
 }
 
+const NavigationIcon = (props) => {
+    const { theme } = useContext(ThemeContext)
+    return (
+        <Icon
+            name="navigation-outline"
+            fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
+            {...props}
+        />
+    )
+}
+
 export {
     SearchIcon,
     ShareIcon,
@@ -197,4 +209,5 @@ export {
     ThermometerIcon,
     ThermometerPlusIcon,
     UserIcon,
+    NavigationIcon,
 }
