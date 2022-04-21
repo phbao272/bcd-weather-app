@@ -1,39 +1,30 @@
 import React, { useState, useEffect } from 'react'
-import {
-    TouchableOpacity,
-    StyleSheet,
-    Image,
-    ScrollView,
-    Dimensions,
-} from 'react-native'
-import { Layout, Text, Icon, Avatar } from '@ui-kitten/components'
+import { TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native'
+import { Layout, Text, Avatar } from '@ui-kitten/components'
 import { useNavigation } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 import { BackIcon } from '../components/icons'
 import Section, { SectionBody, SectionTitle } from '../components/Section'
 
 import { dailySelector } from '../redux/selectors'
-import { ConvertUnixTimeToUTC } from '../utils/index'
+import {
+    ConvertKToC,
+    ConvertPop,
+    ConvertUnixTimeToUTC,
+    ConvertWindDeg,
+    ConvertWindSpeed,
+} from '../utils/index'
+import descWeather from '../../assets/data/desc-weather.json'
 
 import globalStyles from '../constants/index'
+import apis from '../apis/index'
 
 const screen = Dimensions.get('screen')
 
-const DailyItem = ({
-    isToday = false,
-    iconUrl,
-    rainChanceNight,
-    rainChanceDay,
-    data,
-}) => {
+const DailyItem = ({ data }) => {
     return (
         <Layout style={styles.container}>
-            <Layout
-                style={[
-                    styles.flexRow,
-                    { alignItems: 'center', marginBottom: 4 },
-                ]}
-            >
+            <Layout style={[styles.flexRow, { alignItems: 'center', marginBottom: 4 }]}>
                 <Layout
                     style={{
                         flex: 2,
@@ -42,21 +33,23 @@ const DailyItem = ({
                     }}
                 >
                     <Avatar
-                        source={require(`../../assets/weather-icon/rain.png`)}
+                        style={{ padding: 6, backgroundColor: '#ddd' }}
+                        source={{
+                            uri: apis.getWeatherIcon(data.weather[0].icon),
+                        }}
                     />
                 </Layout>
                 <Layout style={{ flex: 8 }}>
                     <Text style={styles.textStyle}>
                         {ConvertUnixTimeToUTC(data?.dt, 'dddd, Do MMMM')}
                     </Text>
-                    <Text style={[styles.textStyle]}>26&#176;C/22&#176;C</Text>
+                    <Text style={[styles.textStyle]}>
+                        {ConvertKToC(data?.temp.max)}&#176;C/{ConvertKToC(data?.temp.min)}&#176;C
+                    </Text>
                 </Layout>
             </Layout>
             <Layout
-                style={[
-                    styles.flexRow,
-                    { alignItems: 'flex-start', justifyContent: 'center' },
-                ]}
+                style={[styles.flexRow, { alignItems: 'flex-start', justifyContent: 'center' }]}
             >
                 <Layout
                     style={{
@@ -65,31 +58,14 @@ const DailyItem = ({
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: '#499bf1' }}>67%</Text>
+                    <Text style={{ color: '#499bf1' }}>{ConvertPop(data?.pop)}%</Text>
                 </Layout>
                 <Layout style={{ flex: 8 }}>
-                    {isToday ? (
-                        <Text>
-                            Hôm nay - Có mây. Gió đông với vận tốc 11km/h. Khả
-                            năng xảy ra mưa {rainChanceDay}%.
-                        </Text>
-                    ) : (
-                        <Text>
-                            Sáng - Có mây. Gió đông với vận tốc 11km/h. Khả năng
-                            xảy ra mưa {rainChanceDay}%.
-                        </Text>
-                    )}
-                    {isToday ? (
-                        <Text>
-                            Tối nay - Mưa. Gió đông - đông nam với vận tốc
-                            13km/h. Khả năng xảy ra mưa {rainChanceNight}%.
-                        </Text>
-                    ) : (
-                        <Text>
-                            Tối - Mưa. Gió đông - đông nam với vận tốc 13km/h.
-                            Khả năng xảy ra mưa {rainChanceNight}%.
-                        </Text>
-                    )}
+                    <Text>
+                        {descWeather[data?.weather[0].id]}. Gió {ConvertWindDeg(data?.wind_deg)},
+                        tốc độ {ConvertWindSpeed(data?.wind_speed)}km/h. Khả năng mưa{' '}
+                        {ConvertPop(data?.pop)}%.
+                    </Text>
                 </Layout>
             </Layout>
         </Layout>
@@ -117,38 +93,18 @@ const DailyPage = () => {
         <Layout style={globalStyles.container}>
             <Section>
                 <SectionTitle>
-                    <Layout
-                        style={[
-                            globalStyles.flexRowCenterAlign,
-                            styles.containerFixedTop,
-                        ]}
-                    >
-                        <TouchableOpacity
-                            onPress={handleGoBack}
-                            activeOpacity={0.7}
-                        >
+                    <Layout style={[globalStyles.flexRowCenterAlign, styles.containerFixedTop]}>
+                        <TouchableOpacity onPress={handleGoBack} activeOpacity={0.7}>
                             <BackIcon />
                         </TouchableOpacity>
-                        <Text style={{ marginLeft: 24, fontSize: 20 }}>
-                            8 Ngày tiếp
-                        </Text>
+                        <Text style={{ marginLeft: 24, fontSize: 20 }}>8 Ngày tiếp</Text>
                     </Layout>
                 </SectionTitle>
                 <SectionBody>
                     <ScrollView>
-                        <DailyItem
-                            isToday="true"
-                            rainChanceDay="12"
-                            rainChanceNight="37"
-                            data={dailyData[0]}
-                        />
-                        <DailyItem rainChanceDay="12" rainChanceNight="37" />
-                        <DailyItem rainChanceDay="12" rainChanceNight="37" />
-                        <DailyItem rainChanceDay="12" rainChanceNight="37" />
-                        <DailyItem rainChanceDay="12" rainChanceNight="37" />
-                        <DailyItem rainChanceDay="12" rainChanceNight="37" />
-                        <DailyItem rainChanceDay="12" rainChanceNight="37" />
-                        <DailyItem rainChanceDay="12" rainChanceNight="37" />
+                        {daily.map((item, index) => (
+                            <DailyItem key={index} data={item} />
+                        ))}
                     </ScrollView>
                 </SectionBody>
             </Section>
