@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Image, Dimensions, ScrollView, StyleSheet, Alert } from 'react-native'
-import { Layout, Spinner } from '@ui-kitten/components'
+import { Image, Dimensions, ScrollView, StyleSheet, Alert, TouchableOpacity } from 'react-native'
+import { Layout, Spinner, Text } from '@ui-kitten/components'
+import Section, { SectionTitle, SectionBody } from '../components/Section'
 
 import Header from '../components/Header'
 import Summary from '../components/Summary'
@@ -10,8 +11,6 @@ import Daily from '../components/daily/Daily'
 import AreaChart from '../components/charts/AreaChart'
 import DarkMode from '../components/DarkMode'
 import AirPollution from '../components/air-pollution/AirPollution'
-
-import globalStyles from '../constants/index';
 
 import globalStyles, { color } from '../constants/index'
 
@@ -35,8 +34,8 @@ import { calcAQI } from '../utils'
 const screen = Dimensions.get('screen')
 
 const HomePage = () => {
-    const [isLoading, setLoading] = useState(true);
-    const [coordinates, setCoordinates] = useState({});
+    const [isLoading, setLoading] = useState(true)
+    const [coordinates, setCoordinates] = useState({})
 
     const dispatch = useDispatch()
 
@@ -44,7 +43,7 @@ const HomePage = () => {
 
     // const dailyWeatherData = useSelector(dailySelector)
 
-    const loading = useSelector(getLoadingSelector);
+    const loading = useSelector(getLoadingSelector)
 
     const [hourly, setHourly] = useState([])
 
@@ -72,34 +71,34 @@ const HomePage = () => {
 
     // TODO: Ưu cầu bật định vị ở điện thoại
     useEffect(() => {
-        handleTurnOnLocation();
-    }, []);
+        handleTurnOnLocation()
+    }, [])
 
     const handleTurnOnLocation = async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
+        let { status } = await Location.requestForegroundPermissionsAsync()
         if (status !== 'granted') {
-            console.log('permission denied');
-            Alert.alert('permission denied');
-            return;
+            console.log('permission denied')
+            Alert.alert('permission denied')
+            return
         }
 
-        let location = await Location.getCurrentPositionAsync({});
+        let location = await Location.getCurrentPositionAsync({})
         setCoordinates({
             lon: location.coords.longitude,
             lat: location.coords.latitude,
-        });
-    };
+        })
+    }
 
-    const navigation = useNavigation();
+    const navigation = useNavigation()
 
     const handleGoToWelcomePage = () => {
-        navigation.navigate('WelcomePage');
-    };
+        navigation.navigate('WelcomePage')
+    }
 
     // TODO: Lấy tên địa điểm
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
-            console.log(coordinates);
+            console.log(coordinates)
             dispatch(
                 setLocationActive({
                     lon: coordinates.lon,
@@ -107,7 +106,7 @@ const HomePage = () => {
                 })
             )
         }
-    }, [coordinates]);
+    }, [coordinates])
 
     // TODO: Lấy dữ liệu One Call
     useEffect(() => {
@@ -116,7 +115,7 @@ const HomePage = () => {
 
             dispatch(getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }))
         }
-    }, [coordinates]);
+    }, [coordinates])
 
     const handleGoToHourlyPage = () => {
         navigation.navigate('HourlyPage')
@@ -245,10 +244,10 @@ const HomePage = () => {
                 </>
             )}
         </Layout>
-    );
-};
+    )
+}
 
-export default HomePage;
+export default HomePage
 
 const styles = StyleSheet.create({
     imageStyle: {
@@ -256,4 +255,4 @@ const styles = StyleSheet.create({
         height: screen.width,
         borderRadius: 12,
     },
-});
+})

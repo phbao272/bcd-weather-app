@@ -1,25 +1,25 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\ADMIN\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js start
+  C:\Program Files\nodejs\node.exe C:\Users\CHCQ\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
 
 PATH: 
-  C:\Users\ADMIN\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\ADMIN\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\nodejs;C:\Program Files\Git\cmd;C:\Users\ADMIN\AppData\Local\Microsoft\WindowsApps;C:\Users\ADMIN\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\ADMIN\AppData\Roaming\npm;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\jdk-15\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\PostgreSQL\14\bin;C:\Program Files\nodejs\;C:\Program Files (x86)\Calibre2\;C:\Program Files (x86)\National Instruments\Shared\LabVIEW CLI;C:\Program Files\dotnet\;C:\Users\CHCQ\scoop\shims;C:\Users\CHCQ\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\CHCQ\AppData\Local\Programs\Python\Python39\;C:\Users\CHCQ\AppData\Local\Microsoft\WindowsApps;C:\Users\CHCQ\AppData\Local\Programs\Microsoft VS Code\bin;C:\modeltech64_2020.4\win64;C:\Program Files\heroku\bin;C:\Users\CHCQ\AppData\Roaming\npm;C:\Program Files\JetBrains\WebStorm 2021.3.3\bin
 
 Yarn version: 
-  1.22.18
+  1.22.17
 
 Node version: 
-  16.14.2
+  16.13.2
 
 Platform: 
   win32 x64
 
 Trace: 
-  SyntaxError: C:\Users\ADMIN\Desktop\bcd-weather-app\package.json: Unexpected token < in JSON at position 883
+  SyntaxError: D:\Study Materials\MobileApp\bcd-weather-app\package.json: Unexpected token < in JSON at position 882
       at JSON.parse (<anonymous>)
-      at C:\Users\ADMIN\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
+      at C:\Users\CHCQ\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1625:59
       at Generator.next (<anonymous>)
-      at step (C:\Users\ADMIN\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
-      at C:\Users\ADMIN\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
+      at step (C:\Users\CHCQ\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\CHCQ\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
 
 npm manifest: 
   {
@@ -51,12 +51,12 @@ npm manifest:
       "moment": "^2.29.1",
       "react": "17.0.1",
       "react-dom": "17.0.1",
-      "react-native": "0.64.3",
+      "react-native": "0.64.3"
   <<<<<<< HEAD
       "react-native-app-intro-slider": "^4.0.4",
   =======
       "react-native-chart-kit": "^6.12.0",
-  >>>>>>> main
+  >>>>>>> main	
       "react-native-safe-area-context": "3.3.2",
       "react-native-screens": "~3.10.1",
       "react-native-svg": "12.1.1",
