@@ -1,63 +1,109 @@
 import React, { useState, useEffect } from 'react'
-import { Image, Dimensions, ScrollView, StyleSheet } from 'react-native'
-import { Layout } from '@ui-kitten/components'
+import { Image, Dimensions, ScrollView, StyleSheet, Alert, TouchableOpacity } from 'react-native'
+import { Layout, Spinner, Text } from '@ui-kitten/components'
+import Section, { SectionTitle, SectionBody } from '../components/Section'
+
 import Header from '../components/Header'
 import Summary from '../components/Summary'
 import Detail from '../components/Detail'
+import Hourly from '../components/hourly/Hourly'
+import Daily from '../components/daily/Daily'
+import AreaChart from '../components/charts/AreaChart'
 import DarkMode from '../components/DarkMode'
-// import Location from '../components/Location'
-import Section, { SectionTitle, SectionBody } from '../components/Section'
+import AirPollution from '../components/air-pollution/AirPollution'
 
-import globalStyles from '../constants/index'
+import globalStyles, { color } from '../constants/index'
 
 import * as Location from 'expo-location'
 import { useDispatch, useSelector } from 'react-redux'
-import { getLocationNameByCoordinates, getWeatherData } from '../apis'
-import { setLocationActive, addWeatherData } from '../redux/slices/WeatherSlice'
+import { useNavigation } from '@react-navigation/native'
 
-import { weatherDataSelector, dailySelector } from '../redux/selectors'
+import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
+import { setLocationActive } from '../redux/slices/locationSlice'
+
+import {
+    weatherDataSelector,
+    hourlySelector,
+    dailySelector,
+    getLoadingSelector,
+    getAirPollutionSelector,
+} from '../redux/selectors'
+
+import { calcAQI } from '../utils'
 
 const screen = Dimensions.get('screen')
 
 const HomePage = () => {
+    const [isLoading, setLoading] = useState(true)
     const [coordinates, setCoordinates] = useState({})
 
     const dispatch = useDispatch()
 
-    const weatherData = useSelector(weatherDataSelector)
+    // const weatherData = useSelector(weatherDataSelector)
 
-    const dailyWeatherData = useSelector(dailySelector)
+    // const dailyWeatherData = useSelector(dailySelector)
 
-    // if (Array.isArray(dailyWeatherData)) {
-    //     console.log(dailyWeatherData[0])
-    // }
+    const loading = useSelector(getLoadingSelector)
+
+    const [hourly, setHourly] = useState([])
+
+    const hourlyData = useSelector(hourlySelector)
+
+    useEffect(() => {
+        setHourly(hourlyData)
+    }, [hourlyData])
+
+    const airPollution = useSelector(getAirPollutionSelector)
+
+    const [airPollutionData, setAirPollutionData] = useState(airPollution)
+
+    useEffect(() => {
+        setAirPollutionData(airPollution)
+    }, [airPollution])
+
+    useEffect(() => {
+        if (!loading) {
+            setTimeout(() => {
+                setLoading(loading)
+            }, 1500)
+        }
+    }, [loading])
 
     // TODO: Ưu cầu bật định vị ở điện thoại
     useEffect(() => {
-        ;(async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync()
-            if (status !== 'granted') {
-                console.log('permission denied')
-                return
-            }
-
-            let location = await Location.getCurrentPositionAsync({})
-            setCoordinates({
-                lon: location.coords.longitude,
-                lat: location.coords.latitude,
-            })
-        })()
+        handleTurnOnLocation()
     }, [])
+
+    const handleTurnOnLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync()
+        if (status !== 'granted') {
+            console.log('permission denied')
+            Alert.alert('permission denied')
+            return
+        }
+
+        let location = await Location.getCurrentPositionAsync({})
+        setCoordinates({
+            lon: location.coords.longitude,
+            lat: location.coords.latitude,
+        })
+    }
+
+    const navigation = useNavigation()
+
+    const handleGoToWelcomePage = () => {
+        navigation.navigate('WelcomePage')
+    }
 
     // TODO: Lấy tên địa điểm
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
             console.log(coordinates)
-            getLocationNameByCoordinates(coordinates.lon, coordinates.lat).then(
-                (res) => {
-                    console.log(res.data[0].local_names.vi)
-                    dispatch(setLocationActive(res.data[0].local_names.vi))
-                },
+            dispatch(
+                setLocationActive({
+                    lon: coordinates.lon,
+                    lat: coordinates.lat,
+                })
             )
         }
     }, [coordinates])
@@ -65,52 +111,138 @@ const HomePage = () => {
     // TODO: Lấy dữ liệu One Call
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
-            getWeatherData(coordinates.lon, coordinates.lat).then((res) => {
-                console.log(res.data)
-                dispatch(addWeatherData(res.data))
-            })
+            dispatch(getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }))
+
+            dispatch(getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }))
         }
     }, [coordinates])
 
+    const handleGoToHourlyPage = () => {
+        navigation.navigate('HourlyPage')
+    }
+
+    const handleGoToDailyPage = () => {
+        navigation.navigate('DailyPage')
+    }
+
+    const handleGoToGraphPage = () => {
+        navigation.navigate('GraphPage')
+    }
+
+    const handleGoToAirPollutionPage = () => {
+        navigation.navigate('AirPollutionPage')
+    }
+
+    // useEffect(() => {
+    //     console.log(hourlyData)
+    // }, [])
+
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
-            <Layout style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
-                <Header />
-            </Layout>
+            {isLoading ? (
+                <Layout
+                    style={{
+                        flex: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Spinner />
+                </Layout>
+            ) : (
+                <>
+                    <Layout style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
+                        <Header />
+                    </Layout>
 
-            <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
-                {/* Image */}
-                <Section>
-                    <SectionBody>
-                        <Image
-                            style={styles.imageStyle}
-                            source={{
-                                uri: 'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xlYXIlMjBza3l8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                            }}
-                        />
-                    </SectionBody>
-                </Section>
+                    <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
+                        {/* Image */}
+                        <Section>
+                            <SectionBody>
+                                <Image
+                                    style={styles.imageStyle}
+                                    source={{
+                                        uri: 'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xlYXIlMjBza3l8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
+                                    }}
+                                />
+                            </SectionBody>
+                        </Section>
 
-                <Section>
-                    <SectionBody>
-                        <Summary />
-                    </SectionBody>
-                </Section>
+                        <Section>
+                            <SectionBody>
+                                <Summary />
+                            </SectionBody>
+                        </Section>
 
-                <Section>
-                    <SectionTitle>CHI TIẾT</SectionTitle>
-                    <SectionBody>
-                        <Detail />
-                    </SectionBody>
-                </Section>
+                        <Section>
+                            <SectionTitle>CHI TIẾT</SectionTitle>
+                            <SectionBody>
+                                <Detail />
+                            </SectionBody>
+                        </Section>
 
-                <Section>
-                    <SectionTitle>Dark Mode</SectionTitle>
-                    <SectionBody>
-                        <DarkMode />
-                    </SectionBody>
-                </Section>
-            </ScrollView>
+                        <Section>
+                            <SectionTitle expand={true} onPress={handleGoToHourlyPage}>
+                                HÀNG GIỜ
+                            </SectionTitle>
+                            <SectionBody>
+                                <Hourly />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle expand={true} onPress={handleGoToDailyPage}>
+                                HÀNG NGÀY
+                            </SectionTitle>
+                            <SectionBody>
+                                <Daily />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle expand={true} onPress={handleGoToGraphPage}>
+                                ĐỒ THỊ
+                            </SectionTitle>
+                            <SectionBody>
+                                <AreaChart
+                                    title=""
+                                    data={hourly}
+                                    name="Khả năng mưa"
+                                    color={color.pop}
+                                    color_shadow={color.pop_shadow}
+                                    type="pop"
+                                    y_axis_suffix="%"
+                                />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle expand={true} onPress={handleGoToAirPollutionPage}>
+                                CHẤT LƯỢNG KHÔNG KHÍ
+                            </SectionTitle>
+                            <SectionBody>
+                                <AirPollution data={airPollutionData.pm25} />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle>Dark Mode</SectionTitle>
+                            <SectionBody>
+                                <DarkMode />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle>WelcomePage</SectionTitle>
+                            <SectionBody>
+                                <TouchableOpacity onPress={handleGoToWelcomePage}>
+                                    <Text>WelcomePage</Text>
+                                </TouchableOpacity>
+                            </SectionBody>
+                        </Section>
+                    </ScrollView>
+                </>
+            )}
         </Layout>
     )
 }

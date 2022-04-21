@@ -8,7 +8,8 @@ import {
     Autocomplete,
     AutocompleteItem,
 } from '@ui-kitten/components'
-import { getWeatherData } from '../apis'
+
+import apis from '../apis'
 import { SearchIcon, BackIcon, SettingIcon } from '../components/icons'
 import { useNavigation } from '@react-navigation/native'
 import { useState } from 'react'
@@ -42,7 +43,7 @@ const SearchPage = () => {
         // });
         console.log(currentSelection.coord.lon, currentSelection.coord.lat)
 
-        getWeatherData(
+        apis.getWeatherData(
             currentSelection.coord.lon,
             currentSelection.coord.lat,
         ).then((res) => {

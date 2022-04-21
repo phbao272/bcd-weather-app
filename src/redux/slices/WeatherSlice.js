@@ -1,9 +1,31 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
+import apis from '../../apis'
+
+export const getWeatherData = createAsyncThunk(
+    'weather/getWeatherData',
+    async (params, thunkAPI) => {
+        // console.log(params)
+        const res = await apis.getWeatherData(params.lon, params.lat)
+        return res.data
+    },
+)
+
+export const getAirPollution = createAsyncThunk(
+    'weather/getAirPollution',
+    async (params, thunkAPI) => {
+        // console.log(params)
+        const res = await apis.getAirPollution(params.lon, params.lat)
+        // console.log(res.data.data.forecast.daily)
+        return res.data.data.forecast.daily
+    },
+)
 
 const initState = {
     weatherData: {},
-    locationActive: '',
-    locations: [],
+    airPollution: [],
+    loading: true,
+    error: '',
 }
 
 export const weatherSlice = createSlice({
@@ -13,13 +35,35 @@ export const weatherSlice = createSlice({
         addWeatherData: (state, action) => {
             state.weatherData = action.payload
         },
-        setLocationActive: (state, action) => {
-            state.locationActive = action.payload
+    },
+    extraReducers: {
+        [getWeatherData.pending]: (state) => {
+            state.loading = true
+        },
+        [getWeatherData.rejected]: (state, action) => {
+            state.loading = false
+            state.error = action.error
+        },
+        [getWeatherData.fulfilled]: (state, action) => {
+            state.weatherData = action.payload
+            state.loading = false
+        },
+
+        [getAirPollution.pending]: (state) => {
+            state.loading = true
+        },
+        [getAirPollution.rejected]: (state, action) => {
+            state.loading = false
+            state.error = action.error
+        },
+        [getAirPollution.fulfilled]: (state, action) => {
+            state.airPollution = action.payload
+            state.loading = false
         },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addWeatherData, setLocationActive } = weatherSlice.actions
+export const { addWeatherData } = weatherSlice.actions
 
 export default weatherSlice.reducer

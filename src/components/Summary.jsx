@@ -4,13 +4,21 @@ import React, { useState, useEffect } from 'react'
 
 import globalStyles from '../constants/index'
 import { ExpandIcon } from './icons'
-import { ConvertUnixTimeToUTC, ConvertKToC } from '../utils/index'
+import {
+    ConvertUnixTimeToUTC,
+    ConvertKToC,
+    ConvertWindSpeed,
+    ConvertWindDeg,
+    ConvertPop,
+} from '../utils/index'
 import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { dailySelector, currentDataSelector } from '../redux/selectors'
 
+import descriptionWeather from '../../assets/data/desc-weather.json'
+
 const Summary = () => {
-    const [dailyWeather, setDailyWeather] = useState([])
+    const [dailyWeather, setDailyWeather] = useState({ weather: [] })
     const [currentWeatherData, setCurrentWeatherData] = useState({})
 
     const navigation = useNavigation()
@@ -33,15 +41,17 @@ const Summary = () => {
     useEffect(() => {
         if (currentData !== undefined) {
             setCurrentWeatherData(currentData)
-            console.log('currentData', currentData)
+            // console.log('currentData', currentData)
         }
     }, [currentData])
+
+    // console.log(descriptionWeather)
 
     return (
         <Layout>
             <Layout style={globalStyles.flexRowCenterAlign}>
                 <Text style={{ fontSize: 60, marginRight: 12 }}>
-                    {ConvertKToC(currentWeatherData?.temp)}&#176;C
+                    {ConvertKToC(currentWeatherData?.temp)}°C
                 </Text>
                 <Layout style={globalStyles.flexRow}>
                     <Text
@@ -50,7 +60,7 @@ const Summary = () => {
                             fontSize: 24,
                         }}
                     >
-                        {ConvertKToC(dailyWeather?.temp?.max)}&#176;C
+                        {ConvertKToC(dailyWeather?.temp?.max)}°C
                     </Text>
                     <Text style={{ fontSize: 24, marginHorizontal: 4 }}>/</Text>
                     <Text
@@ -59,28 +69,26 @@ const Summary = () => {
                             fontSize: 24,
                         }}
                     >
-                        {ConvertKToC(dailyWeather?.temp?.min)}&#176;C
+                        {ConvertKToC(dailyWeather?.temp?.min)}°C
                     </Text>
                 </Layout>
             </Layout>
 
             <Layout>
                 <Text status="basic" style={{ opacity: 0.7, marginBottom: 8 }}>
-                    {ConvertUnixTimeToUTC(
-                        currentWeatherData?.dt,
-                        'dddd, Do MMMM',
-                    )}
+                    {ConvertUnixTimeToUTC(currentWeatherData?.dt, 'dddd, Do MMMM')}
                 </Text>
                 <Text category="s2" style={{ fontSize: 16, marginBottom: 8 }}>
-                    Mây đen u ám
+                    {descriptionWeather[currentData?.weather[0]?.id]}
                 </Text>
-                <TouchableOpacity
-                    onPress={handleGoToDailyPage}
-                    activeOpacity={0.7}
-                >
+                <TouchableOpacity onPress={handleGoToDailyPage} activeOpacity={0.7}>
                     <Text status="basic" style={{ opacity: 0.7, width: '95%' }}>
-                        Hôm nay - Mưa nhẹ. Gió đông - đông nam, tốc độ 9km/h.
-                        Khả năng mưa 30%.
+                        Hôm nay - {descriptionWeather[dailyWeather?.weather[0]?.id]}. Gió{' '}
+                        {ConvertWindDeg(dailyWeather?.wind_deg)}, tốc độ{' '}
+                        {ConvertWindSpeed(dailyWeather?.wind_speed)}km/h.{' '}
+                        {ConvertPop(dailyWeather?.pop)
+                            ? `Khả năng mưa ${ConvertPop(dailyWeather?.pop)}%.`
+                            : ''}
                     </Text>
                     <ExpandIcon
                         style={{
