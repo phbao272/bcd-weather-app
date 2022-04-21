@@ -9,6 +9,7 @@ import Hourly from '../components/hourly/Hourly'
 import Daily from '../components/daily/Daily'
 import AreaChart from '../components/charts/AreaChart'
 import DarkMode from '../components/DarkMode'
+import AirPollution from '../components/air-pollution/AirPollution'
 
 import Section, { SectionTitle, SectionBody } from '../components/Section'
 
@@ -28,6 +29,7 @@ import {
     hourlySelector,
     dailySelector,
     getLoadingSelector,
+    getAirPollutionSelector,
 } from '../redux/selectors'
 
 import { calcAQI } from '../utils'
@@ -55,11 +57,13 @@ const HomePage = () => {
         setHourly(hourlyData)
     }, [hourlyData])
 
-    // if (Array.isArray(dailyWeatherData)) {
-    //     console.log(dailyWeatherData[0])
-    // }
+    const airPollution = useSelector(getAirPollutionSelector)
 
-    // console.log(dailyWeatherData)
+    const [airPollutionData, setAirPollutionData] = useState(airPollution)
+
+    useEffect(() => {
+        setAirPollutionData(airPollution)
+    }, [airPollution])
 
     useEffect(() => {
         if (!loading) {
@@ -233,15 +237,7 @@ const HomePage = () => {
                                 CHẤT LƯỢNG KHÔNG KHÍ
                             </SectionTitle>
                             <SectionBody>
-                                <AreaChart
-                                    title=""
-                                    data={hourly}
-                                    name="Khả năng mưa"
-                                    color={color.pop}
-                                    color_shadow={color.pop_shadow}
-                                    type="pop"
-                                    y_axis_suffix="%"
-                                />
+                                <AirPollution data={airPollutionData.pm25} />
                             </SectionBody>
                         </Section>
 

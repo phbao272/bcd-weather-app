@@ -16,8 +16,8 @@ export const getAirPollution = createAsyncThunk(
     async (params, thunkAPI) => {
         // console.log(params)
         const res = await apis.getAirPollution(params.lon, params.lat)
-
-        return res.data.list
+        // console.log(res.data.data.forecast.daily)
+        return res.data.data.forecast.daily
     },
 )
 

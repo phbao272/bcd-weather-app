@@ -82,20 +82,6 @@ const AreaChart = (props) => {
         backgroundGradientFrom: bgcolor,
         backgroundGradientTo: bgcolor,
 
-        // fillShadowGradient: props.color_shadow
-        //     ? props.color_shadow
-        //     : props.color,
-        // fillShadowGradientOpacity: props.color_shadow ? 0.9 : 0.3,
-
-        // fillShadowGradientFrom: props.color_shadow
-        //     ? props.color_shadow
-        //     : props.color, //props.color
-        // fillShadowGradientTo: props.color_shadow
-        //     ? props.color_shadow
-        //     : props.color, //
-        // fillShadowGradientFromOpacity: props.color_shadow ? 0.9 : 0.3,
-        // fillShadowGradientToOpacity: props.color_shadow ? 0.3 : 0.3,
-
         fillShadowGradientFrom: props.color,
         fillShadowGradientTo: props.color,
         fillShadowGradientFromOpacity: 0.9,

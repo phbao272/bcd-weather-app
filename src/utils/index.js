@@ -27,6 +27,10 @@ const ConvertUnixTimeToUTC = (time, format) => {
     return time ? moment(time * 1000).format(format) : ''
 }
 
+const ConvertDateToDays = (time) => {
+    return moment(time).format('dddd')
+}
+
 const ConvertKToC = (kelvin) => {
     return kelvin ? (kelvin - 273.15).toFixed() : ''
 }
@@ -85,9 +89,12 @@ const ConvertPop = (value) => {
 //     console.log({ weight, nowCast })
 // }
 
+// let aqibot = require('aqi-bot');
+
 export {
     ConvertKToC,
     ConvertUnixTimeToUTC,
+    ConvertDateToDays,
     ConvertVisibility,
     ConvertWindSpeed,
     ConvertWindDeg,

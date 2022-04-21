@@ -2078,6 +2078,11 @@ aproba@^1.1.1:
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
   integrity sha512-Y9J6ZjXtoYh8RnXVCMOU/ttDmk1aBjunq9vO0ta5x85WDQiQfUF9sIPBITdbiiIVcBo03Hi3jMxigBtsddlXRw==
 
+aqi-bot@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/aqi-bot/-/aqi-bot-1.1.4.tgz#87e4fda688c77874352a995704c8bfada11048af"
+  integrity sha1-h+T9pojHeHQ1KplXBMi/raEQSK8=
+
 argparse@^1.0.7:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/argparse/-/argparse-1.0.10.tgz#bcd6791ea5ae09725e17e5ad988134cd40b3d911"

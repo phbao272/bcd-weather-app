@@ -4,6 +4,8 @@ const BASE_URL = 'http://api.openweathermap.org'
 
 export const API_KEY = '928d7cbdb515f2cae3f4c4fa3f9a7893'
 
+export const API_KEY_AQI = '83426a44bd7df7428ef8f0857e6481c98ee1cb0f'
+
 const apis = {
     getCoordinatesByLocationName: (cityName, limit = 5) =>
         axios.get(
@@ -21,7 +23,7 @@ const apis = {
     getWeatherIcon: (id) => `http://openweathermap.org/img/wn/${id}@2x.png`,
     getAirPollution: (lon, lat) =>
         axios.get(
-            `${BASE_URL}/data/2.5/air_pollution/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`,
+            `https://api.waqi.info/feed/geo:${lat};${lon}/?token=${API_KEY_AQI}`,
         ),
 }
 
@@ -29,5 +31,10 @@ const apis = {
 //     axios.get(
 //         `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=metric&exclude=minutely&appid=${API_KEY}`,
 //     )
+
+// getAirPollution: (lon, lat) =>
+//         axios.get(
+//             `${BASE_URL}/data/2.5/air_pollution/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}`,
+//         ),
 
 export default apis
