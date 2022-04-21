@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Image, Dimensions, ScrollView, StyleSheet, Alert } from 'react-native'
-import { Layout, Spinner } from '@ui-kitten/components'
+import { Image, Dimensions, ScrollView, StyleSheet, Alert, TouchableOpacity } from 'react-native'
+import { Layout, Spinner, Text } from '@ui-kitten/components'
+import Section, { SectionTitle, SectionBody } from '../components/Section'
 
 import Header from '../components/Header'
 import Summary from '../components/Summary'
@@ -9,8 +10,7 @@ import Hourly from '../components/hourly/Hourly'
 import Daily from '../components/daily/Daily'
 import AreaChart from '../components/charts/AreaChart'
 import DarkMode from '../components/DarkMode'
-
-import Section, { SectionTitle, SectionBody } from '../components/Section'
+import AirPollution from '../components/air-pollution/AirPollution'
 
 import globalStyles, { color } from '../constants/index'
 
@@ -21,13 +21,12 @@ import { useNavigation } from '@react-navigation/native'
 import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
 import { setLocationActive } from '../redux/slices/locationSlice'
 
-import apis from '../apis'
-
 import {
     weatherDataSelector,
     hourlySelector,
     dailySelector,
     getLoadingSelector,
+    getAirPollutionSelector,
 } from '../redux/selectors'
 
 import { calcAQI } from '../utils'
@@ -39,7 +38,6 @@ const HomePage = () => {
     const [coordinates, setCoordinates] = useState({})
 
     const dispatch = useDispatch()
-    const navigation = useNavigation()
 
     // const weatherData = useSelector(weatherDataSelector)
 
@@ -55,11 +53,13 @@ const HomePage = () => {
         setHourly(hourlyData)
     }, [hourlyData])
 
-    // if (Array.isArray(dailyWeatherData)) {
-    //     console.log(dailyWeatherData[0])
-    // }
+    const airPollution = useSelector(getAirPollutionSelector)
 
-    // console.log(dailyWeatherData)
+    const [airPollutionData, setAirPollutionData] = useState(airPollution)
+
+    useEffect(() => {
+        setAirPollutionData(airPollution)
+    }, [airPollution])
 
     useEffect(() => {
         if (!loading) {
@@ -89,6 +89,12 @@ const HomePage = () => {
         })
     }
 
+    const navigation = useNavigation()
+
+    const handleGoToWelcomePage = () => {
+        navigation.navigate('WelcomePage')
+    }
+
     // TODO: Lấy tên địa điểm
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
@@ -97,7 +103,7 @@ const HomePage = () => {
                 setLocationActive({
                     lon: coordinates.lon,
                     lat: coordinates.lat,
-                }),
+                })
             )
         }
     }, [coordinates])
@@ -105,13 +111,9 @@ const HomePage = () => {
     // TODO: Lấy dữ liệu One Call
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
-            dispatch(
-                getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }),
-            )
+            dispatch(getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }))
 
-            dispatch(
-                getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }),
-            )
+            dispatch(getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }))
         }
     }, [coordinates])
 
@@ -153,9 +155,7 @@ const HomePage = () => {
                         <Header />
                     </Layout>
 
-                    <ScrollView
-                        contentContainerStyle={{ paddingHorizontal: 16 }}
-                    >
+                    <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
                         {/* Image */}
                         <Section>
                             <SectionBody>
@@ -182,10 +182,7 @@ const HomePage = () => {
                         </Section>
 
                         <Section>
-                            <SectionTitle
-                                expand={true}
-                                onPress={handleGoToHourlyPage}
-                            >
+                            <SectionTitle expand={true} onPress={handleGoToHourlyPage}>
                                 HÀNG GIỜ
                             </SectionTitle>
                             <SectionBody>
@@ -194,10 +191,7 @@ const HomePage = () => {
                         </Section>
 
                         <Section>
-                            <SectionTitle
-                                expand={true}
-                                onPress={handleGoToDailyPage}
-                            >
+                            <SectionTitle expand={true} onPress={handleGoToDailyPage}>
                                 HÀNG NGÀY
                             </SectionTitle>
                             <SectionBody>
@@ -206,10 +200,7 @@ const HomePage = () => {
                         </Section>
 
                         <Section>
-                            <SectionTitle
-                                expand={true}
-                                onPress={handleGoToGraphPage}
-                            >
+                            <SectionTitle expand={true} onPress={handleGoToGraphPage}>
                                 ĐỒ THỊ
                             </SectionTitle>
                             <SectionBody>
@@ -226,22 +217,11 @@ const HomePage = () => {
                         </Section>
 
                         <Section>
-                            <SectionTitle
-                                expand={true}
-                                onPress={handleGoToAirPollutionPage}
-                            >
+                            <SectionTitle expand={true} onPress={handleGoToAirPollutionPage}>
                                 CHẤT LƯỢNG KHÔNG KHÍ
                             </SectionTitle>
                             <SectionBody>
-                                <AreaChart
-                                    title=""
-                                    data={hourly}
-                                    name="Khả năng mưa"
-                                    color={color.pop}
-                                    color_shadow={color.pop_shadow}
-                                    type="pop"
-                                    y_axis_suffix="%"
-                                />
+                                <AirPollution data={airPollutionData.pm25} />
                             </SectionBody>
                         </Section>
 
@@ -249,6 +229,15 @@ const HomePage = () => {
                             <SectionTitle>Dark Mode</SectionTitle>
                             <SectionBody>
                                 <DarkMode />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle>WelcomePage</SectionTitle>
+                            <SectionBody>
+                                <TouchableOpacity onPress={handleGoToWelcomePage}>
+                                    <Text>WelcomePage</Text>
+                                </TouchableOpacity>
                             </SectionBody>
                         </Section>
                     </ScrollView>
