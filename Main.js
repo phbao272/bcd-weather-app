@@ -31,10 +31,7 @@ const Main = () => {
     return (
         <>
             <IconRegistry icons={EvaIconsPack} />
-            <ApplicationProvider
-                {...eva}
-                theme={{ ...eva[theme], ...themeCustom }}
-            >
+            <ApplicationProvider {...eva} theme={{ ...eva[theme], ...themeCustom }}>
                 <Provider store={store}>
                     <NavigationContainer>
                         <Stack.Navigator
@@ -44,30 +41,12 @@ const Main = () => {
                             }}
                         >
                             <Stack.Screen name="Home" component={HomePage} />
-                            <Stack.Screen
-                                name="Search"
-                                component={SearchPage}
-                            />
-                            <Stack.Screen
-                                name="SelectLocation"
-                                component={SelectLocationPage}
-                            />
-                            <Stack.Screen
-                                name="DailyPage"
-                                component={DailyPage}
-                            />
-                            <Stack.Screen
-                                name="HourlyPage"
-                                component={HourlyPage}
-                            />
-                            <Stack.Screen
-                                name="GraphPage"
-                                component={GraphPage}
-                            />
-                            <Stack.Screen
-                                name="AirPollutionPage"
-                                component={AirPollutionPage}
-                            />
+                            <Stack.Screen name="Search" component={SearchPage} />
+                            <Stack.Screen name="SelectLocation" component={SelectLocationPage} />
+                            <Stack.Screen name="DailyPage" component={DailyPage} />
+                            <Stack.Screen name="HourlyPage" component={HourlyPage} />
+                            <Stack.Screen name="GraphPage" component={GraphPage} />
+                            <Stack.Screen name="AirPollutionPage" component={AirPollutionPage} />
                         </Stack.Navigator>
                     </NavigationContainer>
                 </Provider>

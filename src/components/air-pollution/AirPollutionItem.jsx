@@ -16,18 +16,15 @@ const AQI_COLOR = {
 const AirPollutionItem = (props) => {
     const bgColor = props.level ? AQI_COLOR[props.level] : '#f5f5f5'
 
-    const HeightOfBar = (80 * props.index) / props.maxAvg
+    const heightOfBar = (80 * props.index) / props.maxAvg
 
-    console.log(HeightOfBar)
+    // console.log(HeightOfBar)
 
     return (
         <Layout style={styles.container}>
             <Text style={styles.index}>{props.index}</Text>
             <Layout
-                style={[
-                    styles.bar,
-                    { backgroundColor: bgColor, height: HeightOfBar },
-                ]}
+                style={[styles.bar, { backgroundColor: bgColor, height: heightOfBar }]}
             ></Layout>
             <Text style={styles.date}>{props.date}</Text>
         </Layout>

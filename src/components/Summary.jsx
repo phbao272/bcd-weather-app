@@ -76,26 +76,18 @@ const Summary = () => {
 
             <Layout>
                 <Text status="basic" style={{ opacity: 0.7, marginBottom: 8 }}>
-                    {ConvertUnixTimeToUTC(
-                        currentWeatherData?.dt,
-                        'dddd, Do MMMM',
-                    )}
+                    {ConvertUnixTimeToUTC(currentWeatherData?.dt, 'dddd, Do MMMM')}
                 </Text>
                 <Text category="s2" style={{ fontSize: 16, marginBottom: 8 }}>
                     {descriptionWeather[currentData?.weather[0]?.id]}
                 </Text>
-                <TouchableOpacity
-                    onPress={handleGoToDailyPage}
-                    activeOpacity={0.7}
-                >
+                <TouchableOpacity onPress={handleGoToDailyPage} activeOpacity={0.7}>
                     <Text status="basic" style={{ opacity: 0.7, width: '95%' }}>
-                        Hôm nay -{' '}
-                        {descriptionWeather[dailyWeather?.weather[0]?.id]}. Gió{' '}
+                        Hôm nay - {descriptionWeather[dailyWeather?.weather[0]?.id]}. Gió{' '}
                         {ConvertWindDeg(dailyWeather?.wind_deg)}, tốc độ{' '}
                         {ConvertWindSpeed(dailyWeather?.wind_speed)}km/h.{' '}
                         {ConvertPop(dailyWeather?.pop)
-                            ? `Khả
-                        năng mưa ${ConvertPop(dailyWeather?.pop)}%.`
+                            ? `Khả năng mưa ${ConvertPop(dailyWeather?.pop)}%.`
                             : ''}
                     </Text>
                     <ExpandIcon

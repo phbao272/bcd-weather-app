@@ -101,7 +101,7 @@ const HomePage = () => {
                 setLocationActive({
                     lon: coordinates.lon,
                     lat: coordinates.lat,
-                }),
+                })
             )
         }
     }, [coordinates])
@@ -109,13 +109,9 @@ const HomePage = () => {
     // TODO: Lấy dữ liệu One Call
     useEffect(() => {
         if (coordinates.lon && coordinates.lat) {
-            dispatch(
-                getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }),
-            )
+            dispatch(getWeatherData({ lon: coordinates.lon, lat: coordinates.lat }))
 
-            dispatch(
-                getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }),
-            )
+            dispatch(getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }))
         }
     }, [coordinates])
 
@@ -157,9 +153,7 @@ const HomePage = () => {
                         <Header />
                     </Layout>
 
-                    <ScrollView
-                        contentContainerStyle={{ paddingHorizontal: 16 }}
-                    >
+                    <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
                         {/* Image */}
                         <Section>
                             <SectionBody>
@@ -186,10 +180,7 @@ const HomePage = () => {
                         </Section>
 
                         <Section>
-                            <SectionTitle
-                                expand={true}
-                                onPress={handleGoToHourlyPage}
-                            >
+                            <SectionTitle expand={true} onPress={handleGoToHourlyPage}>
                                 HÀNG GIỜ
                             </SectionTitle>
                             <SectionBody>
@@ -198,10 +189,7 @@ const HomePage = () => {
                         </Section>
 
                         <Section>
-                            <SectionTitle
-                                expand={true}
-                                onPress={handleGoToDailyPage}
-                            >
+                            <SectionTitle expand={true} onPress={handleGoToDailyPage}>
                                 HÀNG NGÀY
                             </SectionTitle>
                             <SectionBody>
@@ -210,10 +198,7 @@ const HomePage = () => {
                         </Section>
 
                         <Section>
-                            <SectionTitle
-                                expand={true}
-                                onPress={handleGoToGraphPage}
-                            >
+                            <SectionTitle expand={true} onPress={handleGoToGraphPage}>
                                 ĐỒ THỊ
                             </SectionTitle>
                             <SectionBody>
@@ -230,10 +215,7 @@ const HomePage = () => {
                         </Section>
 
                         <Section>
-                            <SectionTitle
-                                expand={true}
-                                onPress={handleGoToAirPollutionPage}
-                            >
+                            <SectionTitle expand={true} onPress={handleGoToAirPollutionPage}>
                                 CHẤT LƯỢNG KHÔNG KHÍ
                             </SectionTitle>
                             <SectionBody>
