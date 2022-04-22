@@ -11,6 +11,7 @@ import Daily from '../components/daily/Daily'
 import AreaChart from '../components/charts/AreaChart'
 import DarkMode from '../components/DarkMode'
 import AirPollution from '../components/air-pollution/AirPollution'
+import AirPollutionInfo from '../components/air-pollution/AirPollutionInfo'
 
 import globalStyles, { color } from '../constants/index'
 
@@ -28,8 +29,6 @@ import {
     getLoadingSelector,
     getAirPollutionSelector,
 } from '../redux/selectors'
-
-import { calcAQI } from '../utils'
 
 const screen = Dimensions.get('screen')
 
@@ -60,6 +59,8 @@ const HomePage = () => {
     useEffect(() => {
         setAirPollutionData(airPollution)
     }, [airPollution])
+
+    // console.log(airPollutionData)
 
     useEffect(() => {
         if (!loading) {
@@ -132,10 +133,6 @@ const HomePage = () => {
     const handleGoToAirPollutionPage = () => {
         navigation.navigate('AirPollutionPage')
     }
-
-    // useEffect(() => {
-    //     console.log(hourlyData)
-    // }, [])
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
@@ -222,7 +219,18 @@ const HomePage = () => {
                             </SectionTitle>
                             <SectionBody>
                                 <AirPollution data={airPollutionData.pm25} />
+                                <AirPollutionInfo data={airPollutionData.aqi} />
                             </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle>MẶT TRỜI</SectionTitle>
+                            <SectionBody></SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionTitle>MẶT TRĂNG</SectionTitle>
+                            <SectionBody></SectionBody>
                         </Section>
 
                         <Section>
@@ -255,4 +263,8 @@ const styles = StyleSheet.create({
         height: screen.width,
         borderRadius: 12,
     },
+    // airPollution: {
+    //     height: 8,
+    //     borderRadius:
+    // }
 })

@@ -63,31 +63,24 @@ const ConvertPop = (value) => {
     return value ? (value * 100).toFixed() : '0'
 }
 
-// export const calcAQI = (arr, value) => {
-//     const max = _.max(arr)
-//     const min = _.min(arr)
-//     const weight = min / max > 0.5 ? min / max : 0.5
-
-//     let nowCast
-
-//     if (weight > 0.5) {
-//         const denominator = arr.reduce((total, item, index) => {
-//             return total + Math.pow(weight, arr.length - 1 - index)
-//         }, 0)
-
-//         const numerator = arr.reduce((total, item, index) => {
-//             return total + item * Math.pow(weight, arr.length - 1 - index)
-//         }, 0)
-
-//         nowCast = numerator / denominator
-//     } else {
-//         nowCast = arr.reduce((total, item, index) => {
-//             return total + item * Math.pow(0.5, arr.length - 1 - index)
-//         }, 0)
-//     }
-
-//     console.log({ weight, nowCast })
-// }
+const ConvertAqi = (num) => {
+    switch (true) {
+        case num <= 50:
+            return 'good'
+        case 50 < num && num <= 100:
+            return 'fair'
+        case 100 < num && num <= 150:
+            return 'moderate'
+        case 150 < num && num <= 200:
+            return 'poor'
+        case 200 < num && num <= 300:
+            return 'veryPoor'
+        case 300 < num && num <= 500:
+            return 'dangerous'
+        default:
+            console.log('Invalid Range')
+    }
+}
 
 export {
     ConvertKToC,
@@ -97,4 +90,5 @@ export {
     ConvertWindSpeed,
     ConvertWindDeg,
     ConvertPop,
+    ConvertAqi,
 }

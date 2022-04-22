@@ -8,7 +8,7 @@ export const getWeatherData = createAsyncThunk(
         // console.log(params)
         const res = await apis.getWeatherData(params.lon, params.lat)
         return res.data
-    },
+    }
 )
 
 export const getAirPollution = createAsyncThunk(
@@ -17,13 +17,14 @@ export const getAirPollution = createAsyncThunk(
         // console.log(params)
         const res = await apis.getAirPollution(params.lon, params.lat)
         // console.log(res.data.data.forecast.daily)
-        return res.data.data.forecast.daily
-    },
+        // console.log(res.data.data.aqi)
+        return { ...res.data.data.forecast.daily, aqi: res.data.data.aqi }
+    }
 )
 
 const initState = {
     weatherData: {},
-    airPollution: [],
+    airPollution: {},
     loading: true,
     error: '',
 }

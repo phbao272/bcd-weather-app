@@ -13,6 +13,27 @@ export const color = {
     dew_point_shadow: '#b2cdd4',
 }
 
+export const AQI_COLOR = {
+    good: '#9cd84e',
+    fair: '#facf39',
+    moderate: '#f99049',
+    poor: '#f65e5f',
+    veryPoor: '#a070b6',
+    dangerous: '#a06a7b',
+}
+
+export const AQI_DESC = {
+    good: ['Tốt', 'Không khí đạt yêu cầu'],
+    fair: ['Vừa phải', 'Chất lượng không khí chấp nhận được'],
+    moderate: [
+        'Không tốt cho người nhạy cảm',
+        'Những người nhạy cảm có thể gặp ảnh hưởng tới sức khỏe',
+    ],
+    poor: ['Hại sức khỏe', 'Ảnh hưởng tới sức khỏe mọi người'],
+    veryPoor: ['Rất Không Lành Mạnh', 'Ảnh hưởng rất lớn tới sức khỏe mọi người'],
+    dangerous: '',
+}
+
 export default {
     activeOpacity: 0.7,
     containerFixedTop: {

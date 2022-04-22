@@ -4,14 +4,7 @@ import PropTypes from 'prop-types'
 
 import { Layout, Text } from '@ui-kitten/components'
 
-const AQI_COLOR = {
-    good: '#9cd84e',
-    fair: '#facf39',
-    moderate: '#f99049',
-    poor: '#f65e5f',
-    veryPoor: '#a070b6',
-    dangerous: '#a06a7b',
-}
+import { AQI_COLOR } from '../../constants'
 
 const AirPollutionItem = (props) => {
     const bgColor = props.level ? AQI_COLOR[props.level] : '#f5f5f5'

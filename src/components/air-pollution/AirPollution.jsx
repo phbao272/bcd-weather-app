@@ -7,11 +7,11 @@ import { Layout, Text } from '@ui-kitten/components'
 
 import AirPollutionItem from './AirPollutionItem'
 
-import { ConvertDateToDays } from '../../utils'
+import { ConvertDateToDays, ConvertAqi } from '../../utils'
 
 const AirPollution = (props) => {
     const [data, setData] = useState([])
-    console.log({ data })
+    // console.log({ data })
 
     const maxAvg = _.maxBy(data, (o) => o.avg)
 
@@ -26,28 +26,7 @@ const AirPollution = (props) => {
 
             // console.log(item.avg)
 
-            switch (true) {
-                case item.avg <= 50:
-                    level = 'good'
-                    break
-                case 50 < item.avg && item.avg <= 100:
-                    level = 'fair'
-                    break
-                case 100 < item.avg && item.avg <= 150:
-                    level = 'moderate'
-                    break
-                case 150 < item.avg && item.avg <= 200:
-                    level = 'poor'
-                    break
-                case 200 < item.avg && item.avg <= 300:
-                    level = 'veryPoor'
-                    break
-                case 300 < item.avg && item.avg <= 500:
-                    level = 'dangerous'
-                    break
-                default:
-                    console.log('Invalid Range')
-            }
+            level = ConvertAqi(item.avg)
 
             return { ...item, level: level }
         })
