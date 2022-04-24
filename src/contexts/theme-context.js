@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from 'react'
-const ThemeContext = createContext()
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Restart } from 'fiction-expo-restart'
+const ThemeContext = createContext()
 
 const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState('dark')
@@ -27,6 +28,8 @@ const ThemeProvider = ({ children }) => {
     const toggleTheme = () => {
         setTheme(theme === 'dark' ? 'light' : 'dark')
         storeData(theme === 'dark' ? 'light' : 'dark')
+        // Restart app
+        // Restart()
     }
 
     const value = {
@@ -34,9 +37,7 @@ const ThemeProvider = ({ children }) => {
         toggleTheme,
     }
 
-    return (
-        <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-    )
+    return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
 
 export { ThemeProvider, ThemeContext }

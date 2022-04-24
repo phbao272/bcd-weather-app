@@ -90,10 +90,10 @@ const DailyPage = () => {
     console.log(daily)
 
     return (
-        <Layout style={globalStyles.container}>
+        <Layout style={[globalStyles.container, styles.container]}>
             <Section>
                 <SectionTitle>
-                    <Layout style={[globalStyles.flexRowCenterAlign, styles.containerFixedTop]}>
+                    <Layout style={[globalStyles.flexRowCenterAlign, { paddingHorizontal: 16 }]}>
                         <TouchableOpacity onPress={handleGoBack} activeOpacity={0.7}>
                             <BackIcon />
                         </TouchableOpacity>
@@ -101,7 +101,7 @@ const DailyPage = () => {
                     </Layout>
                 </SectionTitle>
                 <SectionBody>
-                    <ScrollView>
+                    <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8 }}>
                         {daily.map((item, index) => (
                             <DailyItem key={index} data={item} />
                         ))}
@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
     },
 
     container: {
-        paddingBottom: 24,
+        paddingBottom: 50,
+        paddingHorizontal: 0,
     },
 
     wrapText: {

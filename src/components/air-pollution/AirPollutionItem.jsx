@@ -17,7 +17,13 @@ const AirPollutionItem = (props) => {
         <Layout style={styles.container}>
             <Text style={styles.index}>{props.index}</Text>
             <Layout
-                style={[styles.bar, { backgroundColor: bgColor, height: heightOfBar }]}
+                style={[
+                    styles.bar,
+                    {
+                        backgroundColor: bgColor,
+                        height: heightOfBar,
+                    },
+                ]}
             ></Layout>
             <Text style={styles.date}>{props.date}</Text>
         </Layout>

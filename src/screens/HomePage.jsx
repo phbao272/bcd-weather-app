@@ -12,6 +12,8 @@ import AreaChart from '../components/charts/AreaChart'
 import DarkMode from '../components/DarkMode'
 import AirPollution from '../components/air-pollution/AirPollution'
 import AirPollutionInfo from '../components/air-pollution/AirPollutionInfo'
+import Sun from '../components/Sun'
+import Moon from '../components/Moon'
 
 import globalStyles, { color } from '../constants/index'
 
@@ -23,9 +25,8 @@ import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
 import { setLocationActive } from '../redux/slices/locationSlice'
 
 import {
-    weatherDataSelector,
     hourlySelector,
-    dailySelector,
+    currentDataSelector,
     getLoadingSelector,
     getAirPollutionSelector,
 } from '../redux/selectors'
@@ -37,10 +38,6 @@ const HomePage = () => {
     const [coordinates, setCoordinates] = useState({})
 
     const dispatch = useDispatch()
-
-    // const weatherData = useSelector(weatherDataSelector)
-
-    // const dailyWeatherData = useSelector(dailySelector)
 
     const loading = useSelector(getLoadingSelector)
 
@@ -62,11 +59,19 @@ const HomePage = () => {
 
     // console.log(airPollutionData)
 
+    const current = useSelector(currentDataSelector)
+
+    const [currentData, setCurrentData] = useState(current)
+
+    useEffect(() => {
+        setCurrentData(current)
+    }, [current])
+
     useEffect(() => {
         if (!loading) {
             setTimeout(() => {
                 setLoading(loading)
-            }, 1500)
+            }, 500)
         }
     }, [loading])
 
@@ -104,7 +109,7 @@ const HomePage = () => {
                 setLocationActive({
                     lon: coordinates.lon,
                     lat: coordinates.lat,
-                })
+                }),
             )
         }
     }, [coordinates])
@@ -225,12 +230,16 @@ const HomePage = () => {
 
                         <Section>
                             <SectionTitle>MẶT TRỜI</SectionTitle>
-                            <SectionBody></SectionBody>
+                            <SectionBody>
+                                <Sun sunrise={currentData.sunrise} sunset={currentData.sunset} />
+                            </SectionBody>
                         </Section>
 
                         <Section>
                             <SectionTitle>MẶT TRĂNG</SectionTitle>
-                            <SectionBody></SectionBody>
+                            <SectionBody>
+                                <Moon data={currentData} />
+                            </SectionBody>
                         </Section>
 
                         <Section>

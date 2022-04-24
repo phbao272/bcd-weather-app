@@ -23,6 +23,7 @@
     "expo-linking": "~3.0.0",
     "expo-location": "~14.0.1",
     "expo-status-bar": "~1.2.0",
+    "fiction-expo-restart": "^1.1.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "react": "17.0.1",
