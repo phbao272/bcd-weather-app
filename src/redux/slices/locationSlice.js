@@ -1,19 +1,30 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import apis from '../../apis'
 
-export const setLocationActive = createAsyncThunk(
-    'location/setLocationActive',
-    async (params) => {
-        // console.log(params)
-        const res = await apis.getLocationNameByCoordinates(
-            params.lon,
-            params.lat,
-        )
-        return res.data[0].local_names.vi
-    },
-)
+const getData = async (key) => {
+    try {
+        const jsonValue = await AsyncStorage.getItem(`@${key}`)
+        return jsonValue != null ? JSON.parse(jsonValue) : []
+    } catch (e) {
+        // error reading value
+    }
+}
 
+export const setLocationActive = createAsyncThunk('location/setLocationActive', async (params) => {
+    // console.log(params)
+    const res = await apis.getLocationNameByCoordinates(params.lon, params.lat)
+    return res.data[0].local_names.vi
+})
+
+export const setLocations = createAsyncThunk('location/setLocations', async () => {
+    const res = getData('locations')
+    console.log('setLocations')
+    return res
+})
+
+// getData('locations')
 const initState = {
     locationActive: '',
     locations: [],
@@ -26,7 +37,7 @@ export const locationSlice = createSlice({
     initialState: initState,
     reducers: {
         addLocation: (state, action) => {
-            state.locations.push(action.payload)
+            state.locations = action.payload
         },
     },
     extraReducers: {
@@ -39,6 +50,18 @@ export const locationSlice = createSlice({
         },
         [setLocationActive.fulfilled]: (state, action) => {
             state.locationActive = action.payload
+            state.loading = false
+        },
+
+        [setLocations.pending]: (state) => {
+            state.loading = true
+        },
+        [setLocations.rejected]: (state, action) => {
+            state.loading = false
+            state.error = action.error
+        },
+        [setLocations.fulfilled]: (state, action) => {
+            state.locations = action.payload
             state.loading = false
         },
     },

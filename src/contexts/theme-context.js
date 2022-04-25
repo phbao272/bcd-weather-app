@@ -1,6 +1,8 @@
 import { createContext, useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+
 import { Restart } from 'fiction-expo-restart'
+
 const ThemeContext = createContext()
 
 const ThemeProvider = ({ children }) => {

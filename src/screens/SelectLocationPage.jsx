@@ -1,11 +1,13 @@
 import { TouchableOpacity, StyleSheet, ImageBackground, ScrollView, Dimensions } from 'react-native'
-import React from 'react'
-
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Layout, Text, Avatar } from '@ui-kitten/components'
 
 import { SearchIcon, BackIcon, SettingIcon } from '../components/icons'
 import { useNavigation } from '@react-navigation/native'
 
+import { getLocationsSelector } from '../redux/selectors'
+import { MoreVerticalIcon } from '../components/icons'
 import globalStyles from '../constants/index'
 import apis from '../apis/index'
 import { Icon } from '@ui-kitten/components'
@@ -23,7 +25,7 @@ const savedLocation = [
     },
 ]
 
-const LocationItem = () => {
+const LocationItem = ({ locationName, temp }) => {
     return (
         <Layout style={[styles.itemContainer]}>
             <ImageBackground
@@ -40,7 +42,7 @@ const LocationItem = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: '#fff', fontSize: 26 }}>Đống Đa</Text>
+                    <Text style={{ color: '#ffffff', fontSize: 26 }}>{locationName}</Text>
                     <Avatar
                         style={{
                             padding: 6,
@@ -59,14 +61,15 @@ const LocationItem = () => {
                         alignItems: 'flex-end',
                     }}
                 >
-                    <Text style={{ color: '#fff', fontSize: 52, fontWeight: '100' }}>
-                        26&#176;C
+                    <Text style={{ color: '#ffffff', fontSize: 52, fontWeight: '100' }}>
+                        {temp}&#176;C
                     </Text>
-                    <Icon
+                    {/* <Icon
                         name="more-vertical-outline"
                         fill="#fff"
                         style={{ width: 24, height: 24 }}
-                    />
+                    /> */}
+                    <MoreVerticalIcon />
                 </Layout>
             </ImageBackground>
         </Layout>
@@ -74,6 +77,17 @@ const LocationItem = () => {
 }
 
 const SelectLocationPage = () => {
+    const locations = useSelector(getLocationsSelector)
+
+    const [locationsData, setLocationsData] = useState(locations)
+
+    useEffect(() => {
+        setLocationsData(locations)
+    }, [locations])
+
+    console.log({ locationsData })
+    console.log({ locations })
+
     const navigation = useNavigation()
 
     const handleGoBack = () => {
@@ -101,9 +115,11 @@ const SelectLocationPage = () => {
                 </Layout>
             </Layout>
             <ScrollView style={{ marginTop: 12 }}>
-                <LocationItem />
-                <LocationItem />
-                <LocationItem />
+                {locationsData
+                    ? locationsData.map((item) => (
+                          <LocationItem key={item.id} locationName={item.name} temp={24} />
+                      ))
+                    : null}
             </ScrollView>
         </Layout>
     )

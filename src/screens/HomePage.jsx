@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 
 import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
-import { setLocationActive } from '../redux/slices/locationSlice'
+import { setLocationActive, setLocations } from '../redux/slices/locationSlice'
 
 import {
     hourlySelector,
@@ -74,6 +74,15 @@ const HomePage = () => {
             }, 500)
         }
     }, [loading])
+
+    // TODO: Lấy locations lưu trong Storage
+    useEffect(() => {
+        dispatch(setLocations())
+            .unwrap()
+            .then((originalPromiseResult) => {
+                console.log(originalPromiseResult)
+            })
+    }, [])
 
     // TODO: Ưu cầu bật định vị ở điện thoại
     useEffect(() => {
@@ -231,7 +240,7 @@ const HomePage = () => {
                         <Section>
                             <SectionTitle>MẶT TRỜI</SectionTitle>
                             <SectionBody>
-                                <Sun sunrise={currentData.sunrise} sunset={currentData.sunset} />
+                                <Sun sunrise={currentData?.sunrise} sunset={currentData?.sunset} />
                             </SectionBody>
                         </Section>
 
