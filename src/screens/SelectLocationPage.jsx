@@ -2,15 +2,19 @@ import { TouchableOpacity, StyleSheet, ImageBackground, ScrollView, Dimensions }
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Layout, Text, Avatar } from '@ui-kitten/components'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { SearchIcon, BackIcon, SettingIcon } from '../components/icons'
 import { useNavigation } from '@react-navigation/native'
 
 import { getLocationsSelector } from '../redux/selectors'
-import { MoreVerticalIcon } from '../components/icons'
+import { deleteLocation } from '../redux/slices/locationSlice'
+
+import { TrashIcon } from '../components/icons'
 import globalStyles from '../constants/index'
 import apis from '../apis/index'
-import { Icon } from '@ui-kitten/components'
+import { ConvertKToC } from '../utils'
+import { times } from 'lodash'
 
 const savedLocation = [
     {
@@ -25,7 +29,13 @@ const savedLocation = [
     },
 ]
 
-const LocationItem = ({ locationName, temp }) => {
+const LocationItem = (props) => {
+    const dispatch = useDispatch()
+
+    const handleDeleteItem = () => {
+        dispatch(deleteLocation(props?.id))
+    }
+
     return (
         <Layout style={[styles.itemContainer]}>
             <ImageBackground
@@ -42,14 +52,14 @@ const LocationItem = ({ locationName, temp }) => {
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: '#ffffff', fontSize: 26 }}>{locationName}</Text>
+                    <Text style={{ color: '#ffffff', fontSize: 26 }}>{props?.locationName}</Text>
                     <Avatar
                         style={{
                             padding: 6,
                             backgroundColor: 'rgba(255, 255, 255, 0.4)',
                         }}
                         source={{
-                            uri: apis.getWeatherIcon('01n'),
+                            uri: apis.getWeatherIcon(props?.icon),
                         }}
                     ></Avatar>
                 </Layout>
@@ -62,14 +72,11 @@ const LocationItem = ({ locationName, temp }) => {
                     }}
                 >
                     <Text style={{ color: '#ffffff', fontSize: 52, fontWeight: '100' }}>
-                        {temp}&#176;C
+                        {ConvertKToC(props?.temp)}&#176;C
                     </Text>
-                    {/* <Icon
-                        name="more-vertical-outline"
-                        fill="#fff"
-                        style={{ width: 24, height: 24 }}
-                    /> */}
-                    <MoreVerticalIcon />
+                    <TouchableOpacity onPress={handleDeleteItem} style={{ marginRight: 8 }}>
+                        <TrashIcon />
+                    </TouchableOpacity>
                 </Layout>
             </ImageBackground>
         </Layout>
@@ -77,16 +84,28 @@ const LocationItem = ({ locationName, temp }) => {
 }
 
 const SelectLocationPage = () => {
+    const dispatch = useDispatch()
+
     const locations = useSelector(getLocationsSelector)
 
     const [locationsData, setLocationsData] = useState(locations)
 
     useEffect(() => {
         setLocationsData(locations)
+        storeData(locations)
     }, [locations])
 
+    const storeData = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@locations', jsonValue)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     console.log({ locationsData })
-    console.log({ locations })
+    // console.log({ locations })
 
     const navigation = useNavigation()
 
@@ -96,6 +115,14 @@ const SelectLocationPage = () => {
 
     const handleGoToSearchPage = () => {
         navigation.navigate('Search')
+    }
+
+    const handleGoToHomePage = () => {
+        navigation.navigate('Home')
+    }
+
+    const handleSelectLocation = () => {
+        handleGoToHomePage()
     }
 
     return (
@@ -117,7 +144,18 @@ const SelectLocationPage = () => {
             <ScrollView style={{ marginTop: 12 }}>
                 {locationsData
                     ? locationsData.map((item) => (
-                          <LocationItem key={item.id} locationName={item.name} temp={24} />
+                          <TouchableOpacity
+                              key={item.id}
+                              activeOpacity={0.9}
+                              onPress={handleSelectLocation}
+                          >
+                              <LocationItem
+                                  locationName={item.name}
+                                  temp={item.temp}
+                                  id={item.id}
+                                  icon={item.icon}
+                              />
+                          </TouchableOpacity>
                       ))
                     : null}
             </ScrollView>

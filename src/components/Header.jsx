@@ -25,7 +25,7 @@ const Header = () => {
     return (
         // TODO: Header fixed
         <Layout style={globalStyles.flexRowSpace}>
-            <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{location}</Text>
+            <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{location.name}</Text>
             <Layout style={globalStyles.flexRowCenterAlign}>
                 <TouchableOpacity>
                     <ShareIcon

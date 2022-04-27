@@ -41,18 +41,25 @@ const SearchPage = () => {
         setLocationsData(locations)
     }, [locations])
 
-    const handleSubmit = () => {
-        apis.getCoordinatesByLocationName(value).then((res) => {
+    const handleGetCurrentWeatherData = (lon, lat, id, name) => {
+        apis.getCurrentWeatherData(lon, lat).then((res) => {
             // console.log(res.data)
-            const id = uuidv4()
+
+            const data = {
+                icon: res.data.weather[0].icon,
+                temp: res.data.main.temp,
+            }
+
+            console.log(data)
 
             setLocationsData([
                 ...locationsData,
                 {
                     id,
-                    name: res.data[0]?.local_names?.vi,
-                    lon: res.data[0]?.lon,
-                    lat: res.data[0]?.lat,
+                    name: name,
+                    lon: lon,
+                    lat: lat,
+                    ...data,
                 },
             ])
 
@@ -61,9 +68,10 @@ const SearchPage = () => {
                     ...locationsData,
                     {
                         id,
-                        name: res.data[0]?.local_names?.vi,
-                        lon: res.data[0]?.lon,
-                        lat: res.data[0]?.lat,
+                        name: name,
+                        lon: lon,
+                        lat: lat,
+                        ...data,
                     },
                 ]),
             )
@@ -72,12 +80,31 @@ const SearchPage = () => {
                 ...locationsData,
                 {
                     id,
-                    name: res.data[0]?.local_names?.vi,
-                    lon: res.data[0]?.lon,
-                    lat: res.data[0]?.lat,
+                    name: name,
+                    lon: lon,
+                    lat: lat,
+                    ...data,
                 },
             ])
         })
+    }
+
+    const handleSubmit = () => {
+        if (value.trim().length > 0) {
+            apis.getCoordinatesByLocationName(value).then((res) => {
+                // console.log(res.data)
+                const id = uuidv4()
+
+                handleGetCurrentWeatherData(
+                    res.data[0]?.lon,
+                    res.data[0]?.lat,
+                    id,
+                    res.data[0]?.local_names?.vi ? res.data[0]?.local_names?.vi : res.data[0].name,
+                )
+
+                setValue('')
+            })
+        }
     }
 
     // console.log({ locationsData })

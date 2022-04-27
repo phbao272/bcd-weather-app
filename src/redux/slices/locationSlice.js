@@ -15,7 +15,7 @@ const getData = async (key) => {
 export const setLocationActive = createAsyncThunk('location/setLocationActive', async (params) => {
     // console.log(params)
     const res = await apis.getLocationNameByCoordinates(params.lon, params.lat)
-    return res.data[0].local_names.vi
+    return { name: res.data[0].local_names.vi, lon: params.lon, lat: params.lat }
 })
 
 export const setLocations = createAsyncThunk('location/setLocations', async () => {
@@ -38,6 +38,10 @@ export const locationSlice = createSlice({
     reducers: {
         addLocation: (state, action) => {
             state.locations = action.payload
+        },
+        deleteLocation: (state, action) => {
+            const newState = state.locations.filter((item) => item.id !== action.payload)
+            state.locations = newState
         },
     },
     extraReducers: {
@@ -68,6 +72,6 @@ export const locationSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addLocation } = locationSlice.actions
+export const { addLocation, deleteLocation } = locationSlice.actions
 
 export default locationSlice.reducer

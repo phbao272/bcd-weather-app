@@ -80,7 +80,7 @@ const HomePage = () => {
         dispatch(setLocations())
             .unwrap()
             .then((originalPromiseResult) => {
-                console.log(originalPromiseResult)
+                console.log('data: ', originalPromiseResult)
             })
     }, [])
 
