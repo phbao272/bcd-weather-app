@@ -28,9 +28,7 @@ const Header = () => {
             <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{location.name}</Text>
             <Layout style={globalStyles.flexRowCenterAlign}>
                 <TouchableOpacity>
-                    <ShareIcon
-                        style={[{ marginRight: 24 }, globalStyles.sizeIcon]}
-                    />
+                    <ShareIcon style={[{ marginRight: 24 }, globalStyles.sizeIcon]} />
                 </TouchableOpacity>
 
                 <TouchableOpacity onPress={handleGoToSelectLocationPage}>

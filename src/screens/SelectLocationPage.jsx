@@ -8,7 +8,8 @@ import { SearchIcon, BackIcon, SettingIcon } from '../components/icons'
 import { useNavigation } from '@react-navigation/native'
 
 import { getLocationsSelector } from '../redux/selectors'
-import { deleteLocation } from '../redux/slices/locationSlice'
+import { deleteLocation, editLocationActive } from '../redux/slices/locationSlice'
+import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
 
 import { TrashIcon } from '../components/icons'
 import globalStyles from '../constants/index'
@@ -121,13 +122,19 @@ const SelectLocationPage = () => {
         navigation.navigate('Home')
     }
 
-    const handleSelectLocation = () => {
+    const handleSelectLocation = (item) => {
         handleGoToHomePage()
+
+        console.log({ lon: item.lon, lat: item.lat })
+
+        dispatch(editLocationActive({ name: item.name, lon: item.lon, lat: item.lat }))
+        dispatch(getAirPollution({ lon: item.lon, lat: item.lat }))
+        dispatch(getWeatherData({ lon: item.lon, lat: item.lat }))
     }
 
     return (
-        <Layout style={[globalStyles.container]}>
-            <Layout style={globalStyles.flexRowSpace}>
+        <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
+            <Layout style={[globalStyles.flexRowSpace, { paddingHorizontal: 16 }]}>
                 <TouchableOpacity onPress={handleGoBack}>
                     <BackIcon />
                 </TouchableOpacity>
@@ -141,13 +148,13 @@ const SelectLocationPage = () => {
                     </TouchableOpacity>
                 </Layout>
             </Layout>
-            <ScrollView style={{ marginTop: 12 }}>
+            <ScrollView style={{ marginTop: 12 }} contentContainerStyle={{ paddingHorizontal: 16 }}>
                 {locationsData
                     ? locationsData.map((item) => (
                           <TouchableOpacity
                               key={item.id}
                               activeOpacity={0.9}
-                              onPress={handleSelectLocation}
+                              onPress={() => handleSelectLocation(item)}
                           >
                               <LocationItem
                                   locationName={item.name}

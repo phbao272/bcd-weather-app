@@ -43,6 +43,9 @@ export const locationSlice = createSlice({
             const newState = state.locations.filter((item) => item.id !== action.payload)
             state.locations = newState
         },
+        editLocationActive: (state, action) => {
+            state.locationActive = action.payload
+        },
     },
     extraReducers: {
         [setLocationActive.pending]: (state) => {
@@ -72,6 +75,6 @@ export const locationSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addLocation, deleteLocation } = locationSlice.actions
+export const { addLocation, deleteLocation, editLocationActive } = locationSlice.actions
 
 export default locationSlice.reducer
