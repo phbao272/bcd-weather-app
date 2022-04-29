@@ -3,8 +3,9 @@ import { StatusBar } from 'expo-status-bar'
 import { Provider } from 'react-redux'
 import store from './src/redux/store'
 
-import { useContext } from 'react'
+import { useState, useContext } from 'react'
 import { ThemeContext } from './src/contexts/theme-context'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { default as themeCustom } from './src/theme/custom-theme.json'
 
@@ -14,6 +15,7 @@ import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { useNavigation } from '@react-navigation/native'
 
 import HomePage from './src/screens/HomePage'
 import SearchPage from './src/screens/SearchPage'

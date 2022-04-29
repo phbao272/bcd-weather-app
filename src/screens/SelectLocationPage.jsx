@@ -115,7 +115,7 @@ const SelectLocationPage = () => {
     }
 
     const handleGoToSearchPage = () => {
-        navigation.navigate('Search')
+        navigation.navigate('Search', { isFirstTime: false })
     }
 
     const handleGoToHomePage = () => {

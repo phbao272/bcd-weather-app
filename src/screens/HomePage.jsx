@@ -16,6 +16,7 @@ import Sun from '../components/Sun'
 import Moon from '../components/Moon'
 
 import globalStyles, { color } from '../constants/index'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import * as Location from 'expo-location'
 import { useDispatch, useSelector } from 'react-redux'
@@ -75,6 +76,23 @@ const HomePage = () => {
         }
     }, [loading])
 
+    useEffect(() => {
+        const _retrieveData = async () => {
+            try {
+                const value = await AsyncStorage.getItem('@isFirstTime')
+                // console.log({ value })
+                if (value !== null) {
+                    navigation.navigate('Home', { isFirstTime: false })
+                } else {
+                    navigation.navigate('WelcomePage', { isFirstTime: true })
+                }
+            } catch (error) {
+                // Error retrieving data
+            }
+        }
+        _retrieveData()
+    }, [])
+
     // TODO: Lấy locations lưu trong Storage
     useEffect(() => {
         dispatch(setLocations())
@@ -106,9 +124,9 @@ const HomePage = () => {
 
     const navigation = useNavigation()
 
-    const handleGoToWelcomePage = () => {
-        navigation.navigate('WelcomePage')
-    }
+    // const handleGoToWelcomePage = () => {
+    //     navigation.navigate('WelcomePage')
+    // }
 
     // TODO: Lấy tên địa điểm
     useEffect(() => {
@@ -258,14 +276,14 @@ const HomePage = () => {
                             </SectionBody>
                         </Section>
 
-                        <Section>
+                        {/* <Section>
                             <SectionTitle>WelcomePage</SectionTitle>
                             <SectionBody>
                                 <TouchableOpacity onPress={handleGoToWelcomePage}>
                                     <Text>WelcomePage</Text>
                                 </TouchableOpacity>
                             </SectionBody>
-                        </Section>
+                        </Section> */}
                     </ScrollView>
                 </>
             )}

@@ -6,7 +6,7 @@ import { Layout, Text, Button, Autocomplete, AutocompleteItem, Input } from '@ui
 import { v4 as uuidv4 } from 'uuid'
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import { useRoute } from '@react-navigation/native'
 import { addLocation } from '../redux/slices/locationSlice'
 import { getLocationsSelector } from '../redux/selectors'
 
@@ -108,22 +108,48 @@ const SearchPage = () => {
     }
 
     // console.log({ locationsData })
+    const route = useRoute()
+    // console.log(route.params.isFirstTime)
+
+    const firstTime = route.params.isFirstTime
 
     return (
         <Layout style={globalStyles.container}>
-            <Layout style={globalStyles.flexRowSpace}>
-                <TouchableOpacity onPress={handleGoBack}>
-                    <BackIcon />
-                </TouchableOpacity>
-            </Layout>
-            <Input
-                placeholder="Place your Text"
-                value={value}
-                onChangeText={(nextValue) => setValue(nextValue)}
-            />
-            <Button onPress={handleSubmit}>
-                <SearchIcon />
-            </Button>
+            {firstTime ? (
+                <>
+                    <Layout style={globalStyles.flexRowSpace}>
+                        <TouchableOpacity onPress={handleGoBack}>
+                            <BackIcon />
+                        </TouchableOpacity>
+                        <Input
+                            placeholder="Nhập địa điểm"
+                            value={value}
+                            onChangeText={(nextValue) => setValue(nextValue)}
+                            style={{ flex: 1, marginLeft: 12 }}
+                        />
+                    </Layout>
+                    <Button onPress={handleSubmit}>
+                        <SearchIcon />
+                    </Button>
+                </>
+            ) : (
+                <>
+                    <Layout style={globalStyles.flexRowSpace}>
+                        <TouchableOpacity onPress={handleGoBack}>
+                            <BackIcon />
+                        </TouchableOpacity>
+                    </Layout>
+                    <Input
+                        placeholder="Nhập địa điểm"
+                        value={value}
+                        onChangeText={(nextValue) => setValue(nextValue)}
+                    />
+                    <Button onPress={handleSubmit}>
+                        <SearchIcon />
+                    </Button>
+                    <Button onPress={handleSubmit}>Vị trí hiện tại</Button>
+                </>
+            )}
         </Layout>
     )
 }

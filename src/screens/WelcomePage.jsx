@@ -1,8 +1,10 @@
-import { StyleSheet, View, Image, Dimensions, TouchableOpacity } from 'react-native';
-import React from 'react';
-import AppIntroSlider from 'react-native-app-intro-slider';
+import { StyleSheet, View, Image, Dimensions, TouchableOpacity } from 'react-native'
+import React, { useContext } from 'react'
+import AppIntroSlider from 'react-native-app-intro-slider'
+import { Layout, Text, Button } from '@ui-kitten/components'
+import { useNavigation } from '@react-navigation/native'
 
-import { Layout, Text } from '@ui-kitten/components';
+import { ThemeContext } from '../contexts/theme-context'
 
 const slides = [
     {
@@ -17,9 +19,16 @@ const slides = [
         text: 'BCD Weather cần quyền truy cập vị trí của bạn để hoạt động',
         image: require('../../assets/welcome-image/intro.png'),
     },
-];
+]
 
-const WelcomePage = () => {
+const WelcomePage = ({ route }) => {
+    const navigation = useNavigation()
+
+    // const route = useRoute()
+    // console.log(route.params.isFirstTime)
+
+    const { toggleFirstTime } = useContext(ThemeContext)
+
     const renderItem = ({ item }) => {
         return (
             <View style={styles.container}>
@@ -28,58 +37,85 @@ const WelcomePage = () => {
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text style={{ fontSize: 26 }}>{item.title}</Text>
-                    <Text style={{ fontSize: 18 }}>{item.text}</Text>
+                    <Text style={{ fontSize: 26, fontWeight: '600' }}>{item.title}</Text>
+                    <Text style={{ fontSize: 16, opacity: 0.7 }}>{item.text}</Text>
                 </View>
+
+                {item.key === 'two' ? (
+                    <View style={styles.btnContainer}>
+                        <Button
+                            style={{ marginBottom: 12, width: screen.width / 2 }}
+                            size="large"
+                            appearance="outline"
+                            onPress={handleSubmit}
+                        >
+                            Cho phép
+                        </Button>
+                        <Button size="medium" appearance="ghost" onPress={handleCancel}>
+                            Bỏ qua
+                        </Button>
+                    </View>
+                ) : null}
             </View>
-        );
-    };
+        )
+    }
+
+    const handleSubmit = () => {
+        navigation.navigate('Home')
+        toggleFirstTime()
+    }
+
+    const handleCancel = () => {
+        navigation.navigate('Search', { isFirstTime: true })
+    }
 
     const _renderDoneButton = () => {
-        return (
-            <TouchableOpacity style={styles.doneButton}>
-                <Text>CẤP QUYỀN</Text>
-            </TouchableOpacity>
-        );
-    };
+        return null
+    }
 
-    //
-    return <AppIntroSlider data={slides} renderItem={renderItem} renderDoneButton={_renderDoneButton} showNextButton={false} />;
-};
+    return (
+        <AppIntroSlider
+            data={slides}
+            renderItem={renderItem}
+            renderDoneButton={_renderDoneButton}
+            showNextButton={false}
+        />
+    )
+}
 
-export default WelcomePage;
+export default WelcomePage
 
-const screen = Dimensions.get('screen');
+const screen = Dimensions.get('screen')
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 32,
         position: 'relative',
-        alignItems: 'center',
+        backgroundColor: '#1F1F1F',
     },
 
     imageContainer: {
         height: screen.height / 2,
         width: screen.width,
         overflow: 'hidden',
-        padding: 4,
+        paddingTop: 8,
+        paddingHorizontal: 12,
     },
 
     image: {
         width: '100%',
         height: screen.width,
+        borderRadius: 8,
     },
 
     textContainer: {
-        padding: 16,
-        flex: 1,
-        textAlign: 'left',
+        paddingHorizontal: 16,
+        paddingTop: 8,
     },
 
-    doneButton: {
-        backgroundColor: '#ccc',
-        paddingVertical: 4,
-        paddingHorizontal: 8,
+    btnContainer: {
+        alignItems: 'center',
+        paddingTop: 24,
     },
-});
+})
