@@ -105,7 +105,7 @@ const SelectLocationPage = () => {
         }
     }
 
-    console.log({ locationsData })
+    // console.log({ locationsData })
     // console.log({ locations })
 
     const navigation = useNavigation()

@@ -50,7 +50,7 @@ const SearchPage = () => {
                 temp: res.data.main.temp,
             }
 
-            console.log(data)
+            // console.log(data)
 
             setLocationsData([
                 ...locationsData,
@@ -64,17 +64,27 @@ const SearchPage = () => {
             ])
 
             dispatch(
-                addLocation([
-                    ...locationsData,
-                    {
-                        id,
-                        name: name,
-                        lon: lon,
-                        lat: lat,
-                        ...data,
-                    },
-                ]),
+                addLocation({
+                    id,
+                    name: name,
+                    lon: lon,
+                    lat: lat,
+                    ...data,
+                }),
             )
+
+            // dispatch(
+            //     addLocation([
+            //         ...locationsData,
+            //         {
+            //             id,
+            //             name: name,
+            //             lon: lon,
+            //             lat: lat,
+            //             ...data,
+            //         },
+            //     ]),
+            // )
 
             storeData([
                 ...locationsData,

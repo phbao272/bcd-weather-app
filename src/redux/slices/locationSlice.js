@@ -37,7 +37,8 @@ export const locationSlice = createSlice({
     initialState: initState,
     reducers: {
         addLocation: (state, action) => {
-            state.locations = action.payload
+            state.locations.push(action.payload)
+            // console.log(action.payload)
         },
         deleteLocation: (state, action) => {
             const newState = state.locations.filter((item) => item.id !== action.payload)
@@ -70,6 +71,7 @@ export const locationSlice = createSlice({
         [setLocations.fulfilled]: (state, action) => {
             state.locations = action.payload
             state.loading = false
+            // console.log(action.payload)
         },
     },
 })

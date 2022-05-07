@@ -3,6 +3,9 @@ import { Image, Dimensions, ScrollView, StyleSheet, Alert, TouchableOpacity } fr
 import { Layout, Spinner, Text } from '@ui-kitten/components'
 import Section, { SectionTitle, SectionBody } from '../components/Section'
 
+import { v4 as uuidv4 } from 'uuid'
+import _ from 'lodash'
+
 import Header from '../components/Header'
 import Summary from '../components/Summary'
 import Detail from '../components/Detail'
@@ -23,13 +26,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 
 import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
-import { setLocationActive, setLocations } from '../redux/slices/locationSlice'
+import { setLocationActive, setLocations, addLocation } from '../redux/slices/locationSlice'
 
 import {
     hourlySelector,
     currentDataSelector,
     getLoadingSelector,
     getAirPollutionSelector,
+    getLocationsSelector,
 } from '../redux/selectors'
 
 const screen = Dimensions.get('screen')
@@ -37,6 +41,7 @@ const screen = Dimensions.get('screen')
 const HomePage = () => {
     const [isLoading, setLoading] = useState(true)
     const [coordinates, setCoordinates] = useState({})
+    const [locationName, setLocationName] = useState(null)
 
     const dispatch = useDispatch()
 
@@ -138,6 +143,10 @@ const HomePage = () => {
                     lat: coordinates.lat,
                 }),
             )
+                .unwrap()
+                .then((originalPromiseResult) => {
+                    setLocationName(originalPromiseResult.name)
+                })
         }
     }, [coordinates])
 
@@ -149,6 +158,29 @@ const HomePage = () => {
             dispatch(getAirPollution({ lon: coordinates.lon, lat: coordinates.lat }))
         }
     }, [coordinates])
+
+    const locations = useSelector(getLocationsSelector)
+
+    // TODO: Thêm vị trí hiện tại vào Locations
+    useEffect(() => {
+        if (coordinates.lon && coordinates.lat && currentData) {
+            if (locations.length > 0 && !_.find(locations, { name: locationName })) {
+                dispatch(
+                    addLocation({
+                        id: uuidv4(),
+                        name: locationName,
+                        lon: coordinates.lon,
+                        lat: coordinates.lat,
+                        icon: currentData.weather[0].icon || '10d',
+                        temp: currentData.temp,
+                    }),
+                )
+            }
+
+            // console.log(currentData)
+        }
+        // console.log({ locations })
+    }, [coordinates, currentData])
 
     const handleGoToHourlyPage = () => {
         navigation.navigate('HourlyPage')
