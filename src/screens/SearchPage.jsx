@@ -73,19 +73,6 @@ const SearchPage = () => {
                 }),
             )
 
-            // dispatch(
-            //     addLocation([
-            //         ...locationsData,
-            //         {
-            //             id,
-            //             name: name,
-            //             lon: lon,
-            //             lat: lat,
-            //             ...data,
-            //         },
-            //     ]),
-            // )
-
             storeData([
                 ...locationsData,
                 {
@@ -119,7 +106,6 @@ const SearchPage = () => {
 
     // console.log({ locationsData })
     const route = useRoute()
-    // console.log(route.params.isFirstTime)
 
     const firstTime = route.params.isFirstTime
 

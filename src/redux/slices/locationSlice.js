@@ -12,15 +12,30 @@ const getData = async (key) => {
     }
 }
 
+const storeData = async (value, key) => {
+    try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem('@' + key, jsonValue)
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 export const setLocationActive = createAsyncThunk('location/setLocationActive', async (params) => {
     // console.log(params)
     const res = await apis.getLocationNameByCoordinates(params.lon, params.lat)
+
+    storeData(
+        { name: res.data[0].local_names.vi, lon: params.lon, lat: params.lat },
+        'location-active',
+    )
+
     return { name: res.data[0].local_names.vi, lon: params.lon, lat: params.lat }
 })
 
 export const setLocations = createAsyncThunk('location/setLocations', async () => {
     const res = getData('locations')
-    console.log('setLocations')
+    // console.log('setLocations')
     return res
 })
 

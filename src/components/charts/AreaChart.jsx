@@ -38,10 +38,7 @@ const AreaChart = (props) => {
 
     const bgcolor = context?.theme === 'dark' ? '#0D0D0D' : '#FFFFFF'
 
-    const labelColor =
-        context?.theme === 'dark'
-            ? `rgba(255, 255, 255, 0.7)`
-            : `rgba(0, 0, 0, 0.7)`
+    const labelColor = context?.theme === 'dark' ? `rgba(255, 255, 255, 0.7)` : `rgba(0, 0, 0, 0.7)`
 
     const customData = () => {
         switch (props.type) {
@@ -116,9 +113,7 @@ const AreaChart = (props) => {
                 }}
             />
             {props.name ? (
-                <Text style={[styles.text, { color: labelColor }]}>
-                    {props.name}
-                </Text>
+                <Text style={[styles.text, { color: labelColor }]}>{props.name}</Text>
             ) : null}
         </Layout>
     )
@@ -142,7 +137,7 @@ const styles = StyleSheet.create({
 
 AreaChart.propTypes = {
     title: PropTypes.string,
-    data: PropTypes.array.isRequired,
+    data: PropTypes.array,
     name: PropTypes.string,
     color: PropTypes.string.isRequired,
     color_shadow: PropTypes.string,

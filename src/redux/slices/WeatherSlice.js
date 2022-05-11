@@ -1,26 +1,38 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import apis from '../../apis'
 
 export const getWeatherData = createAsyncThunk(
     'weather/getWeatherData',
     async (params, thunkAPI) => {
-        // console.log(params)
         const res = await apis.getWeatherData(params.lon, params.lat)
+
+        // storeData(res.data, 'weather')
+
         return res.data
-    }
+    },
 )
 
 export const getAirPollution = createAsyncThunk(
     'weather/getAirPollution',
     async (params, thunkAPI) => {
-        // console.log(params)
         const res = await apis.getAirPollution(params.lon, params.lat)
-        // console.log(res.data.data.forecast.daily)
-        // console.log(res.data.data.aqi)
+
+        // storeData({ ...res.data.data.forecast.daily, aqi: res.data.data.aqi }, 'air-pollution')
+
         return { ...res.data.data.forecast.daily, aqi: res.data.data.aqi }
-    }
+    },
 )
+
+const storeData = async (value, key) => {
+    try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem('@' + key, jsonValue)
+    } catch (e) {
+        console.log(e)
+    }
+}
 
 const initState = {
     weatherData: {},

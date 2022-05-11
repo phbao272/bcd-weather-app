@@ -93,13 +93,13 @@ const SelectLocationPage = () => {
 
     useEffect(() => {
         setLocationsData(locations)
-        storeData(locations)
+        storeData(locations, 'locations')
     }, [locations])
 
-    const storeData = async (value) => {
+    const storeData = async (value, key) => {
         try {
             const jsonValue = JSON.stringify(value)
-            await AsyncStorage.setItem('@locations', jsonValue)
+            await AsyncStorage.setItem('@' + key, jsonValue)
         } catch (e) {
             console.log(e)
         }
@@ -130,6 +130,8 @@ const SelectLocationPage = () => {
         dispatch(editLocationActive({ name: item.name, lon: item.lon, lat: item.lat }))
         dispatch(getAirPollution({ lon: item.lon, lat: item.lat }))
         dispatch(getWeatherData({ lon: item.lon, lat: item.lat }))
+
+        storeData({ name: item.name, lon: item.lon, lat: item.lat }, 'location-active')
     }
 
     return (

@@ -42,6 +42,7 @@ const HomePage = () => {
     const [isLoading, setLoading] = useState(true)
     const [coordinates, setCoordinates] = useState({})
     const [locationName, setLocationName] = useState(null)
+    const [turnOnLocation, setTurnOnLocation] = useState(false)
 
     const dispatch = useDispatch()
 
@@ -109,11 +110,47 @@ const HomePage = () => {
 
     // TODO: Ưu cầu bật định vị ở điện thoại
     useEffect(() => {
-        handleTurnOnLocation()
+        // handleTurnOnLocation()
     }, [])
 
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const jsonValue = await AsyncStorage.getItem('@location-active')
+
+                let data = []
+
+                // TODO: Xử lý chuỗi JSON lấy lon, lat
+                if (jsonValue !== null) {
+                    data = jsonValue
+                        .slice(1, jsonValue.length - 2)
+                        .split(',')
+                        .map((item) => item.split(':'))
+
+                    const lon = Number(data[1][1])
+                    const lat = Number(data[2][1])
+
+                    setCoordinates({
+                        lon: lon,
+                        lat: lat,
+                    })
+                    // console.log(data)
+                    // console.log({ lon, lat })
+                }
+            } catch (e) {
+                // error reading value
+            }
+        }
+
+        getData()
+    }, [])
+
+    // console.log(coordinates)
+
+    // Note: Cập nhật coordinates theo Storage
     const handleTurnOnLocation = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync()
+
         if (status !== 'granted') {
             console.log('permission denied')
             Alert.alert('permission denied')
@@ -121,17 +158,12 @@ const HomePage = () => {
         }
 
         let location = await Location.getCurrentPositionAsync({})
+
         setCoordinates({
             lon: location.coords.longitude,
             lat: location.coords.latitude,
         })
     }
-
-    const navigation = useNavigation()
-
-    // const handleGoToWelcomePage = () => {
-    //     navigation.navigate('WelcomePage')
-    // }
 
     // TODO: Lấy tên địa điểm
     useEffect(() => {
@@ -165,22 +197,26 @@ const HomePage = () => {
     useEffect(() => {
         if (coordinates.lon && coordinates.lat && currentData) {
             if (locations.length > 0 && !_.find(locations, { name: locationName })) {
-                dispatch(
-                    addLocation({
-                        id: uuidv4(),
-                        name: locationName,
-                        lon: coordinates.lon,
-                        lat: coordinates.lat,
-                        icon: currentData.weather[0].icon || '10d',
-                        temp: currentData.temp,
-                    }),
-                )
+                if (locationName) {
+                    dispatch(
+                        addLocation({
+                            id: uuidv4(),
+                            name: locationName,
+                            lon: coordinates.lon,
+                            lat: coordinates.lat,
+                            icon: currentData.weather[0].icon || '10d',
+                            temp: currentData.temp,
+                        }),
+                    )
+                }
             }
 
             // console.log(currentData)
         }
         // console.log({ locations })
     }, [coordinates, currentData])
+
+    const navigation = useNavigation()
 
     const handleGoToHourlyPage = () => {
         navigation.navigate('HourlyPage')
@@ -197,6 +233,10 @@ const HomePage = () => {
     const handleGoToAirPollutionPage = () => {
         navigation.navigate('AirPollutionPage')
     }
+
+    // const handleGoToWelcomePage = () => {
+    //     navigation.navigate('WelcomePage')
+    // }
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
