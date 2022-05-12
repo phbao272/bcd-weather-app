@@ -24,7 +24,7 @@ function* yLabel() {
 }
 
 const AreaChart = (props) => {
-    const [data, setData] = useState(props.data.slice(0, 24))
+    const [data, setData] = useState(props?.data?.slice(0, 24))
 
     useEffect(() => {
         setData(props.data.slice(0, 24))

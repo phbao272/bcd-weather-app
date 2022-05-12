@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Image, Dimensions, ScrollView, StyleSheet, Alert, TouchableOpacity } from 'react-native'
-import { Layout, Spinner, Text } from '@ui-kitten/components'
+import { Layout, Spinner, Text, Button } from '@ui-kitten/components'
 import Section, { SectionTitle, SectionBody } from '../components/Section'
 
 import { v4 as uuidv4 } from 'uuid'
@@ -257,6 +257,16 @@ const HomePage = () => {
     //     navigation.navigate('WelcomePage')
     // }
 
+    const viewShot = useRef()
+
+    const captureAndShareScreenshot = () => {
+        viewShot.current.capture().then((uri) => {
+            console.log('do something with ', uri)
+            Sharing.shareAsync('file://' + uri)
+        }),
+            (error) => console.error('Oops, snapshot failed', error)
+    }
+
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
             {isLoading ? (
@@ -272,102 +282,104 @@ const HomePage = () => {
             ) : (
                 <>
                     <Layout style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
-                        <Header />
+                        <Header captureAndShareScreenshot={captureAndShareScreenshot} />
                     </Layout>
-
                     <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
-                        {/* Image */}
-                        <Section>
-                            <SectionBody>
-                                <Image
-                                    style={styles.imageStyle}
-                                    source={{
-                                        uri: 'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xlYXIlMjBza3l8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
-                                    }}
-                                />
-                            </SectionBody>
-                        </Section>
+                        <ViewShot ref={viewShot} options={{ format: 'jpg', quality: 1 }}>
+                            <Section>
+                                <SectionBody>
+                                    <Image
+                                        style={styles.imageStyle}
+                                        source={{
+                                            uri: 'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xlYXIlMjBza3l8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
+                                        }}
+                                    />
+                                </SectionBody>
+                            </Section>
 
-                        <Section>
-                            <SectionBody>
-                                <Summary />
-                            </SectionBody>
-                        </Section>
+                            <Section>
+                                <SectionBody>
+                                    <Summary />
+                                </SectionBody>
+                            </Section>
 
-                        <Section>
-                            <SectionTitle>CHI TIẾT</SectionTitle>
-                            <SectionBody>
-                                <Detail />
-                            </SectionBody>
-                        </Section>
+                            <Section>
+                                <SectionTitle>CHI TIẾT</SectionTitle>
+                                <SectionBody>
+                                    <Detail />
+                                </SectionBody>
+                            </Section>
 
-                        <Section>
-                            <SectionTitle expand={true} onPress={handleGoToHourlyPage}>
-                                HÀNG GIỜ
-                            </SectionTitle>
-                            <SectionBody>
-                                <Hourly />
-                            </SectionBody>
-                        </Section>
+                            <Section>
+                                <SectionTitle expand={true} onPress={handleGoToHourlyPage}>
+                                    HÀNG GIỜ
+                                </SectionTitle>
+                                <SectionBody>
+                                    <Hourly />
+                                </SectionBody>
+                            </Section>
 
-                        <Section>
-                            <SectionTitle expand={true} onPress={handleGoToDailyPage}>
-                                HÀNG NGÀY
-                            </SectionTitle>
-                            <SectionBody>
-                                <Daily />
-                            </SectionBody>
-                        </Section>
+                            <Section>
+                                <SectionTitle expand={true} onPress={handleGoToDailyPage}>
+                                    HÀNG NGÀY
+                                </SectionTitle>
+                                <SectionBody>
+                                    <Daily />
+                                </SectionBody>
+                            </Section>
 
-                        <Section>
-                            <SectionTitle expand={true} onPress={handleGoToGraphPage}>
-                                ĐỒ THỊ
-                            </SectionTitle>
-                            <SectionBody>
-                                <AreaChart
-                                    title=""
-                                    data={hourly}
-                                    name="Khả năng mưa"
-                                    color={color.pop}
-                                    color_shadow={color.pop_shadow}
-                                    type="pop"
-                                    y_axis_suffix="%"
-                                />
-                            </SectionBody>
-                        </Section>
+                            <Section>
+                                <SectionTitle expand={true} onPress={handleGoToGraphPage}>
+                                    ĐỒ THỊ
+                                </SectionTitle>
+                                <SectionBody>
+                                    <AreaChart
+                                        title=""
+                                        data={hourly}
+                                        name="Khả năng mưa"
+                                        color={color.pop}
+                                        color_shadow={color.pop_shadow}
+                                        type="pop"
+                                        y_axis_suffix="%"
+                                    />
+                                </SectionBody>
+                            </Section>
 
-                        <Section>
-                            <SectionTitle expand={true} onPress={handleGoToAirPollutionPage}>
-                                CHẤT LƯỢNG KHÔNG KHÍ
-                            </SectionTitle>
-                            <SectionBody>
-                                <AirPollution data={airPollutionData.pm25} />
-                                <AirPollutionInfo data={airPollutionData.aqi} />
-                            </SectionBody>
-                        </Section>
+                            <Section>
+                                <SectionTitle expand={true} onPress={handleGoToAirPollutionPage}>
+                                    CHẤT LƯỢNG KHÔNG KHÍ
+                                </SectionTitle>
+                                <SectionBody>
+                                    <AirPollution data={airPollutionData.pm25} />
+                                    <AirPollutionInfo data={airPollutionData.aqi} />
+                                </SectionBody>
+                            </Section>
 
-                        <Section>
-                            <SectionTitle>MẶT TRỜI</SectionTitle>
-                            <SectionBody>
-                                <Sun sunrise={currentData?.sunrise} sunset={currentData?.sunset} />
-                            </SectionBody>
-                        </Section>
+                            <Section>
+                                <SectionTitle>MẶT TRỜI</SectionTitle>
+                                <SectionBody>
+                                    <Sun
+                                        sunrise={currentData?.sunrise}
+                                        sunset={currentData?.sunset}
+                                    />
+                                </SectionBody>
+                            </Section>
 
-                        <Section>
-                            <SectionTitle>MẶT TRĂNG</SectionTitle>
-                            <SectionBody>
-                                <Moon data={currentData} />
-                            </SectionBody>
-                        </Section>
+                            <Section>
+                                <SectionTitle>MẶT TRĂNG</SectionTitle>
+                                <SectionBody>
+                                    <Moon data={currentData} />
+                                </SectionBody>
+                            </Section>
 
-                        <Section>
-                            <SectionTitle>Dark Mode</SectionTitle>
-                            <SectionBody>
-                                <DarkMode />
-                            </SectionBody>
-                        </Section>
+                            <Section>
+                                <SectionTitle>Dark Mode</SectionTitle>
+                                <SectionBody>
+                                    <DarkMode />
+                                </SectionBody>
+                            </Section>
 
-                        {/* <Section>
+                            {/* <Section>
                             <SectionTitle>WelcomePage</SectionTitle>
                             <SectionBody>
                                 <TouchableOpacity onPress={handleGoToWelcomePage}>
@@ -375,6 +387,7 @@ const HomePage = () => {
                                 </TouchableOpacity>
                             </SectionBody>
                         </Section> */}
+                        </ViewShot>
                     </ScrollView>
                 </>
             )}

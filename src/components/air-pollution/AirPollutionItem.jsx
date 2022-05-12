@@ -54,8 +54,12 @@ const styles = StyleSheet.create({
 })
 
 AirPollutionItem.propTypes = {
-    index: PropTypes.number.isRequired,
-    date: PropTypes.string.isRequired,
+    index: PropTypes.number,
+    date: PropTypes.string,
     level: PropTypes.string,
-    maxAvg: PropTypes.number.isRequired,
+    maxAvg: PropTypes.number,
+    // index: PropTypes.number.isRequired,
+    // date: PropTypes.string.isRequired,
+    // level: PropTypes.string,
+    // maxAvg: PropTypes.number.isRequired,
 }

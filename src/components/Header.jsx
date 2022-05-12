@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import globalStyles from '../constants/index'
 
-const Header = () => {
+const Header = ({ captureAndShareScreenshot }) => {
     const location = useSelector(locatitonActiveSelector)
 
     const navigation = useNavigation()
@@ -27,7 +27,7 @@ const Header = () => {
         <Layout style={globalStyles.flexRowSpace}>
             <Text style={{ fontSize: 24, fontWeight: 'bold' }}>{location.name}</Text>
             <Layout style={globalStyles.flexRowCenterAlign}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={captureAndShareScreenshot}>
                     <ShareIcon style={[{ marginRight: 24 }, globalStyles.sizeIcon]} />
                 </TouchableOpacity>
 
