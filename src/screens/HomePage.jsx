@@ -6,6 +6,9 @@ import Section, { SectionTitle, SectionBody } from '../components/Section'
 import { v4 as uuidv4 } from 'uuid'
 import _ from 'lodash'
 
+import ViewShot from 'react-native-view-shot'
+import * as Sharing from 'expo-sharing'
+
 import Header from '../components/Header'
 import Summary from '../components/Summary'
 import Detail from '../components/Detail'
@@ -110,7 +113,7 @@ const HomePage = () => {
 
     // TODO: Ưu cầu bật định vị ở điện thoại
     useEffect(() => {
-        // handleTurnOnLocation()
+        handleTurnOnLocation()
     }, [])
 
     useEffect(() => {
@@ -133,6 +136,7 @@ const HomePage = () => {
                     setCoordinates({
                         lon: lon,
                         lat: lat,
+                        currPosition: false,
                     })
                     // console.log(data)
                     // console.log({ lon, lat })
@@ -142,7 +146,7 @@ const HomePage = () => {
             }
         }
 
-        getData()
+        // getData()
     }, [])
 
     // console.log(coordinates)
@@ -162,6 +166,7 @@ const HomePage = () => {
         setCoordinates({
             lon: location.coords.longitude,
             lat: location.coords.latitude,
+            currPosition: true,
         })
     }
 
@@ -173,6 +178,7 @@ const HomePage = () => {
                 setLocationActive({
                     lon: coordinates.lon,
                     lat: coordinates.lat,
+                    currPosition: coordinates.currPosition,
                 }),
             )
                 .unwrap()
@@ -196,19 +202,32 @@ const HomePage = () => {
     // TODO: Thêm vị trí hiện tại vào Locations
     useEffect(() => {
         if (coordinates.lon && coordinates.lat && currentData) {
-            if (locations.length > 0 && !_.find(locations, { name: locationName })) {
-                if (locationName) {
+            if (locations.length > 0) {
+                if (locationName && !_.find(locations, { name: locationName })) {
                     dispatch(
                         addLocation({
                             id: uuidv4(),
                             name: locationName,
                             lon: coordinates.lon,
                             lat: coordinates.lat,
+                            currPosition: coordinates.currPosition,
                             icon: currentData.weather[0].icon || '10d',
                             temp: currentData.temp,
                         }),
                     )
                 }
+            } else {
+                dispatch(
+                    addLocation({
+                        id: uuidv4(),
+                        name: locationName,
+                        lon: coordinates.lon,
+                        lat: coordinates.lat,
+                        currPosition: coordinates.currPosition,
+                        icon: currentData.weather[0].icon || '10d',
+                        temp: currentData.temp,
+                    }),
+                )
             }
 
             // console.log(currentData)
@@ -371,8 +390,4 @@ const styles = StyleSheet.create({
         height: screen.width,
         borderRadius: 12,
     },
-    // airPollution: {
-    //     height: 8,
-    //     borderRadius:
-    // }
 })

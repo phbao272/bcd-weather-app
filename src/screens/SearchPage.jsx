@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native'
 import { Layout, Text, Button, Autocomplete, AutocompleteItem, Input } from '@ui-kitten/components'
@@ -21,6 +21,10 @@ const SearchPage = () => {
 
     const handleGoBack = () => {
         navigation.goBack()
+    }
+
+    const handleGoToSelectLocationPage = () => {
+        navigation.navigate('SelectLocation')
     }
 
     const [value, setValue] = useState('')
@@ -90,16 +94,25 @@ const SearchPage = () => {
         if (value.trim().length > 0) {
             apis.getCoordinatesByLocationName(value).then((res) => {
                 // console.log(res.data)
-                const id = uuidv4()
+                if (res.data && res.data.length > 0) {
+                    const id = uuidv4()
 
-                handleGetCurrentWeatherData(
-                    res.data[0]?.lon,
-                    res.data[0]?.lat,
-                    id,
-                    res.data[0]?.local_names?.vi ? res.data[0]?.local_names?.vi : res.data[0].name,
-                )
+                    handleGetCurrentWeatherData(
+                        res.data[0]?.lon,
+                        res.data[0]?.lat,
+                        id,
+                        res.data[0]?.local_names?.vi
+                            ? res.data[0]?.local_names?.vi
+                            : res.data[0].name,
+                    )
 
-                setValue('')
+                    setValue('')
+                    handleGoToSelectLocationPage()
+                } else {
+                    console.log('Địa điểm không tồn tại')
+                    Alert.alert('Địa điểm không tồn tại')
+                    setValue('')
+                }
             })
         }
     }

@@ -207,6 +207,19 @@ const TrashIcon = (props) => {
     )
 }
 
+const PinIcon = (props) => {
+    const { theme } = useContext(ThemeContext)
+    return (
+        <Icon
+            name="pin-outline"
+            // fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
+            fill="#ffffff"
+            {...props}
+        />
+    )
+}
+
 export {
     SearchIcon,
     ShareIcon,
@@ -224,4 +237,5 @@ export {
     UserIcon,
     NavigationIcon,
     TrashIcon,
+    PinIcon,
 }

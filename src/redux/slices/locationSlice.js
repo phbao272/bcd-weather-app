@@ -26,11 +26,21 @@ export const setLocationActive = createAsyncThunk('location/setLocationActive', 
     const res = await apis.getLocationNameByCoordinates(params.lon, params.lat)
 
     storeData(
-        { name: res.data[0].local_names.vi, lon: params.lon, lat: params.lat },
+        {
+            name: res.data[0].local_names.vi,
+            lon: params.lon,
+            lat: params.lat,
+            currPosition: params.currPosition,
+        },
         'location-active',
     )
 
-    return { name: res.data[0].local_names.vi, lon: params.lon, lat: params.lat }
+    return {
+        name: res.data[0].local_names.vi,
+        lon: params.lon,
+        lat: params.lat,
+        currPosition: params.currPosition,
+    }
 })
 
 export const setLocations = createAsyncThunk('location/setLocations', async () => {

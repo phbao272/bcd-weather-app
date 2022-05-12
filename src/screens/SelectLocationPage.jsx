@@ -11,7 +11,7 @@ import { getLocationsSelector } from '../redux/selectors'
 import { deleteLocation, editLocationActive } from '../redux/slices/locationSlice'
 import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
 
-import { TrashIcon } from '../components/icons'
+import { TrashIcon, PinIcon } from '../components/icons'
 import globalStyles from '../constants/index'
 import apis from '../apis/index'
 import { ConvertKToC } from '../utils'
@@ -53,7 +53,18 @@ const LocationItem = (props) => {
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: '#ffffff', fontSize: 26 }}>{props?.locationName}</Text>
+                    <Layout
+                        style={{
+                            backgroundColor: 'transparent',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Text style={{ color: '#ffffff', fontSize: 26, marginRight: 8 }}>
+                            {props?.locationName}
+                        </Text>
+                        {props.currPosition ? <PinIcon /> : null}
+                    </Layout>
                     <Avatar
                         style={{
                             padding: 6,
@@ -163,6 +174,7 @@ const SelectLocationPage = () => {
                                   temp={item.temp}
                                   id={item.id}
                                   icon={item.icon}
+                                  currPosition={item?.currPosition}
                               />
                           </TouchableOpacity>
                       ))
