@@ -24,8 +24,6 @@ const AirPollution = (props) => {
         let newData = props.data.map((item) => {
             let level = ''
 
-            // console.log(item.avg)
-
             level = ConvertAqi(item.avg)
 
             return { ...item, level: level }
@@ -33,7 +31,6 @@ const AirPollution = (props) => {
 
         newData = newData.filter((item) => {
             const unixTime = new Date(item.day).getTime() / 1000
-            // console.log(unixTime)
 
             return unixTime > unixTimeNow - 86400
         })

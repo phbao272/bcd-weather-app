@@ -85,7 +85,7 @@ const Summary = () => {
                     <Text status="basic" style={{ opacity: 0.7, width: '95%' }}>
                         Hôm nay - {descriptionWeather[dailyWeather?.weather[0]?.id]}. Gió{' '}
                         {ConvertWindDeg(dailyWeather?.wind_deg)}, tốc độ{' '}
-                        {ConvertWindSpeed(dailyWeather?.wind_speed)}km/h.{' '}
+                        {ConvertWindSpeed(dailyWeather?.wind_speed)} km/h.{' '}
                         {ConvertPop(dailyWeather?.pop)
                             ? `Khả năng mưa ${ConvertPop(dailyWeather?.pop)}%.`
                             : ''}

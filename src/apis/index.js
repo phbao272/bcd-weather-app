@@ -12,15 +12,17 @@ const apis = {
 
     getLocationNameByCoordinates: (lon, lat, limit = 5) =>
         axios.get(
-            `${BASE_URL}/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${API_KEY}`
+            `${BASE_URL}/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${API_KEY}`,
         ),
     getWeatherData: (lon, lat) =>
         axios.get(
-            `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}`
+            `${BASE_URL}/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely&appid=${API_KEY}`,
         ),
-    getWeatherIcon: (id) => `http://openweathermap.org/img/wn/${id}@2x.png`,
+    getCurrentWeatherData: (lon, lat) =>
+        axios.get(`${BASE_URL}/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`),
     getAirPollution: (lon, lat) =>
         axios.get(`https://api.waqi.info/feed/geo:${lat};${lon}/?token=${API_KEY_AQI}`),
+    getWeatherIcon: (id) => `http://openweathermap.org/img/wn/${id}@2x.png`,
 }
 
 // export const getWeatherData = (lon, lat) =>

@@ -1,14 +1,21 @@
 import { TouchableOpacity, StyleSheet, ImageBackground, ScrollView, Dimensions } from 'react-native'
-import React from 'react'
-
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Layout, Text, Avatar } from '@ui-kitten/components'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { SearchIcon, BackIcon, SettingIcon } from '../components/icons'
 import { useNavigation } from '@react-navigation/native'
 
+import { getLocationsSelector } from '../redux/selectors'
+import { deleteLocation, editLocationActive } from '../redux/slices/locationSlice'
+import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
+
+import { TrashIcon, PinIcon } from '../components/icons'
 import globalStyles from '../constants/index'
 import apis from '../apis/index'
-import { Icon } from '@ui-kitten/components'
+import { ConvertKToC } from '../utils'
+import { times } from 'lodash'
 
 const savedLocation = [
     {
@@ -23,7 +30,13 @@ const savedLocation = [
     },
 ]
 
-const LocationItem = () => {
+const LocationItem = (props) => {
+    const dispatch = useDispatch()
+
+    const handleDeleteItem = () => {
+        dispatch(deleteLocation(props?.id))
+    }
+
     return (
         <Layout style={[styles.itemContainer]}>
             <ImageBackground
@@ -40,14 +53,25 @@ const LocationItem = () => {
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: '#fff', fontSize: 26 }}>Đống Đa</Text>
+                    <Layout
+                        style={{
+                            backgroundColor: 'transparent',
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Text style={{ color: '#ffffff', fontSize: 26, marginRight: 8 }}>
+                            {props?.locationName}
+                        </Text>
+                        {props.currPosition ? <PinIcon /> : null}
+                    </Layout>
                     <Avatar
                         style={{
                             padding: 6,
                             backgroundColor: 'rgba(255, 255, 255, 0.4)',
                         }}
                         source={{
-                            uri: apis.getWeatherIcon('01n'),
+                            uri: apis.getWeatherIcon(props?.icon),
                         }}
                     ></Avatar>
                 </Layout>
@@ -59,14 +83,12 @@ const LocationItem = () => {
                         alignItems: 'flex-end',
                     }}
                 >
-                    <Text style={{ color: '#fff', fontSize: 52, fontWeight: '100' }}>
-                        26&#176;C
+                    <Text style={{ color: '#ffffff', fontSize: 52, fontWeight: '100' }}>
+                        {ConvertKToC(props?.temp)}&#176;C
                     </Text>
-                    <Icon
-                        name="more-vertical-outline"
-                        fill="#fff"
-                        style={{ width: 24, height: 24 }}
-                    />
+                    <TouchableOpacity onPress={handleDeleteItem} style={{ marginRight: 8 }}>
+                        <TrashIcon />
+                    </TouchableOpacity>
                 </Layout>
             </ImageBackground>
         </Layout>
@@ -74,6 +96,29 @@ const LocationItem = () => {
 }
 
 const SelectLocationPage = () => {
+    const dispatch = useDispatch()
+
+    const locations = useSelector(getLocationsSelector)
+
+    const [locationsData, setLocationsData] = useState(locations)
+
+    useEffect(() => {
+        setLocationsData(locations)
+        storeData(locations, 'locations')
+    }, [locations])
+
+    const storeData = async (value, key) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@' + key, jsonValue)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    // console.log({ locationsData })
+    // console.log({ locations })
+
     const navigation = useNavigation()
 
     const handleGoBack = () => {
@@ -81,12 +126,28 @@ const SelectLocationPage = () => {
     }
 
     const handleGoToSearchPage = () => {
-        navigation.navigate('Search')
+        navigation.navigate('Search', { isFirstTime: false })
+    }
+
+    const handleGoToHomePage = () => {
+        navigation.navigate('Home')
+    }
+
+    const handleSelectLocation = (item) => {
+        handleGoToHomePage()
+
+        console.log({ lon: item.lon, lat: item.lat })
+
+        dispatch(editLocationActive({ name: item.name, lon: item.lon, lat: item.lat }))
+        dispatch(getAirPollution({ lon: item.lon, lat: item.lat }))
+        dispatch(getWeatherData({ lon: item.lon, lat: item.lat }))
+
+        storeData({ name: item.name, lon: item.lon, lat: item.lat }, 'location-active')
     }
 
     return (
-        <Layout style={[globalStyles.container]}>
-            <Layout style={globalStyles.flexRowSpace}>
+        <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
+            <Layout style={[globalStyles.flexRowSpace, { paddingHorizontal: 16 }]}>
                 <TouchableOpacity onPress={handleGoBack}>
                     <BackIcon />
                 </TouchableOpacity>
@@ -100,10 +161,24 @@ const SelectLocationPage = () => {
                     </TouchableOpacity>
                 </Layout>
             </Layout>
-            <ScrollView style={{ marginTop: 12 }}>
-                <LocationItem />
-                <LocationItem />
-                <LocationItem />
+            <ScrollView style={{ marginTop: 12 }} contentContainerStyle={{ paddingHorizontal: 16 }}>
+                {locationsData
+                    ? locationsData.map((item) => (
+                          <TouchableOpacity
+                              key={item.id}
+                              activeOpacity={0.9}
+                              onPress={() => handleSelectLocation(item)}
+                          >
+                              <LocationItem
+                                  locationName={item.name}
+                                  temp={item.temp}
+                                  id={item.id}
+                                  icon={item.icon}
+                                  currPosition={item?.currPosition}
+                              />
+                          </TouchableOpacity>
+                      ))
+                    : null}
             </ScrollView>
         </Layout>
     )

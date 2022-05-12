@@ -194,6 +194,32 @@ const NavigationIcon = (props) => {
     )
 }
 
+const TrashIcon = (props) => {
+    const { theme } = useContext(ThemeContext)
+    return (
+        <Icon
+            name="trash-2-outline"
+            // fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
+            fill="#ffffff"
+            {...props}
+        />
+    )
+}
+
+const PinIcon = (props) => {
+    const { theme } = useContext(ThemeContext)
+    return (
+        <Icon
+            name="pin-outline"
+            // fill={theme === 'light' ? '#222b45' : '#ffffff'}
+            style={globalStyles.sizeIcon}
+            fill="#ffffff"
+            {...props}
+        />
+    )
+}
+
 export {
     SearchIcon,
     ShareIcon,
@@ -210,4 +236,6 @@ export {
     ThermometerPlusIcon,
     UserIcon,
     NavigationIcon,
+    TrashIcon,
+    PinIcon,
 }

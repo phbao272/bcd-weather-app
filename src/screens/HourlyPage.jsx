@@ -174,7 +174,7 @@ const HourlyPage = () => {
         <Layout style={[globalStyles.container, styles.container]}>
             <Section>
                 <SectionTitle>
-                    <Layout style={globalStyles.flexRowCenterAlign}>
+                    <Layout style={[globalStyles.flexRowCenterAlign, { paddingHorizontal: 16 }]}>
                         <TouchableOpacity onPress={handleGoBack} activeOpacity={0.7}>
                             <BackIcon />
                         </TouchableOpacity>
@@ -182,7 +182,13 @@ const HourlyPage = () => {
                     </Layout>
                 </SectionTitle>
                 <SectionBody>
-                    <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8 }}>
+                    <ScrollView
+                        contentContainerStyle={{
+                            paddingHorizontal: 16,
+                            paddingTop: 8,
+                            paddingBottom: 100,
+                        }}
+                    >
                         <Section>
                             <SectionTitle>HÔM NAY</SectionTitle>
                             <SectionBody>

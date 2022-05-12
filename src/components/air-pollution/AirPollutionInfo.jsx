@@ -26,7 +26,9 @@ const AirPollutionInfo = (props) => {
                 <Text style={{ color: color, fontSize: 42, marginRight: 8 }}>{props.data}</Text>
                 <Layout>
                     <Text style={{ fontSize: 20 }}>{AQI_DESC[level][0]}</Text>
-                    <Text style={{ opacity: 0.7, fontSize: 14 }}>{AQI_DESC[level][1]}</Text>
+                    <Text style={{ opacity: 0.7, fontSize: 14, maxWidth: windowWidth / 1.5 }}>
+                        {AQI_DESC[level][1]}
+                    </Text>
                 </Layout>
             </Layout>
             <Layout
