@@ -26,6 +26,16 @@ import GraphPage from './src/screens/GraphPage'
 import AirPollutionPage from './src/screens/AirPollutionPage'
 import WelcomePage from './src/screens/WelcomePage'
 
+import * as Notifications from 'expo-notifications'
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+    }),
+})
+
 const Stack = createNativeStackNavigator()
 
 const Main = () => {

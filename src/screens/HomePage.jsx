@@ -30,6 +30,7 @@ import { useNavigation } from '@react-navigation/native'
 
 import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
 import { setLocationActive, setLocations, addLocation } from '../redux/slices/locationSlice'
+import { setToken } from '../redux/slices/userSlice'
 
 import {
     hourlySelector,
@@ -38,6 +39,11 @@ import {
     getAirPollutionSelector,
     getLocationsSelector,
 } from '../redux/selectors'
+
+import * as Notifications from 'expo-notifications'
+import * as Device from 'expo-device'
+
+import { sendPushNotification } from '../utils'
 
 const screen = Dimensions.get('screen')
 
@@ -116,6 +122,7 @@ const HomePage = () => {
         handleTurnOnLocation()
     }, [])
 
+    // TODO: Lấy vị trí hiện tại từ Local Storage
     useEffect(() => {
         const getData = async () => {
             try {
@@ -267,6 +274,63 @@ const HomePage = () => {
             (error) => console.error('Oops, snapshot failed', error)
     }
 
+    // const getNotificationToken = async () => {
+    //     const { status } = await Notifications.getPermissionsAsync()
+    //     if (status !== 'granted') {
+    //         const { status } = await Notifications.requestPermissionsAsync()
+    //         if (status !== 'granted') {
+    //             alert('Failed to get push token for push notification!')
+    //             console.log('Failed to get push token for push notification!')
+    //             return
+    //         }
+    //     }
+
+    //     token = (await Notifications.getExpoPushTokenAsync()).data
+    //     console.log({ token })
+    //     return token
+    // }
+
+    const [expoPushToken, setExpoPushToken] = useState('')
+    const [notification, setNotification] = useState(false)
+    const notificationListener = useRef()
+    const responseListener = useRef()
+
+    useEffect(() => {
+        registerForPushNotificationsAsync().then((token) => {
+            dispatch(setToken(token))
+            setExpoPushToken(token)
+        })
+
+        // This listener is fired whenever a notification is received while the app is foregrounded
+        notificationListener.current = Notifications.addNotificationReceivedListener(
+            (notification) => {
+                setNotification(notification)
+            },
+        )
+
+        // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(
+            (response) => {
+                console.log(response)
+            },
+        )
+
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener.current)
+            Notifications.removeNotificationSubscription(responseListener.current)
+        }
+    }, [])
+
+    async function scheduleAndCancel() {
+        const identifier = await Notifications.scheduleNotificationAsync({
+            content: {
+                title: 'Hey!',
+            },
+            trigger: { seconds: 5, repeats: true },
+        })
+        await Notifications.cancelScheduledNotificationAsync(identifier)
+    }
+
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
             {isLoading ? (
@@ -320,9 +384,7 @@ const HomePage = () => {
                             </Section>
 
                             <Section>
-                                <SectionTitle expand={true} onPress={handleGoToDailyPage}>
-                                    HÀNG NGÀY
-                                </SectionTitle>
+                                <SectionTitle expand={true}>HÀNG NGÀY</SectionTitle>
                                 <SectionBody>
                                     <Daily />
                                 </SectionBody>
@@ -379,6 +441,34 @@ const HomePage = () => {
                                 </SectionBody>
                             </Section>
 
+                            <Section>
+                                <SectionBody>
+                                    <TouchableOpacity
+                                        onPress={async () => {
+                                            await sendPushNotification(
+                                                expoPushToken,
+                                                'Thời tiết hôm nay',
+                                                'Nhiệt độ từ 10-15 độ C',
+                                            )
+                                        }}
+                                    >
+                                        <Text>Get Token</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={scheduleAndCancel}>
+                                        <Text>scheduleAndCancel</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={async () => {
+                                            await Notifications.cancelAllScheduledNotificationsAsync()
+                                        }}
+                                    >
+                                        <Text>cancelAllScheduledNotificationsAsync</Text>
+                                    </TouchableOpacity>
+                                </SectionBody>
+                            </Section>
+
                             {/* <Section>
                             <SectionTitle>WelcomePage</SectionTitle>
                             <SectionBody>
@@ -396,6 +486,37 @@ const HomePage = () => {
 }
 
 export default HomePage
+
+async function registerForPushNotificationsAsync() {
+    let token
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync()
+        let finalStatus = existingStatus
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync()
+            finalStatus = status
+        }
+        if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!')
+            return
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data
+        console.log(token)
+    } else {
+        alert('Must use physical device for Push Notifications')
+    }
+
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        })
+    }
+
+    return token
+}
 
 const styles = StyleSheet.create({
     imageStyle: {

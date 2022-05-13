@@ -9,7 +9,9 @@ import AirPollution from '../components/air-pollution/AirPollution'
 import { BackIcon } from '../components/icons'
 
 import globalStyles from '../constants'
-import { getAirPollutionSelector } from '../redux/selectors'
+import { getAirPollutionSelector, getTokenSelector } from '../redux/selectors'
+
+import { sendPushNotification } from '../utils'
 
 const AirPollutionPage = () => {
     const navigation = useNavigation()
@@ -28,6 +30,10 @@ const AirPollutionPage = () => {
     useEffect(() => {
         setAirPollutionData(airPollution)
     }, [airPollution])
+
+    const expoPushToken = useSelector(getTokenSelector)
+
+    const bodyMessage = 'Ô nhiễm nặng nề'
 
     return (
         <Layout style={[globalStyles.container, styles.container]}>
@@ -81,6 +87,22 @@ const AirPollutionPage = () => {
                             </SectionTitle>
                             <SectionBody>
                                 <AirPollution data={airPollutionData.o3} />
+                            </SectionBody>
+                        </Section>
+
+                        <Section>
+                            <SectionBody>
+                                <TouchableOpacity
+                                    onPress={async () => {
+                                        await sendPushNotification(
+                                            expoPushToken,
+                                            'Chất lượng không khí',
+                                            bodyMessage,
+                                        )
+                                    }}
+                                >
+                                    <Text>Get Token</Text>
+                                </TouchableOpacity>
                             </SectionBody>
                         </Section>
                     </SectionBody>
