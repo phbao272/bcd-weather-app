@@ -33,6 +33,7 @@ import { setLocationActive, setLocations, addLocation } from '../redux/slices/lo
 import { setToken } from '../redux/slices/userSlice'
 
 import {
+    dailySelector,
     hourlySelector,
     currentDataSelector,
     getLoadingSelector,
@@ -40,10 +41,13 @@ import {
     getLocationsSelector,
 } from '../redux/selectors'
 
+import { ConvertKToC, ConvertWindDeg, ConvertWindSpeed, ConvertPop } from '../utils'
+
 import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
 
 import { sendPushNotification } from '../utils'
+import descriptionWeather from '../../assets/data/desc-weather.json'
 
 const screen = Dimensions.get('screen')
 
@@ -56,6 +60,17 @@ const HomePage = () => {
     const dispatch = useDispatch()
 
     const loading = useSelector(getLoadingSelector)
+
+    const [dailyWeather, setDailyWeather] = useState({ weather: [] })
+
+    const dailyWeatherData = useSelector(dailySelector)
+
+    useEffect(() => {
+        if (Array.isArray(dailyWeatherData)) {
+            console.log('dailyWeatherData', dailyWeatherData[0])
+            setDailyWeather(dailyWeatherData[0])
+        }
+    }, [dailyWeatherData])
 
     const [hourly, setHourly] = useState([])
 
@@ -274,22 +289,6 @@ const HomePage = () => {
             (error) => console.error('Oops, snapshot failed', error)
     }
 
-    // const getNotificationToken = async () => {
-    //     const { status } = await Notifications.getPermissionsAsync()
-    //     if (status !== 'granted') {
-    //         const { status } = await Notifications.requestPermissionsAsync()
-    //         if (status !== 'granted') {
-    //             alert('Failed to get push token for push notification!')
-    //             console.log('Failed to get push token for push notification!')
-    //             return
-    //         }
-    //     }
-
-    //     token = (await Notifications.getExpoPushTokenAsync()).data
-    //     console.log({ token })
-    //     return token
-    // }
-
     const [expoPushToken, setExpoPushToken] = useState('')
     const [notification, setNotification] = useState(false)
     const notificationListener = useRef()
@@ -331,6 +330,27 @@ const HomePage = () => {
         await Notifications.cancelScheduledNotificationAsync(identifier)
     }
 
+    const [message, setMessage] = useState({ title: '', body: '' })
+
+    useEffect(() => {
+        setMessage({
+            title: `${ConvertKToC(currentData?.temp)}°C - ${
+                descriptionWeather[currentData?.weather[0]?.id]
+            } | Cao: ${ConvertKToC(dailyWeather?.temp?.max)}°C - Thấp: ${ConvertKToC(
+                dailyWeather?.temp?.min,
+            )}°C`,
+            body: `Hôm nay - ${
+                descriptionWeather[dailyWeather?.weather[0]?.id]
+            }. Gió ${ConvertWindDeg(dailyWeather?.wind_deg)}, tốc độ ${ConvertWindSpeed(
+                dailyWeather?.wind_speed,
+            )} km/h. ${
+                ConvertPop(dailyWeather?.pop)
+                    ? `Khả năng mưa ${ConvertPop(dailyWeather?.pop)}%.`
+                    : ''
+            }`,
+        })
+    }, [currentData, dailyWeather])
+
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
             {isLoading ? (
@@ -350,6 +370,7 @@ const HomePage = () => {
                     </Layout>
                     <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
                         <ViewShot ref={viewShot} options={{ format: 'jpg', quality: 1 }}>
+                            {/* Image */}
                             <Section>
                                 <SectionBody>
                                     <Image
@@ -360,20 +381,20 @@ const HomePage = () => {
                                     />
                                 </SectionBody>
                             </Section>
-
+                            {/* Summary */}
                             <Section>
                                 <SectionBody>
                                     <Summary />
                                 </SectionBody>
                             </Section>
-
+                            {/* Detail */}
                             <Section>
                                 <SectionTitle>CHI TIẾT</SectionTitle>
                                 <SectionBody>
                                     <Detail />
                                 </SectionBody>
                             </Section>
-
+                            {/* Hourly */}
                             <Section>
                                 <SectionTitle expand={true} onPress={handleGoToHourlyPage}>
                                     HÀNG GIỜ
@@ -382,14 +403,14 @@ const HomePage = () => {
                                     <Hourly />
                                 </SectionBody>
                             </Section>
-
+                            {/* Daily */}
                             <Section>
                                 <SectionTitle expand={true}>HÀNG NGÀY</SectionTitle>
                                 <SectionBody>
                                     <Daily />
                                 </SectionBody>
                             </Section>
-
+                            {/* Chart */}
                             <Section>
                                 <SectionTitle expand={true} onPress={handleGoToGraphPage}>
                                     ĐỒ THỊ
@@ -406,7 +427,7 @@ const HomePage = () => {
                                     />
                                 </SectionBody>
                             </Section>
-
+                            {/* Air Pollution */}
                             <Section>
                                 <SectionTitle expand={true} onPress={handleGoToAirPollutionPage}>
                                     CHẤT LƯỢNG KHÔNG KHÍ
@@ -416,7 +437,7 @@ const HomePage = () => {
                                     <AirPollutionInfo data={airPollutionData.aqi} />
                                 </SectionBody>
                             </Section>
-
+                            {/* Sun */}
                             <Section>
                                 <SectionTitle>MẶT TRỜI</SectionTitle>
                                 <SectionBody>
@@ -426,14 +447,14 @@ const HomePage = () => {
                                     />
                                 </SectionBody>
                             </Section>
-
+                            {/* Moon */}
                             <Section>
                                 <SectionTitle>MẶT TRĂNG</SectionTitle>
                                 <SectionBody>
                                     <Moon data={currentData} />
                                 </SectionBody>
                             </Section>
-
+                            {/* Dark Mode */}
                             <Section>
                                 <SectionTitle>Dark Mode</SectionTitle>
                                 <SectionBody>
@@ -447,8 +468,8 @@ const HomePage = () => {
                                         onPress={async () => {
                                             await sendPushNotification(
                                                 expoPushToken,
-                                                'Thời tiết hôm nay',
-                                                'Nhiệt độ từ 10-15 độ C',
+                                                message.title,
+                                                message.body,
                                             )
                                         }}
                                     >
