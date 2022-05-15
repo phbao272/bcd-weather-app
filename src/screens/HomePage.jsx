@@ -41,13 +41,14 @@ import {
     getLocationsSelector,
 } from '../redux/selectors'
 
-import { ConvertKToC, ConvertWindDeg, ConvertWindSpeed, ConvertPop } from '../utils'
+import { ConvertKToC, ConvertWindDeg, ConvertWindSpeed, ConvertPop, ConvertAqi } from '../utils'
 
 import * as Notifications from 'expo-notifications'
 import * as Device from 'expo-device'
 
-import { sendPushNotification } from '../utils'
+import { sendPushNotification, schedulePushNotification, cancelNotification } from '../utils'
 import descriptionWeather from '../../assets/data/desc-weather.json'
+import { AQI_DESC } from '../constants'
 
 const screen = Dimensions.get('screen')
 
@@ -320,16 +321,6 @@ const HomePage = () => {
         }
     }, [])
 
-    async function scheduleAndCancel() {
-        const identifier = await Notifications.scheduleNotificationAsync({
-            content: {
-                title: 'Hey!',
-            },
-            trigger: { seconds: 5, repeats: true },
-        })
-        await Notifications.cancelScheduledNotificationAsync(identifier)
-    }
-
     const [message, setMessage] = useState({ title: '', body: '' })
 
     useEffect(() => {
@@ -350,6 +341,48 @@ const HomePage = () => {
             }`,
         })
     }, [currentData, dailyWeather])
+
+    const [messageAirPollution, setMessageAirPollution] = useState({ title: '', body: '' })
+
+    useEffect(() => {
+        const level = ConvertAqi(airPollutionData.aqi) || 'good'
+        let title = `Chất lượng không khí - ${AQI_DESC[level][0]}`
+        let body
+
+        switch (level) {
+            case 'good':
+                body = '🤗🤗🤗 Hãy ra ngoài và tận hưởng không khí'
+                break
+            case 'fair':
+                body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
+                break
+            case 'moderate':
+                body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
+                break
+            case 'poor':
+                body = `⚠️⚠️⚠️ Ảnh hưởng tới sức khỏe mọi người.`
+                break
+            case 'veryPoor':
+                body = '⚠️⚠️⚠️ Ảnh hưởng rất lớn tới sức khỏe mọi người '
+                break
+            case 'dangerous':
+                body = '🔥🔥🔥 Không nên ra đường nếu không cần thiết.'
+                break
+            default:
+                body = `Hãy nhớ mang theo khẩu trang khi ra đường.`
+        }
+
+        setMessageAirPollution({
+            title,
+            body,
+        })
+    }, [airPollutionData])
+
+    useEffect(() => {
+        const notifId = schedulePushNotification(message)
+
+        return () => cancelNotification(notifId)
+    }, [])
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
@@ -405,7 +438,9 @@ const HomePage = () => {
                             </Section>
                             {/* Daily */}
                             <Section>
-                                <SectionTitle expand={true}>HÀNG NGÀY</SectionTitle>
+                                <SectionTitle expand={true} onPress={handleGoToDailyPage}>
+                                    HÀNG NGÀY
+                                </SectionTitle>
                                 <SectionBody>
                                     <Daily />
                                 </SectionBody>
@@ -466,18 +501,16 @@ const HomePage = () => {
                                 <SectionBody>
                                     <TouchableOpacity
                                         onPress={async () => {
-                                            await sendPushNotification(
-                                                expoPushToken,
-                                                message.title,
-                                                message.body,
-                                            )
+                                            await sendPushNotification(expoPushToken, message)
                                         }}
                                     >
-                                        <Text>Get Token</Text>
+                                        <Text>Get Notification Weather</Text>
                                     </TouchableOpacity>
 
-                                    <TouchableOpacity onPress={scheduleAndCancel}>
-                                        <Text>scheduleAndCancel</Text>
+                                    <TouchableOpacity
+                                        onPress={() => schedulePushNotification(message)}
+                                    >
+                                        <Text>schedulePushNotification</Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
@@ -486,6 +519,17 @@ const HomePage = () => {
                                         }}
                                     >
                                         <Text>cancelAllScheduledNotificationsAsync</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={async () => {
+                                            await sendPushNotification(
+                                                expoPushToken,
+                                                messageAirPollution,
+                                            )
+                                        }}
+                                    >
+                                        <Text>Get Notification Air Pollution</Text>
                                     </TouchableOpacity>
                                 </SectionBody>
                             </Section>

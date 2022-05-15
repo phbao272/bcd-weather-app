@@ -89,22 +89,6 @@ const AirPollutionPage = () => {
                                 <AirPollution data={airPollutionData.o3} />
                             </SectionBody>
                         </Section>
-
-                        <Section>
-                            <SectionBody>
-                                <TouchableOpacity
-                                    onPress={async () => {
-                                        await sendPushNotification(
-                                            expoPushToken,
-                                            'Chất lượng không khí',
-                                            bodyMessage,
-                                        )
-                                    }}
-                                >
-                                    <Text>Get Token</Text>
-                                </TouchableOpacity>
-                            </SectionBody>
-                        </Section>
                     </SectionBody>
                 </ScrollView>
             </Section>
