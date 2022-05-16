@@ -19,10 +19,6 @@ import {
 
 const screenWidth = Dimensions.get('window').width
 
-function* yLabel() {
-    yield* ['0%', '', '50%', '', '100%']
-}
-
 const AreaChart = (props) => {
     const [data, setData] = useState(props?.data?.slice(0, 24))
 
@@ -31,8 +27,6 @@ const AreaChart = (props) => {
     }, [props.data])
 
     // console.log(data)
-
-    const yLabelIterator = yLabel()
 
     const context = useContext(ThemeContext)
 
@@ -104,7 +98,6 @@ const AreaChart = (props) => {
                 withDots={false}
                 withInnerLines={false}
                 withOuterLines={false}
-                // formatYLabel={() => yLabelIterator.next().value}
                 chartConfig={chartConfig}
                 fromZero
                 bezier

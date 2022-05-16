@@ -562,6 +562,22 @@ const HomePage = () => {
                                 </TouchableOpacity>
                             </SectionBody>
                         </Section> */}
+                            <Section>
+                                <SectionBody>
+                                    <Layout style={{ textAlign: 'center' }}>
+                                        <Text
+                                            style={{
+                                                textTransform: 'uppercase',
+                                                fontSize: 12,
+                                                fontWeight: '600',
+                                                opacity: 0.7,
+                                            }}
+                                        >
+                                            Dữ liệu cung cấp bởi Open Weather Map
+                                        </Text>
+                                    </Layout>
+                                </SectionBody>
+                            </Section>
                         </ViewShot>
                     </ScrollView>
                 </>
