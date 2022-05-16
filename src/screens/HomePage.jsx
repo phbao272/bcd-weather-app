@@ -290,111 +290,111 @@ const HomePage = () => {
             (error) => console.error('Oops, snapshot failed', error)
     }
 
-    // const [expoPushToken, setExpoPushToken] = useState('')
-    // const [notification, setNotification] = useState(false)
-    // const notificationListener = useRef()
-    // const responseListener = useRef()
+    const [expoPushToken, setExpoPushToken] = useState('')
+    const [notification, setNotification] = useState(false)
+    const notificationListener = useRef()
+    const responseListener = useRef()
 
-    // useEffect(() => {
-    //     registerForPushNotificationsAsync().then((token) => {
-    //         dispatch(setToken(token))
-    //         setExpoPushToken(token)
-    //     })
+    useEffect(() => {
+        registerForPushNotificationsAsync().then((token) => {
+            dispatch(setToken(token))
+            setExpoPushToken(token)
+        })
 
-    //     // This listener is fired whenever a notification is received while the app is foregrounded
-    //     notificationListener.current = Notifications.addNotificationReceivedListener(
-    //         (notification) => {
-    //             setNotification(notification)
-    //         },
-    //     )
+        // This listener is fired whenever a notification is received while the app is foregrounded
+        notificationListener.current = Notifications.addNotificationReceivedListener(
+            (notification) => {
+                setNotification(notification)
+            },
+        )
 
-    //     // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
-    //     responseListener.current = Notifications.addNotificationResponseReceivedListener(
-    //         (response) => {
-    //             console.log(response)
-    //         },
-    //     )
+        // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(
+            (response) => {
+                console.log(response)
+            },
+        )
 
-    //     return () => {
-    //         Notifications.removeNotificationSubscription(notificationListener.current)
-    //         Notifications.removeNotificationSubscription(responseListener.current)
-    //     }
-    // }, [])
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener.current)
+            Notifications.removeNotificationSubscription(responseListener.current)
+        }
+    }, [])
 
     // TODO: Push notification weather
-    // const [message, setMessage] = useState({ title: '', body: '' })
+    const [message, setMessage] = useState({ title: '', body: '' })
 
-    // useEffect(() => {
-    //     setMessage({
-    //         title: `${ConvertKToC(currentData?.temp)}°C - ${
-    //             descriptionWeather[currentData?.weather[0]?.id]
-    //         } | Cao: ${ConvertKToC(dailyWeather?.temp?.max)}°C - Thấp: ${ConvertKToC(
-    //             dailyWeather?.temp?.min,
-    //         )}°C`,
-    //         body: `Hôm nay - ${
-    //             descriptionWeather[dailyWeather?.weather[0]?.id]
-    //         }. Gió ${ConvertWindDeg(dailyWeather?.wind_deg)}, tốc độ ${ConvertWindSpeed(
-    //             dailyWeather?.wind_speed,
-    //         )} km/h. ${
-    //             ConvertPop(dailyWeather?.pop)
-    //                 ? `Khả năng mưa ${ConvertPop(dailyWeather?.pop)}%.`
-    //                 : ''
-    //         }`,
-    //     })
-    // }, [currentData, dailyWeather])
+    useEffect(() => {
+        setMessage({
+            title: `${ConvertKToC(currentData?.temp)}°C - ${
+                descriptionWeather[currentData?.weather[0]?.id]
+            } | Cao: ${ConvertKToC(dailyWeather?.temp?.max)}°C - Thấp: ${ConvertKToC(
+                dailyWeather?.temp?.min,
+            )}°C`,
+            body: `Hôm nay - ${
+                descriptionWeather[dailyWeather?.weather[0]?.id]
+            }. Gió ${ConvertWindDeg(dailyWeather?.wind_deg)}, tốc độ ${ConvertWindSpeed(
+                dailyWeather?.wind_speed,
+            )} km/h. ${
+                ConvertPop(dailyWeather?.pop)
+                    ? `Khả năng mưa ${ConvertPop(dailyWeather?.pop)}%.`
+                    : ''
+            }`,
+        })
+    }, [currentData, dailyWeather])
 
-    // // TODO: Push notification air pollution
-    // const [messageAirPollution, setMessageAirPollution] = useState({ title: '', body: '' })
+    // TODO: Push notification air pollution
+    const [messageAirPollution, setMessageAirPollution] = useState({ title: '', body: '' })
 
-    // useEffect(() => {
-    //     const level = ConvertAqi(airPollutionData.aqi) || 'good'
-    //     let title = `Chất lượng không khí - ${AQI_DESC[level][0]}`
-    //     let body
+    useEffect(() => {
+        const level = ConvertAqi(airPollutionData.aqi) || 'good'
+        let title = `Chất lượng không khí - ${AQI_DESC[level][0]}`
+        let body
 
-    //     switch (level) {
-    //         case 'good':
-    //             body = '🤗🤗🤗 Hãy ra ngoài và tận hưởng không khí'
-    //             break
-    //         case 'fair':
-    //             body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
-    //             break
-    //         case 'moderate':
-    //             body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
-    //             break
-    //         case 'poor':
-    //             body = `⚠️⚠️⚠️ Ảnh hưởng tới sức khỏe mọi người.`
-    //             break
-    //         case 'veryPoor':
-    //             body = '⚠️⚠️⚠️ Ảnh hưởng rất lớn tới sức khỏe mọi người '
-    //             break
-    //         case 'dangerous':
-    //             body = '🔥🔥🔥 Không nên ra đường nếu không cần thiết.'
-    //             break
-    //         default:
-    //             body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
-    //     }
+        switch (level) {
+            case 'good':
+                body = '🤗🤗🤗 Hãy ra ngoài và tận hưởng không khí'
+                break
+            case 'fair':
+                body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
+                break
+            case 'moderate':
+                body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
+                break
+            case 'poor':
+                body = `⚠️⚠️⚠️ Ảnh hưởng tới sức khỏe mọi người.`
+                break
+            case 'veryPoor':
+                body = '⚠️⚠️⚠️ Ảnh hưởng rất lớn tới sức khỏe mọi người '
+                break
+            case 'dangerous':
+                body = '🔥🔥🔥 Không nên ra đường nếu không cần thiết.'
+                break
+            default:
+                body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
+        }
 
-    //     setMessageAirPollution({
-    //         title,
-    //         body,
-    //     })
-    // }, [airPollutionData])
+        setMessageAirPollution({
+            title,
+            body,
+        })
+    }, [airPollutionData])
 
-    // // TODO: Push notification pop
-    // const [messagePop, setMessagePop] = useState({ title: '', body: '' })
+    // TODO: Push notification pop
+    const [messagePop, setMessagePop] = useState({ title: '', body: '' })
 
-    // useEffect(() => {
-    //     setMessagePop({
-    //         title: 'Cảnh báo trời mưa',
-    //         body: '🌧️🌧️🌧️ Hãy mang theo áo mưa khi ra đường',
-    //     })
-    // }, [dailyWeather])
+    useEffect(() => {
+        setMessagePop({
+            title: 'Cảnh báo trời mưa',
+            body: '🌧️🌧️🌧️ Hãy mang theo áo mưa khi ra đường',
+        })
+    }, [dailyWeather])
 
-    // useEffect(() => {
-    //     const notifId = schedulePushNotification(message)
+    useEffect(() => {
+        const notifId = schedulePushNotification(message)
 
-    //     return () => cancelNotification(notifId)
-    // }, [])
+        return () => cancelNotification(notifId)
+    }, [])
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
@@ -509,7 +509,7 @@ const HomePage = () => {
                                 </SectionBody>
                             </Section>
 
-                            {/* <Section>
+                            <Section>
                                 <SectionBody>
                                     <TouchableOpacity
                                         onPress={async () => {
@@ -552,16 +552,16 @@ const HomePage = () => {
                                         <Text>Get Notification Pop</Text>
                                     </TouchableOpacity>
                                 </SectionBody>
-                            </Section> */}
+                            </Section>
 
-                            {/* <Section>
-                            <SectionTitle>WelcomePage</SectionTitle>
-                            <SectionBody>
-                                <TouchableOpacity onPress={handleGoToWelcomePage}>
-                                    <Text>WelcomePage</Text>
-                                </TouchableOpacity>
-                            </SectionBody>
-                        </Section> */}
+                            <Section>
+                                <SectionTitle>WelcomePage</SectionTitle>
+                                <SectionBody>
+                                    <TouchableOpacity onPress={handleGoToWelcomePage}>
+                                        <Text>WelcomePage</Text>
+                                    </TouchableOpacity>
+                                </SectionBody>
+                            </Section>
                             <Section>
                                 <SectionBody>
                                     <Layout style={{ textAlign: 'center' }}>
@@ -588,36 +588,36 @@ const HomePage = () => {
 
 export default HomePage
 
-// async function registerForPushNotificationsAsync() {
-//     let token
-//     if (Device.isDevice) {
-//         const { status: existingStatus } = await Notifications.getPermissionsAsync()
-//         let finalStatus = existingStatus
-//         if (existingStatus !== 'granted') {
-//             const { status } = await Notifications.requestPermissionsAsync()
-//             finalStatus = status
-//         }
-//         if (finalStatus !== 'granted') {
-//             alert('Failed to get push token for push notification!')
-//             return
-//         }
-//         token = (await Notifications.getExpoPushTokenAsync()).data
-//         console.log(token)
-//     } else {
-//         alert('Must use physical device for Push Notifications')
-//     }
+async function registerForPushNotificationsAsync() {
+    let token
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync()
+        let finalStatus = existingStatus
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync()
+            finalStatus = status
+        }
+        if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!')
+            return
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data
+        console.log(token)
+    } else {
+        alert('Must use physical device for Push Notifications')
+    }
 
-//     if (Platform.OS === 'android') {
-//         Notifications.setNotificationChannelAsync('default', {
-//             name: 'default',
-//             importance: Notifications.AndroidImportance.MAX,
-//             vibrationPattern: [0, 250, 250, 250],
-//             lightColor: '#FF231F7C',
-//         })
-//     }
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        })
+    }
 
-//     return token
-// }
+    return token
+}
 
 const styles = StyleSheet.create({
     imageStyle: {

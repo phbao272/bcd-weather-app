@@ -55,7 +55,7 @@ const MenuItem = ({ title, desc, handleOpenModal }) => {
 
 const SettingPage = () => {
     const [visible, setVisible] = useState(false)
-    const [selectedIndex, setSelectedIndex] = useState(() => (context?.theme === 'dark' ? 0 : 1))
+    const [selectedIndex, setSelectedIndex] = useState(() => (context?.theme === 'dark' ? 1 : 0))
 
     const context = useContext(ThemeContext)
     const bgcolor = context?.theme === 'dark' ? '#1F1F1F' : '#F5F5F5'
