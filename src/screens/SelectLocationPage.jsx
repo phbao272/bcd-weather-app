@@ -133,6 +133,10 @@ const SelectLocationPage = () => {
         navigation.navigate('Home')
     }
 
+    const handleGoToSettingPage = () => {
+        navigation.navigate('SettingPage')
+    }
+
     const handleSelectLocation = (item) => {
         handleGoToHomePage()
 
@@ -156,7 +160,7 @@ const SelectLocationPage = () => {
                         <SearchIcon />
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={handleGoToSettingPage}>
                         <SettingIcon />
                     </TouchableOpacity>
                 </Layout>
