@@ -554,14 +554,14 @@ const HomePage = () => {
                                 </SectionBody>
                             </Section>
 
-                            <Section>
+                            {/* <Section>
                                 <SectionTitle>WelcomePage</SectionTitle>
                                 <SectionBody>
                                     <TouchableOpacity onPress={handleGoToWelcomePage}>
                                         <Text>WelcomePage</Text>
                                     </TouchableOpacity>
                                 </SectionBody>
-                            </Section>
+                            </Section> */}
                             <Section>
                                 <SectionBody>
                                     <Layout style={{ textAlign: 'center' }}>
