@@ -20,6 +20,8 @@ export const getAirPollutionSelector = (state) => state.weather.airPollution
 
 export const getLocationsSelector = (state) => state.location.locations
 
+export const getTokenSelector = (state) => state.user.token
+
 // export const getLoadingSelector = createSelector(
 //     getLoadingWeatherSelector,
 //     getLoadingLocationSelector,

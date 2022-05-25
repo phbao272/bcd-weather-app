@@ -25,6 +25,17 @@ import HourlyPage from './src/screens/HourlyPage'
 import GraphPage from './src/screens/GraphPage'
 import AirPollutionPage from './src/screens/AirPollutionPage'
 import WelcomePage from './src/screens/WelcomePage'
+import SettingPage from './src/screens/SettingPage'
+
+import * as Notifications from 'expo-notifications'
+
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+    }),
+})
 
 const Stack = createNativeStackNavigator()
 
@@ -51,6 +62,7 @@ const Main = () => {
                             <Stack.Screen name="WelcomePage" component={WelcomePage} />
                             <Stack.Screen name="GraphPage" component={GraphPage} />
                             <Stack.Screen name="AirPollutionPage" component={AirPollutionPage} />
+                            <Stack.Screen name="SettingPage" component={SettingPage} />
                         </Stack.Navigator>
                     </NavigationContainer>
                 </Provider>

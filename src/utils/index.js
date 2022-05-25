@@ -1,5 +1,6 @@
 import moment from 'moment'
 import _ from 'lodash'
+import * as Notifications from 'expo-notifications'
 
 moment.locale('vi')
 
@@ -80,6 +81,52 @@ const ConvertAqi = (num) => {
         default:
             console.log('Invalid Range')
     }
+}
+
+export async function sendPushNotification(expoPushToken, messageData) {
+    const message = {
+        to: expoPushToken,
+        sound: 'default',
+        title: messageData.title,
+        body: messageData.body,
+        data: { someData: 'goes here' },
+    }
+
+    await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+    })
+}
+
+export async function schedulePushNotification(message) {
+    // time = new Date(time.getTime() - 5 * 60000)
+    // const hours = time.getHours()
+    // const minutes = time.getMinutes()
+    const hours = 8
+    const minutes = 0
+    const id = await Notifications.scheduleNotificationAsync({
+        content: {
+            title: message.title,
+            body: message.body,
+            sound: 'default',
+        },
+        trigger: {
+            hour: hours,
+            minute: minutes,
+            repeats: true,
+        },
+    })
+    console.log('notif id on scheduling', id)
+    return id
+}
+
+export async function cancelNotification(notifId) {
+    await Notifications.cancelScheduledNotificationAsync(notifId)
 }
 
 export {

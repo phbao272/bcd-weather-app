@@ -7,7 +7,7 @@ import { Layout, Text } from '@ui-kitten/components'
 import { AQI_COLOR } from '../../constants'
 
 const AirPollutionItem = (props) => {
-    const bgColor = props.level ? AQI_COLOR[props.level] : '#f5f5f5'
+    const bgColor = props.level && AQI_COLOR[props.level] ? AQI_COLOR[props.level] : '#f5f5f5'
 
     const heightOfBar = (80 * props.index) / props.maxAvg
 
@@ -58,8 +58,4 @@ AirPollutionItem.propTypes = {
     date: PropTypes.string,
     level: PropTypes.string,
     maxAvg: PropTypes.number,
-    // index: PropTypes.number.isRequired,
-    // date: PropTypes.string.isRequired,
-    // level: PropTypes.string,
-    // maxAvg: PropTypes.number.isRequired,
 }

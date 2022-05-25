@@ -30,14 +30,25 @@ import { useNavigation } from '@react-navigation/native'
 
 import { getWeatherData, getAirPollution } from '../redux/slices/WeatherSlice'
 import { setLocationActive, setLocations, addLocation } from '../redux/slices/locationSlice'
+import { setToken } from '../redux/slices/userSlice'
 
 import {
+    dailySelector,
     hourlySelector,
     currentDataSelector,
     getLoadingSelector,
     getAirPollutionSelector,
     getLocationsSelector,
 } from '../redux/selectors'
+
+import { ConvertKToC, ConvertWindDeg, ConvertWindSpeed, ConvertPop, ConvertAqi } from '../utils'
+
+import * as Notifications from 'expo-notifications'
+import * as Device from 'expo-device'
+
+import { sendPushNotification, schedulePushNotification, cancelNotification } from '../utils'
+import descriptionWeather from '../../assets/data/desc-weather.json'
+import { AQI_DESC } from '../constants'
 
 const screen = Dimensions.get('screen')
 
@@ -50,6 +61,17 @@ const HomePage = () => {
     const dispatch = useDispatch()
 
     const loading = useSelector(getLoadingSelector)
+
+    const [dailyWeather, setDailyWeather] = useState({ weather: [] })
+
+    const dailyWeatherData = useSelector(dailySelector)
+
+    useEffect(() => {
+        if (Array.isArray(dailyWeatherData)) {
+            console.log('dailyWeatherData', dailyWeatherData[0])
+            setDailyWeather(dailyWeatherData[0])
+        }
+    }, [dailyWeatherData])
 
     const [hourly, setHourly] = useState([])
 
@@ -116,6 +138,7 @@ const HomePage = () => {
         handleTurnOnLocation()
     }, [])
 
+    // TODO: Lấy vị trí hiện tại từ Local Storage
     useEffect(() => {
         const getData = async () => {
             try {
@@ -267,6 +290,112 @@ const HomePage = () => {
             (error) => console.error('Oops, snapshot failed', error)
     }
 
+    const [expoPushToken, setExpoPushToken] = useState('')
+    const [notification, setNotification] = useState(false)
+    const notificationListener = useRef()
+    const responseListener = useRef()
+
+    useEffect(() => {
+        registerForPushNotificationsAsync().then((token) => {
+            dispatch(setToken(token))
+            setExpoPushToken(token)
+        })
+
+        // This listener is fired whenever a notification is received while the app is foregrounded
+        notificationListener.current = Notifications.addNotificationReceivedListener(
+            (notification) => {
+                setNotification(notification)
+            },
+        )
+
+        // This listener is fired whenever a user taps on or interacts with a notification (works when app is foregrounded, backgrounded, or killed)
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(
+            (response) => {
+                console.log(response)
+            },
+        )
+
+        return () => {
+            Notifications.removeNotificationSubscription(notificationListener.current)
+            Notifications.removeNotificationSubscription(responseListener.current)
+        }
+    }, [])
+
+    // TODO: Push notification weather
+    const [message, setMessage] = useState({ title: '', body: '' })
+
+    useEffect(() => {
+        setMessage({
+            title: `${ConvertKToC(currentData?.temp)}°C - ${
+                descriptionWeather[currentData?.weather[0]?.id]
+            } | Cao: ${ConvertKToC(dailyWeather?.temp?.max)}°C - Thấp: ${ConvertKToC(
+                dailyWeather?.temp?.min,
+            )}°C`,
+            body: `Hôm nay - ${
+                descriptionWeather[dailyWeather?.weather[0]?.id]
+            }. Gió ${ConvertWindDeg(dailyWeather?.wind_deg)}, tốc độ ${ConvertWindSpeed(
+                dailyWeather?.wind_speed,
+            )} km/h. ${
+                ConvertPop(dailyWeather?.pop)
+                    ? `Khả năng mưa ${ConvertPop(dailyWeather?.pop)}%.`
+                    : ''
+            }`,
+        })
+    }, [currentData, dailyWeather])
+
+    // TODO: Push notification air pollution
+    const [messageAirPollution, setMessageAirPollution] = useState({ title: '', body: '' })
+
+    useEffect(() => {
+        const level = ConvertAqi(airPollutionData.aqi) || 'good'
+        let title = `Chất lượng không khí - ${AQI_DESC[level][0]}`
+        let body
+
+        switch (level) {
+            case 'good':
+                body = '🤗🤗🤗 Hãy ra ngoài và tận hưởng không khí'
+                break
+            case 'fair':
+                body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
+                break
+            case 'moderate':
+                body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
+                break
+            case 'poor':
+                body = `⚠️⚠️⚠️ Ảnh hưởng tới sức khỏe mọi người.`
+                break
+            case 'veryPoor':
+                body = '⚠️⚠️⚠️ Ảnh hưởng rất lớn tới sức khỏe mọi người '
+                break
+            case 'dangerous':
+                body = '🔥🔥🔥 Không nên ra đường nếu không cần thiết.'
+                break
+            default:
+                body = `😷😷😷 Hãy nhớ mang theo khẩu trang khi ra đường.`
+        }
+
+        setMessageAirPollution({
+            title,
+            body,
+        })
+    }, [airPollutionData])
+
+    // TODO: Push notification pop
+    const [messagePop, setMessagePop] = useState({ title: '', body: '' })
+
+    useEffect(() => {
+        setMessagePop({
+            title: 'Cảnh báo trời mưa',
+            body: '🌧️🌧️🌧️ Hãy mang theo áo mưa khi ra đường',
+        })
+    }, [dailyWeather])
+
+    useEffect(() => {
+        const notifId = schedulePushNotification(message)
+
+        return () => cancelNotification(notifId)
+    }, [])
+
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
             {isLoading ? (
@@ -286,6 +415,7 @@ const HomePage = () => {
                     </Layout>
                     <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
                         <ViewShot ref={viewShot} options={{ format: 'jpg', quality: 1 }}>
+                            {/* Image */}
                             <Section>
                                 <SectionBody>
                                     <Image
@@ -296,20 +426,20 @@ const HomePage = () => {
                                     />
                                 </SectionBody>
                             </Section>
-
+                            {/* Summary */}
                             <Section>
                                 <SectionBody>
                                     <Summary />
                                 </SectionBody>
                             </Section>
-
+                            {/* Detail */}
                             <Section>
                                 <SectionTitle>CHI TIẾT</SectionTitle>
                                 <SectionBody>
                                     <Detail />
                                 </SectionBody>
                             </Section>
-
+                            {/* Hourly */}
                             <Section>
                                 <SectionTitle expand={true} onPress={handleGoToHourlyPage}>
                                     HÀNG GIỜ
@@ -318,7 +448,7 @@ const HomePage = () => {
                                     <Hourly />
                                 </SectionBody>
                             </Section>
-
+                            {/* Daily */}
                             <Section>
                                 <SectionTitle expand={true} onPress={handleGoToDailyPage}>
                                     HÀNG NGÀY
@@ -327,7 +457,7 @@ const HomePage = () => {
                                     <Daily />
                                 </SectionBody>
                             </Section>
-
+                            {/* Chart */}
                             <Section>
                                 <SectionTitle expand={true} onPress={handleGoToGraphPage}>
                                     ĐỒ THỊ
@@ -344,7 +474,7 @@ const HomePage = () => {
                                     />
                                 </SectionBody>
                             </Section>
-
+                            {/* Air Pollution */}
                             <Section>
                                 <SectionTitle expand={true} onPress={handleGoToAirPollutionPage}>
                                     CHẤT LƯỢNG KHÔNG KHÍ
@@ -354,7 +484,7 @@ const HomePage = () => {
                                     <AirPollutionInfo data={airPollutionData.aqi} />
                                 </SectionBody>
                             </Section>
-
+                            {/* Sun */}
                             <Section>
                                 <SectionTitle>MẶT TRỜI</SectionTitle>
                                 <SectionBody>
@@ -364,14 +494,14 @@ const HomePage = () => {
                                     />
                                 </SectionBody>
                             </Section>
-
+                            {/* Moon */}
                             <Section>
                                 <SectionTitle>MẶT TRĂNG</SectionTitle>
                                 <SectionBody>
                                     <Moon data={currentData} />
                                 </SectionBody>
                             </Section>
-
+                            {/* Dark Mode */}
                             <Section>
                                 <SectionTitle>Dark Mode</SectionTitle>
                                 <SectionBody>
@@ -379,14 +509,75 @@ const HomePage = () => {
                                 </SectionBody>
                             </Section>
 
+                            <Section>
+                                <SectionBody>
+                                    <TouchableOpacity
+                                        onPress={async () => {
+                                            await sendPushNotification(expoPushToken, message)
+                                        }}
+                                    >
+                                        <Text>Get Notification Weather</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={() => schedulePushNotification(message)}
+                                    >
+                                        <Text>schedulePushNotification</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={async () => {
+                                            await Notifications.cancelAllScheduledNotificationsAsync()
+                                        }}
+                                    >
+                                        <Text>cancelAllScheduledNotificationsAsync</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={async () => {
+                                            await sendPushNotification(
+                                                expoPushToken,
+                                                messageAirPollution,
+                                            )
+                                        }}
+                                    >
+                                        <Text>Get Notification Air Pollution</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={async () => {
+                                            await sendPushNotification(expoPushToken, messagePop)
+                                        }}
+                                    >
+                                        <Text>Get Notification Pop</Text>
+                                    </TouchableOpacity>
+                                </SectionBody>
+                            </Section>
+
                             {/* <Section>
-                            <SectionTitle>WelcomePage</SectionTitle>
-                            <SectionBody>
-                                <TouchableOpacity onPress={handleGoToWelcomePage}>
-                                    <Text>WelcomePage</Text>
-                                </TouchableOpacity>
-                            </SectionBody>
-                        </Section> */}
+                                <SectionTitle>WelcomePage</SectionTitle>
+                                <SectionBody>
+                                    <TouchableOpacity onPress={handleGoToWelcomePage}>
+                                        <Text>WelcomePage</Text>
+                                    </TouchableOpacity>
+                                </SectionBody>
+                            </Section> */}
+                            <Section>
+                                <SectionBody>
+                                    <Layout style={{ textAlign: 'center' }}>
+                                        <Text
+                                            style={{
+                                                textTransform: 'uppercase',
+                                                fontSize: 12,
+                                                fontWeight: '600',
+                                                opacity: 0.7,
+                                            }}
+                                        >
+                                            Dữ liệu cung cấp bởi Open Weather Map
+                                        </Text>
+                                    </Layout>
+                                </SectionBody>
+                            </Section>
                         </ViewShot>
                     </ScrollView>
                 </>
@@ -396,6 +587,37 @@ const HomePage = () => {
 }
 
 export default HomePage
+
+async function registerForPushNotificationsAsync() {
+    let token
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync()
+        let finalStatus = existingStatus
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync()
+            finalStatus = status
+        }
+        if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!')
+            return
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data
+        console.log(token)
+    } else {
+        alert('Must use physical device for Push Notifications')
+    }
+
+    if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        })
+    }
+
+    return token
+}
 
 const styles = StyleSheet.create({
     imageStyle: {
