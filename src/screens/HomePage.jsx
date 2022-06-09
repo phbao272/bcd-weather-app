@@ -397,6 +397,36 @@ const HomePage = () => {
         return () => cancelNotification(notifId)
     }, [])
 
+    const [imgUri, setImgUri] = useState(
+        'https://images.unsplash.com/photo-1620385019253-b051a26048ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
+    )
+
+    useEffect(() => {
+        if (currentData.weather[0].description.includes('cloud')) {
+            setImgUri(
+                'https://images.unsplash.com/photo-1534088568595-a066f410bcda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=451&q=80',
+            )
+        }
+
+        if (currentData.weather[0].description.includes('thunderstorm')) {
+            setImgUri(
+                'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
+            )
+        }
+
+        if (currentData.weather[0].description.includes('drizzle')) {
+            setImgUri(
+                'https://images.unsplash.com/photo-1573151892117-efd764c9949f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1935&q=80',
+            )
+        }
+
+        if (currentData.weather[0].description.includes('rain')) {
+            setImgUri(
+                'https://images.unsplash.com/photo-1620385019253-b051a26048ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80',
+            )
+        }
+    })
+
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
             {isLoading ? (
@@ -422,7 +452,7 @@ const HomePage = () => {
                                     <Image
                                         style={styles.imageStyle}
                                         source={{
-                                            uri: 'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xlYXIlMjBza3l8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
+                                            uri: imgUri,
                                         }}
                                     />
                                 </SectionBody>

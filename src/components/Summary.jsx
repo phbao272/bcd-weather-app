@@ -31,7 +31,7 @@ const Summary = () => {
 
     useEffect(() => {
         if (Array.isArray(dailyWeatherData)) {
-            console.log('dailyWeatherData', dailyWeatherData[0])
+            // console.log('dailyWeatherData', dailyWeatherData[0])
             setDailyWeather(dailyWeatherData[0])
         }
     }, [dailyWeatherData])
@@ -44,8 +44,6 @@ const Summary = () => {
             // console.log('currentData', currentData)
         }
     }, [currentData])
-
-    // console.log(descriptionWeather)
 
     return (
         <Layout>
