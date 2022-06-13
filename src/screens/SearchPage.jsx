@@ -149,15 +149,20 @@ const SearchPage = () => {
                             <BackIcon />
                         </TouchableOpacity>
                     </Layout>
-                    <Input
-                        placeholder="Nhập địa điểm"
-                        value={value}
-                        onChangeText={(nextValue) => setValue(nextValue)}
-                    />
-                    <Button onPress={handleSubmit}>
-                        <SearchIcon />
-                    </Button>
-                    <Button onPress={handleSubmit}>Vị trí hiện tại</Button>
+                    <Layout style={{ marginTop: 12 }}>
+                        <Input
+                            placeholder="Nhập địa điểm"
+                            value={value}
+                            onChangeText={(nextValue) => setValue(nextValue)}
+                            size="large"
+                        />
+                    </Layout>
+                    <Layout style={{ marginTop: 12 }}>
+                        <Button onPress={handleSubmit}>
+                            <SearchIcon />
+                        </Button>
+                    </Layout>
+                    {/* <Button onPress={handleSubmit}>Vị trí hiện tại</Button> */}
                 </>
             )}
         </Layout>

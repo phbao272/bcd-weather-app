@@ -103,12 +103,7 @@ export async function sendPushNotification(expoPushToken, messageData) {
     })
 }
 
-export async function schedulePushNotification(message) {
-    // time = new Date(time.getTime() - 5 * 60000)
-    // const hours = time.getHours()
-    // const minutes = time.getMinutes()
-    const hours = 8
-    const minutes = 0
+export async function schedulePushNotification(message, hours = 8, minutes = 0) {
     const id = await Notifications.scheduleNotificationAsync({
         content: {
             title: message.title,

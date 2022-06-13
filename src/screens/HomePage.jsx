@@ -326,7 +326,10 @@ const HomePage = () => {
 
     // TODO: Push notification weather
     const [message, setMessage] = useState({ title: '', body: '' })
-
+    const [isFirstPush, setIsFirstPush] = useState(true)
+    useEffect(() => {
+        console.log({ isFirstPush })
+    }, [isFirstPush])
     useEffect(() => {
         setMessage({
             title: `${ConvertKToC(currentData?.temp)}°C - ${
@@ -344,6 +347,13 @@ const HomePage = () => {
                     : ''
             }`,
         })
+
+        if (ConvertPop(dailyWeather?.pop) > 40) {
+            // if (isFirstPush) {
+            sendPushNotification(expoPushToken, messagePop)
+            setIsFirstPush(false)
+            // }
+        }
     }, [currentData, dailyWeather])
 
     // TODO: Push notification air pollution
@@ -399,6 +409,16 @@ const HomePage = () => {
         return () => cancelNotification(notifId)
     }, [])
 
+    const [isScheduled, setScheduled] = useState(false)
+
+    useEffect(() => {
+        if (message.title && message.body) {
+            Notifications.cancelAllScheduledNotificationsAsync()
+            schedulePushNotification(message, 15, 6)
+            schedulePushNotification(messageAirPollution, 15, 6)
+        }
+    }, [message, messageAirPollution])
+
     const [imgUri, setImgUri] = useState(
         'https://images.unsplash.com/photo-1620385019253-b051a26048ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
     )
@@ -425,12 +445,12 @@ const HomePage = () => {
                     'https://images.unsplash.com/photo-1520491417561-88c817c63414?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
                 )
                 break
-            case 'Atmosphere': // chua co
+            case 'Atmosphere':
                 setImgUri(
                     'https://images.unsplash.com/photo-1416431168657-a6c4184348ab?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
                 )
                 break
-            case 'Clear': // chua co
+            case 'Clear':
                 setImgUri(
                     'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
                 )
@@ -547,21 +567,21 @@ const HomePage = () => {
                                 </SectionBody>
                             </Section>
                             {/* Moon */}
-                            <Section>
+                            {/* <Section>
                                 <SectionTitle>MẶT TRĂNG</SectionTitle>
                                 <SectionBody>
                                     <Moon data={currentData} />
                                 </SectionBody>
-                            </Section>
+                            </Section> */}
                             {/* Dark Mode */}
-                            <Section>
+                            {/* <Section>
                                 <SectionTitle>Dark Mode</SectionTitle>
                                 <SectionBody>
                                     <DarkMode />
                                 </SectionBody>
-                            </Section>
+                            </Section> */}
 
-                            <Section>
+                            {/* <Section>
                                 <SectionBody>
                                     <TouchableOpacity
                                         onPress={async () => {
@@ -603,8 +623,15 @@ const HomePage = () => {
                                     >
                                         <Text>Get Notification Pop</Text>
                                     </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={async () => {
+                                            await sendPushNotification(messagePop, 14, 40)
+                                        }}
+                                    >
+                                        <Text>Get Notification Pop</Text>
+                                    </TouchableOpacity>
                                 </SectionBody>
-                            </Section>
+                            </Section> */}
 
                             {/* <Section>
                                 <SectionTitle>WelcomePage</SectionTitle>
@@ -623,6 +650,7 @@ const HomePage = () => {
                                                 fontSize: 12,
                                                 fontWeight: '600',
                                                 opacity: 0.7,
+                                                textAlign: 'center',
                                             }}
                                         >
                                             Dữ liệu cung cấp bởi Open Weather Map

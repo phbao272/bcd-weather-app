@@ -33,7 +33,7 @@ const ThemeProvider = ({ children }) => {
         storeData(theme === 'dark' ? 'light' : 'dark', 'theme')
 
         // Restart app
-        // Restart()
+        Restart()
     }
 
     const toggleFirstTime = () => {
