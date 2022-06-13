@@ -148,15 +148,19 @@ const SearchPage = () => {
                             <BackIcon />
                         </TouchableOpacity>
                     </Layout>
-                    <Input
-                        placeholder="Nhập địa điểm"
-                        value={value}
-                        onChangeText={(nextValue) => setValue(nextValue)}
-                    />
-                    <Button onPress={handleSubmit}>
-                        <SearchIcon />
-                    </Button>
-                    <Button onPress={handleSubmit}>Vị trí hiện tại</Button>
+                    <Layout style={{ marginTop: 12 }}>
+                        <Input
+                            placeholder="Nhập địa điểm"
+                            value={value}
+                            onChangeText={(nextValue) => setValue(nextValue)}
+                        />
+                    </Layout>
+                    <Layout style={{ marginTop: 12 }}>
+                        <Button onPress={handleSubmit}>
+                            <SearchIcon />
+                        </Button>
+                    </Layout>
+                    {/* <Button onPress={handleSubmit}>Vị trí hiện tại</Button> */}
                 </>
             )}
         </Layout>
@@ -171,52 +175,3 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 })
-
-// const filter = (item, query) => item.name.toLowerCase().includes(query.toLowerCase())
-
-// const [value, setValue] = useState('')
-// const [data, setData] = useState(provins)
-// const [placement, setPlacement] = useState('bottom')
-
-// const onSelect = (index) => {
-//     const currentSelection = data.find((item) => item.name === data[index].name)
-
-//     setValue(currentSelection.name)
-//     // setLocationName(currentSelection.name);
-//     // setCoordinates({
-//     //     longitude: currentSelection.coord.lon,
-//     //     latitude: currentSelection.coord.lat,
-//     // });
-//     console.log(currentSelection.coord.lon, currentSelection.coord.lat)
-
-//     apis.getWeatherData(currentSelection.coord.lon, currentSelection.coord.lat).then((res) => {
-//         console.log(res.data)
-//     })
-// }
-
-// const onChangeText = (query) => {
-//     setValue(query)
-//     setData(provins.filter((item) => filter(item, query)))
-// }
-
-// const renderOption = (item, index) => <AutocompleteItem key={index} title={item.name} />
-
-// return (
-//     <Layout style={globalStyles.container}>
-//         <Layout style={globalStyles.flexRowSpace}>
-//             <TouchableOpacity onPress={handleGoBack}>
-//                 <BackIcon />
-//             </TouchableOpacity>
-//         </Layout>
-//         <Text>Search Page</Text>
-//         <Autocomplete
-//             placeholder="Place your Text"
-//             value={value}
-//             placement={placement}
-//             onChangeText={onChangeText}
-//             onSelect={onSelect}
-//         >
-//             {data.map(renderOption)}
-//         </Autocomplete>
-//     </Layout>
-// )

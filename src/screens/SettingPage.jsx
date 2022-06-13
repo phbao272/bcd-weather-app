@@ -10,6 +10,8 @@ import globalStyles from '../constants'
 
 const screen = Dimensions.get('screen')
 
+const width = screen.width > screen.height ? screen.height : screen.width
+
 const MENU_DATA = [
     {
         id: 1,
@@ -71,6 +73,9 @@ const SettingPage = () => {
         context.toggleTheme()
     }
 
+    console.log('width', screen.width)
+    console.log('height', screen.height)
+
     return (
         <Layout style={[globalStyles.container, styles.container]}>
             <Section>
@@ -104,8 +109,8 @@ const SettingPage = () => {
                 onBackdropPress={() => setVisible(false)}
             >
                 <Card
-                    disabled={true}
-                    style={{ minWidth: screen.width - 32, backgroundColor: bgcolor }}
+                    // disabled={true}
+                    style={{ minWidth: width - 32, backgroundColor: bgcolor }}
                 >
                     <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 12 }}>
                         Giao diện

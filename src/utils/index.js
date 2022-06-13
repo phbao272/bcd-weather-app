@@ -107,8 +107,8 @@ export async function schedulePushNotification(message) {
     // time = new Date(time.getTime() - 5 * 60000)
     // const hours = time.getHours()
     // const minutes = time.getMinutes()
-    const hours = 8
-    const minutes = 0
+    const hours = 18
+    const minutes = 45
     const id = await Notifications.scheduleNotificationAsync({
         content: {
             title: message.title,
@@ -121,7 +121,7 @@ export async function schedulePushNotification(message) {
             repeats: true,
         },
     })
-    console.log('notif id on scheduling', id)
+    console.log(`notif id on scheduling ${id} hours: ${hours} minutes: ${minutes}`)
     return id
 }
 

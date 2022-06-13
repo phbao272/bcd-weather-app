@@ -396,6 +396,15 @@ const HomePage = () => {
         return () => cancelNotification(notifId)
     }, [])
 
+    const [isScheduled, setScheduled] = useState(false)
+
+    useEffect(() => {
+        if (message.title && message.body && isScheduled) {
+            setScheduled(true)
+            schedulePushNotification(message)
+        }  else
+    }, [message])
+
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
             {isLoading ? (
@@ -502,12 +511,12 @@ const HomePage = () => {
                                 </SectionBody>
                             </Section>
                             {/* Dark Mode */}
-                            <Section>
+                            {/* <Section>
                                 <SectionTitle>Dark Mode</SectionTitle>
                                 <SectionBody>
                                     <DarkMode />
                                 </SectionBody>
-                            </Section>
+                            </Section> */}
 
                             <Section>
                                 <SectionBody>
@@ -623,6 +632,7 @@ const styles = StyleSheet.create({
     imageStyle: {
         width: '100%',
         height: screen.width,
+        // height: 400,
         borderRadius: 12,
     },
 })

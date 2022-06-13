@@ -139,7 +139,7 @@ const HourlyPage = () => {
                     </Layout>
                 </SectionTitle>
                 <SectionBody>
-                    <ScrollView>
+                    <ScrollView style={{ paddingHorizontal: 16 }}>
                         <Section>
                             <SectionTitle>HÔM NAY</SectionTitle>
                             <SectionBody>
