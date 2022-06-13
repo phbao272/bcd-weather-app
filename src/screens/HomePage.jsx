@@ -3,6 +3,7 @@ import { Image, Dimensions, ScrollView, StyleSheet, Alert, TouchableOpacity } fr
 import { Layout, Spinner, Text, Button } from '@ui-kitten/components'
 import Section, { SectionTitle, SectionBody } from '../components/Section'
 
+import 'react-native-get-random-values'
 import { v4 as uuidv4 } from 'uuid'
 import _ from 'lodash'
 
@@ -276,9 +277,9 @@ const HomePage = () => {
         navigation.navigate('AirPollutionPage')
     }
 
-    // const handleGoToWelcomePage = () => {
-    //     navigation.navigate('WelcomePage')
-    // }
+    const handleGoToWelcomePage = () => {
+        navigation.navigate('WelcomePage')
+    }
 
     const viewShot = useRef()
 
