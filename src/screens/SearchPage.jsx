@@ -47,14 +47,15 @@ const SearchPage = () => {
 
     const handleGetCurrentWeatherData = (lon, lat, id, name) => {
         apis.getCurrentWeatherData(lon, lat).then((res) => {
-            // console.log(res.data)
+            console.log(res.data)
 
             const data = {
                 icon: res.data.weather[0].icon,
+                main_weather: res.data.weather[0].main,
                 temp: res.data.main.temp,
             }
 
-            // console.log(data)
+            console.log(data)
 
             setLocationsData([
                 ...locationsData,
@@ -171,52 +172,3 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 })
-
-// const filter = (item, query) => item.name.toLowerCase().includes(query.toLowerCase())
-
-// const [value, setValue] = useState('')
-// const [data, setData] = useState(provins)
-// const [placement, setPlacement] = useState('bottom')
-
-// const onSelect = (index) => {
-//     const currentSelection = data.find((item) => item.name === data[index].name)
-
-//     setValue(currentSelection.name)
-//     // setLocationName(currentSelection.name);
-//     // setCoordinates({
-//     //     longitude: currentSelection.coord.lon,
-//     //     latitude: currentSelection.coord.lat,
-//     // });
-//     console.log(currentSelection.coord.lon, currentSelection.coord.lat)
-
-//     apis.getWeatherData(currentSelection.coord.lon, currentSelection.coord.lat).then((res) => {
-//         console.log(res.data)
-//     })
-// }
-
-// const onChangeText = (query) => {
-//     setValue(query)
-//     setData(provins.filter((item) => filter(item, query)))
-// }
-
-// const renderOption = (item, index) => <AutocompleteItem key={index} title={item.name} />
-
-// return (
-//     <Layout style={globalStyles.container}>
-//         <Layout style={globalStyles.flexRowSpace}>
-//             <TouchableOpacity onPress={handleGoBack}>
-//                 <BackIcon />
-//             </TouchableOpacity>
-//         </Layout>
-//         <Text>Search Page</Text>
-//         <Autocomplete
-//             placeholder="Place your Text"
-//             value={value}
-//             placement={placement}
-//             onChangeText={onChangeText}
-//             onSelect={onSelect}
-//         >
-//             {data.map(renderOption)}
-//         </Autocomplete>
-//     </Layout>
-// )

@@ -170,7 +170,7 @@ const HomePage = () => {
             }
         }
 
-        // getData()
+        getData()
     }, [])
 
     // console.log(coordinates)
@@ -237,6 +237,7 @@ const HomePage = () => {
                             currPosition: coordinates.currPosition,
                             icon: currentData.weather[0].icon || '10d',
                             temp: currentData.temp,
+                            uri: imgUri,
                         }),
                     )
                 }
@@ -250,6 +251,7 @@ const HomePage = () => {
                         currPosition: coordinates.currPosition,
                         icon: currentData.weather[0].icon || '10d',
                         temp: currentData.temp,
+                        uri: imgUri,
                     }),
                 )
             }
@@ -257,7 +259,7 @@ const HomePage = () => {
             // console.log(currentData)
         }
         // console.log({ locations })
-    }, [coordinates, currentData])
+    }, [coordinates, currentData, imgUri])
 
     const navigation = useNavigation()
 
@@ -402,30 +404,48 @@ const HomePage = () => {
     )
 
     useEffect(() => {
-        if (currentData.weather[0].description.includes('cloud')) {
-            setImgUri(
-                'https://images.unsplash.com/photo-1534088568595-a066f410bcda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=451&q=80',
-            )
+        switch (currentData?.weather[0].main) {
+            case 'Thunderstorm':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
+                )
+                break
+            case 'Drizzle':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1573151892117-efd764c9949f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1935&q=80',
+                )
+                break
+            case 'Rain':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1620385019253-b051a26048ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80',
+                )
+                break
+            case 'Snow':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1520491417561-88c817c63414?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
+                )
+                break
+            case 'Atmosphere': // chua co
+                setImgUri(
+                    'https://images.unsplash.com/photo-1416431168657-a6c4184348ab?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+                )
+                break
+            case 'Clear': // chua co
+                setImgUri(
+                    'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
+                )
+                break
+            case 'Clouds':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1534088568595-a066f410bcda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=451&q=80',
+                )
+                break
+            default:
+                setImgUri(
+                    'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
+                )
         }
-
-        if (currentData.weather[0].description.includes('thunderstorm')) {
-            setImgUri(
-                'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
-            )
-        }
-
-        if (currentData.weather[0].description.includes('drizzle')) {
-            setImgUri(
-                'https://images.unsplash.com/photo-1573151892117-efd764c9949f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1935&q=80',
-            )
-        }
-
-        if (currentData.weather[0].description.includes('rain')) {
-            setImgUri(
-                'https://images.unsplash.com/photo-1620385019253-b051a26048ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80',
-            )
-        }
-    })
+    }, [currentData, coordinates])
 
     return (
         <Layout style={[globalStyles.container, { paddingHorizontal: 0 }]}>
@@ -443,6 +463,7 @@ const HomePage = () => {
                 <>
                     <Layout style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
                         <Header captureAndShareScreenshot={captureAndShareScreenshot} />
+                        {/* <Header /> */}
                     </Layout>
                     <ScrollView contentContainerStyle={{ paddingHorizontal: 16 }}>
                         <ViewShot ref={viewShot} options={{ format: 'jpg', quality: 1 }}>

@@ -37,10 +37,61 @@ const LocationItem = (props) => {
         dispatch(deleteLocation(props?.id))
     }
 
+    const [imgUri, setImgUri] = useState(
+        'https://images.unsplash.com/photo-1620385019253-b051a26048ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80',
+    )
+
+    useEffect(() => {
+        switch (props.main) {
+            case 'Thunderstorm':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
+                )
+                break
+            case 'Drizzle':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1573151892117-efd764c9949f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1935&q=80',
+                )
+                break
+            case 'Rain':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1620385019253-b051a26048ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80',
+                )
+                break
+            case 'Snow':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1520491417561-88c817c63414?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=388&q=80',
+                )
+                break
+            case 'Atmosphere': // chua co
+                setImgUri(
+                    'https://images.unsplash.com/photo-1416431168657-a6c4184348ab?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+                )
+                break
+            case 'Clear': // chua co
+                setImgUri(
+                    'https://images.unsplash.com/photo-1601297183305-6df142704ea2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
+                )
+                break
+            case 'Clouds':
+                setImgUri(
+                    'https://images.unsplash.com/photo-1534088568595-a066f410bcda?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=451&q=80',
+                )
+                break
+            default:
+                setImgUri(
+                    'https://images.unsplash.com/photo-1605727216801-e27ce1d0cc28?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1171&q=80',
+                )
+        }
+    }, [props])
+
     return (
         <Layout style={[styles.itemContainer]}>
             <ImageBackground
-                source={require('../../assets/locationBackground1.jpg')}
+                // source={require('../../assets/locationBackground1.jpg')}
+                source={{
+                    uri: imgUri,
+                }}
                 style={[styles.image]}
                 imageStyle={{ borderRadius: 4 }}
                 resizeMode="cover"
@@ -105,6 +156,7 @@ const SelectLocationPage = () => {
     useEffect(() => {
         setLocationsData(locations)
         storeData(locations, 'locations')
+        console.log('locations: ', locations)
     }, [locations])
 
     const storeData = async (value, key) => {
@@ -179,6 +231,7 @@ const SelectLocationPage = () => {
                                   id={item.id}
                                   icon={item.icon}
                                   currPosition={item?.currPosition}
+                                  main={item.main_weather}
                               />
                           </TouchableOpacity>
                       ))
